@@ -27,10 +27,15 @@
 ```typescript
 // ✅ CORRECT - Standard import
 import { feature1, feature2 } from '{package-name}';
+
 // ✅ CORRECT - Specific entry point (if available)
 import { specificFeature } from '{package-name}/{entry}';
-// ❌ AVOID - Deep imports into internals
+
+// ❌ AVOID - Deep imports
 import something from '{package-name}/src/internal/module';
+
+// ❌ AVOID - Default imports (unless documented)
+import SomethingDefault from '{package-name}';
 ```
 
 ---
@@ -103,11 +108,11 @@ import something from '{package-name}/src/internal/module';
 
 ## Quick Reference
 
-| Task                 | How                             |
-| -------------------- | ------------------------------- |
+| Task | How |
+|------|-----|
 | Import main features | `import { x } from '{package}'` |
-| {Common task}        | {Brief how}                     |
-| {Another task}       | {Brief how}                     |
+| {Common task} | {Brief how} |
+| {Another task} | {Brief how} |
 
 ---
 

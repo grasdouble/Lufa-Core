@@ -23,7 +23,7 @@ Analyze the project to gather context. Start with:
 
 1. Root `package.json` — project metadata, dependencies, scripts
 2. Workspace configuration file (e.g. `pnpm-workspace.yaml`, `package.json` workspaces, `nx.json`, `lerna.json`) — package structure
-3. `{{docs_output_path}}/packages/**/*.md` — package documentation (just updated)
+3. `{{docs_output_path}}/documentation/**/*.md` — package documentation (just updated)
 4. Configuration files at root or in a config package — linting, TypeScript, build tools
 5. Any existing docs folder (`docs/`, `documentation/`, etc.)
 

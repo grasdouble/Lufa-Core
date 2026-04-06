@@ -37,7 +37,6 @@
 {Description of purpose and functionality}
 
 **Usage:**
-
 ```typescript
 import { Component1 } from '{package-name}';
 ```
@@ -50,8 +49,8 @@ import { Component1 } from '{package-name}';
 
 ### Exports
 
-| Export      | Type                      | Description   |
-| ----------- | ------------------------- | ------------- |
+| Export | Type | Description |
+|--------|------|-------------|
 | `{export1}` | {function/component/type} | {description} |
 | `{export2}` | {function/component/type} | {description} |
 
@@ -103,20 +102,20 @@ import { otherFeature } from '{other-package-name}';
 
 ### Internal (Workspace)
 
-| Package           | Purpose      |
-| ----------------- | ------------ |
+| Package | Purpose |
+|---------|---------|
 | `{workspace-dep}` | {why needed} |
 
 ### External
 
-| Package          | Version   | Purpose |
-| ---------------- | --------- | ------- |
-| `{external-dep}` | {version} | {why}   |
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `{external-dep}` | {version} | {why} |
 
 ### Peer Dependencies
 
-| Package | Version   | Notes           |
-| ------- | --------- | --------------- |
+| Package | Version | Notes |
+|---------|---------|-------|
 | `react` | {version} | {if applicable} |
 
 ## Configuration
@@ -132,7 +131,6 @@ import { otherFeature } from '{other-package-name}';
 Test files location: `__tests__/`
 
 Run tests:
-
 ```bash
 {package-manager} --filter {package-name} test
 ```
@@ -145,4 +143,4 @@ Run tests:
 
 ---
 
-_Generated: {date}_
+*Generated: {date}*

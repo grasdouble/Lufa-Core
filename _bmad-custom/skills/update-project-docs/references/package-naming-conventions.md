@@ -1,6 +1,6 @@
 # Package Naming Conventions
 
-Reference data for the `update-project-docs` skill.
+Reference data for the `update-project-docs` workflow.
 
 ---
 
@@ -13,7 +13,7 @@ Reference data for the `update-project-docs` skill.
 | `{package_path}`       | `packages/ui/my-package`                       | relative path from project root                  |
 | `{category}`           | `ui`                                           | derived from path segment after `{packages_root}/` |
 | `{project_root}`       | `/Users/.../my-project`                        | absolute project root                            |
-| `{output_path}`        | `{docs_output_path}/packages/ui`               | docs output directory                            |
+| `{output_path}`        | `{docs_output_path}/documentation/ui`          | docs output directory                            |
 | `{current_commit}`     | `abc1234def5678...`                            | HEAD SHA from Step 1 scan report                 |
 | `{commits_since_last}` | `["abc1234 fix: ...", "def5678 feat: ..."]`    | git log output from Step 1 scan report           |
 

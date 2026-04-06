@@ -1,0 +1,11 @@
+type: skill
+name: bmad-bmm-update-project-docs
+description: Maintains up-to-date _bmad-docs/ using parallel subagents.
+version: 1.0.0
+entry_point: 00-init.md
+author: bmad
+tags:
+  - documentation
+  - monorepo
+  - parallel-subagents
+  - bmm

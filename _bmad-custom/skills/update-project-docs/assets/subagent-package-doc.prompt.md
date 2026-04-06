@@ -9,7 +9,7 @@ This template is used to generate the prompt for each subagent that documents a 
 | `{{project_name}}`       | Project name                          | `MyProject`                      |
 | `{{package_name}}`       | Full package name with scope          | `@scope/package-name`            |
 | `{{package_name_short}}` | Package name without scope            | `package-name`                   |
-| `{{package_path}}`       | Relative path from project root       | `packages/category/package-name` |
+| `{{package_path}}`       | Relative path from project root       | `{packages_root}/category/package-name` |
 | `{{category}}`           | Package category                      | `category`                       |
 | `{{project_root}}`       | Absolute project root path            | `/Users/.../myproject`           |
 | `{{docs_output_path}}`   | Docs output path (relative to root)   | `_bmad-docs`                     |

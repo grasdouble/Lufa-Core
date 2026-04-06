@@ -89,7 +89,7 @@ Return a structured JSON report:
   "packages": [
     {
       "name": "@scope/package-name",
-      "path": "packages/category/package-name",
+      "path": "{packages_root}/category/package-name",
       "category": "category",
       "description": "Package description",
       "has_doc": true,
