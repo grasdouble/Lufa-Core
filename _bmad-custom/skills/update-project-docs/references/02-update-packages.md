@@ -8,7 +8,9 @@ nextStep: ./03-update-context.md
 
 ## Goal
 
-Document every package in `{packages_to_update}` by launching **one subagent per package, all in parallel**. Each subagent is fully isolated and writes only its assigned files to `{project-root}/_bmad-docs/packages/{category}/`.
+Document every package in `{packages_to_update}` by launching **one subagent per package, all in parallel**. Each subagent is fully isolated and writes its assigned files to:
+- `{project-root}/{docs_output_path}/documentation/{category}/` — main documentation
+- `{project-root}/{docs_output_path}/context/{category}/` — AI context
 
 ## Naming Reference
 

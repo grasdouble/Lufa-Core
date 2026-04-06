@@ -1,14 +1,14 @@
 # Project Context Structure Template
 
-Template for the `_bmad-docs/project-context.md` file.
-Used by `step-03-update-context.md` to guide the context subagent.
+Template for the `{docs_output_path}/project-context.md` file.
+Used by `03-update-context.md` to guide the context subagent.
 
 ---
 
 ## File Structure
 
 ```markdown
-# Project Context for AI Agents - Lufa
+# Project Context for AI Agents - {{project_name}}
 
 > **Purpose**: Critical rules and patterns that AI agents MUST follow.
 > **Generated**: {date}
@@ -18,39 +18,19 @@ Used by `step-03-update-context.md` to guide the context subagent.
 
 ## Technology Stack & Versions
 
-{Current versions table}
+{Current versions table — derived from root package.json and lock file}
 
 ---
 
-## 🚨 CRITICAL: Design System Patterns (MUST READ)
+## 🚨 CRITICAL: Architecture Patterns (MUST READ)
 
-### Token & Theme Usage
-
-{Explanation with code examples — how to use design tokens and themes correctly}
-
-### Component Import Rules
-
-{Rules and examples — always import from the design system package, never from internals}
-
-### Storybook Story Conventions
-
-{Patterns and examples — how stories are structured, CSF format, args usage}
-
----
-
-## 🚨 CRITICAL: Microfrontend Architecture
-
-### Import Map Pattern
-
-{How import maps work in this project — runtime module resolution}
-
-### Microfrontend Boundaries
-
-{What belongs in main-container vs feature microfrontends}
-
-### Cross-Microfrontend Communication
-
-{Patterns for inter-MF communication if any}
+{The most important architectural patterns specific to this project.
+Replace this section with the project's dominant architecture — examples:
+- Design system / component library
+- Microfrontend / module federation
+- Plugin system
+- Monorepo package boundaries
+Each section should include: what it is, how to use it correctly, and what to avoid.}
 
 ---
 
@@ -62,13 +42,13 @@ Used by `step-03-update-context.md` to guide the context subagent.
 
 ## Import Patterns
 
-{Standard import patterns for the project — @grasdouble/lufa\_\* scope usage}
+{Standard import patterns — package scope usage, aliasing conventions}
 
 ---
 
 ## Testing Conventions
 
-{Playwright test patterns, Storybook visual testing, unit testing}
+{Test runner patterns, integration testing, unit testing approach}
 
 ---
 
@@ -80,19 +60,7 @@ Used by `step-03-update-context.md` to guide the context subagent.
 
 ## Build System
 
-{Vite configuration patterns, pnpm workspace commands, plugin usage}
-
----
-
-## Design System Tokens & Themes
-
-{How to consume tokens, how to switch themes, CSS variables usage}
-
----
-
-## Docusaurus Documentation
-
-{How the documentation site is structured, how to add new pages}
+{Build tool configuration patterns, workspace commands, plugin usage}
 
 ---
 
@@ -114,10 +82,11 @@ Used by `step-03-update-context.md` to guide the context subagent.
 These sections MUST always be included:
 
 1. **Technology Stack** — Current versions
-2. **Design System Patterns** — Token/theme/component rules
-3. **Microfrontend Architecture** — Import maps and boundaries
-4. **TypeScript Rules** — Type safety conventions
-5. **Common Mistakes** — Project-specific pitfalls
+2. **Architecture Patterns** — The dominant patterns for this project (discovered from codebase, not assumed)
+3. **TypeScript Rules** — Type safety conventions
+4. **Common Mistakes** — Project-specific pitfalls
+
+Additional sections should be added based on what is actually present in the project (e.g. design system, microfrontends, plugin system, etc.).
 
 ---
 
@@ -148,9 +117,9 @@ These sections MUST always be included:
 
 ## Version Detection Sources
 
-| Version               | Source File                                |
-| --------------------- | ------------------------------------------ |
-| Main dependencies     | Root `package.json`                        |
-| Design System version | `packages/design-system/main/package.json` |
-| TypeScript version    | Root `tsconfig.json` or `package.json`     |
-| Exact versions        | `pnpm-lock.yaml`                           |
+| Version            | Source File                                        |
+| ------------------ | -------------------------------------------------- |
+| Main dependencies  | Root `package.json`                                |
+| TypeScript version | Root `tsconfig.json` or `package.json`             |
+| Exact versions     | Lock file (`pnpm-lock.yaml`, `yarn.lock`, etc.)    |
+| Package versions   | `{packages_root}/**/package.json`                  |

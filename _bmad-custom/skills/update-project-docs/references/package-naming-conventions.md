@@ -1,58 +1,57 @@
 # Package Naming Conventions
 
-Reference data for the `update-project-docs` workflow.
+Reference data for the `update-project-docs` skill.
 
 ---
 
 ## Variable Reference
 
-| Variable               | Example                                     | Source                                      |
-| ---------------------- | ------------------------------------------- | ------------------------------------------- |
-| `{package_name}`       | `@grasdouble/lufa_design-system`            | `package.json` → `name` field               |
-| `{package_name_short}` | `lufa_design-system`                        | `{package_name}` without `@scope/` prefix   |
-| `{package_path}`       | `packages/design-system/main`               | relative path from project root             |
-| `{category}`           | `design-system`                             | derived from path segment after `packages/` |
-| `{project_root}`       | `/Users/.../Lufa`                           | absolute project root                       |
-| `{output_path}`        | `_bmad-docs/packages/design-system`         | docs output directory                       |
-| `{current_commit}`     | `abc1234def5678...`                         | HEAD SHA from Step 1 scan report            |
-| `{commits_since_last}` | `["abc1234 fix: ...", "def5678 feat: ..."]` | git log output from Step 1 scan report      |
+| Variable               | Example                                        | Source                                           |
+| ---------------------- | ---------------------------------------------- | ------------------------------------------------ |
+| `{package_name}`       | `@scope/my-package`                            | `package.json` → `name` field                   |
+| `{package_name_short}` | `my-package`                                   | `{package_name}` without `@scope/` prefix        |
+| `{package_path}`       | `packages/ui/my-package`                       | relative path from project root                  |
+| `{category}`           | `ui`                                           | derived from path segment after `{packages_root}/` |
+| `{project_root}`       | `/Users/.../my-project`                        | absolute project root                            |
+| `{output_path}`        | `{docs_output_path}/packages/ui`               | docs output directory                            |
+| `{current_commit}`     | `abc1234def5678...`                            | HEAD SHA from Step 1 scan report                 |
+| `{commits_since_last}` | `["abc1234 fix: ...", "def5678 feat: ..."]`    | git log output from Step 1 scan report           |
 
 ---
 
 ## Scope Stripping Examples
 
-| Package Name (input)                               | Short Name (output)                    |
-| -------------------------------------------------- | -------------------------------------- |
-| `@grasdouble/lufa_design-system`                   | `lufa_design-system`                   |
-| `@grasdouble/lufa_design-system-tokens`            | `lufa_design-system-tokens`            |
-| `@grasdouble/lufa_plugin_vite_import-map-injector` | `lufa_plugin_vite_import-map-injector` |
-| `@grasdouble/lufa_microfrontend_main-container`    | `lufa_microfrontend_main-container`    |
-| `@grasdouble/lufa_config_eslint`                   | `lufa_config_eslint`                   |
-| `@grasdouble/cdn_autobuild-server`                 | `cdn_autobuild-server`                 |
+| Package Name (input)            | Short Name (output)   |
+| ------------------------------- | --------------------- |
+| `@scope/my-package`             | `my-package`          |
+| `@scope/ui-button`              | `ui-button`           |
+| `@scope/plugin-vite-foo`        | `plugin-vite-foo`     |
+| `@scope/config-eslint`          | `config-eslint`       |
+| `my-unscoped-package`           | `my-unscoped-package` |
+
+> If `{package_scope}` is empty (no scope configured), `{package_name_short}` equals `{package_name}`.
 
 ---
 
 ## Output File Naming
 
-| Short Name                             | Main Doc                                  | Context Doc                                       |
-| -------------------------------------- | ----------------------------------------- | ------------------------------------------------- |
-| `lufa_design-system`                   | `lufa_design-system.md`                   | `lufa_design-system.context.md`                   |
-| `lufa_plugin_vite_import-map-injector` | `lufa_plugin_vite_import-map-injector.md` | `lufa_plugin_vite_import-map-injector.context.md` |
+| Short Name          | Main Doc              | Context Doc                    |
+| ------------------- | --------------------- | ------------------------------ |
+| `my-package`        | `my-package.md`       | `my-package.context.md`        |
+| `plugin-vite-foo`   | `plugin-vite-foo.md`  | `plugin-vite-foo.context.md`   |
 
 ---
 
 ## Directory Mapping
 
-| Package Path                    | Docs Output Path                     |
-| ------------------------------- | ------------------------------------ |
-| `packages/apps/*`               | `_bmad-docs/packages/apps/`          |
-| `packages/apps/microfrontend/*` | `_bmad-docs/packages/apps/`          |
-| `packages/cdn/*`                | `_bmad-docs/packages/cdn/`           |
-| `packages/config/*`             | `_bmad-docs/packages/config/`        |
-| `packages/design-system/*`      | `_bmad-docs/packages/design-system/` |
-| `packages/plugins/vite/*`       | `_bmad-docs/packages/plugins/`       |
-| `packages/plugins/vscode/*`     | `_bmad-docs/packages/plugins/`       |
-| `packages/poc/*`                | `_bmad-docs/packages/poc/`           |
+Docs output directories use two parallel trees under `{docs_output_path}/`:
+
+| File Type       | Output Path                                                      |
+| --------------- | ---------------------------------------------------------------- |
+| Main doc        | `{docs_output_path}/documentation/{category}/{package-name}.md` |
+| AI context doc  | `{docs_output_path}/context/{category}/{package-name}.context.md` |
+
+The `{category}` value mirrors the directory structure of `{packages_root}/` and is discovered at runtime — not hardcoded.
 
 ---
 

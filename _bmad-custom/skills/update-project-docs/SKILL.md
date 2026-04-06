@@ -1,13 +1,13 @@
 ---
 name: update-project-docs
-description: Maintains up-to-date documentation in _bmad-docs/ using parallel subagents. Use when user says "update project docs", "update documentation", or "doc update".
+description: Maintains up-to-date documentation for a monorepo using parallel subagents. Use when user says "update project docs", "update documentation", or "doc update".
 ---
 
 # Update Project Docs
 
 ## Overview
 
-Orchestrates documentation maintenance for the Lufa monorepo. Scans packages for changes since last doc generation, dispatches parallel subagents to document each stale package, then updates `project-context.md` and `index.md`. Acts as pure coordinator — all analysis and writing is delegated.
+Orchestrates documentation maintenance for a monorepo. Scans packages for changes since last doc generation, dispatches parallel subagents to document each stale package, then updates `project-context.md` and `index.md`. Acts as pure coordinator — all analysis and writing is delegated.
 
 **Modes:**
 - **Full** — Scan + packages (parallel) + context + index
@@ -19,16 +19,25 @@ Orchestrates documentation maintenance for the Lufa monorepo. Scans packages for
 
 Load config from `{project-root}/_bmad/config.yaml` and `{project-root}/_bmad/config.user.yaml` if present.
 
-Key variables to resolve (with defaults):
-- `{user_name}` — address user by name
-- `{communication_language}` — all communications
-- `{document_output_language}` — generated doc content (default: English)
-- `{docsPath}` → `{project-root}/_bmad-docs`
+Resolve these variables (with defaults):
+
+| Variable                  | Default              | Description                                      |
+|---------------------------|----------------------|--------------------------------------------------|
+| `{user_name}`             | —                    | Address user by name                             |
+| `{communication_language}`| English              | All communications                               |
+| `{document_output_language}` | English           | Generated doc content                            |
+| `{project_name}`          | infer from `package.json` | Project name used in doc titles            |
+| `{packages_root}`         | `packages`           | Root folder containing packages (relative to project-root) |
+| `{docs_output_path}`      | `_bmad-docs`         | Output folder for generated docs (relative to project-root) |
+| `{package_scope}`         | infer from packages  | npm scope prefix (e.g. `@myorg`), empty if none |
+| `{git_merge_strategy}`    | `squash`             | `squash` or `merge` — affects change detection logic |
+
+If config is missing or incomplete, infer values from the project at runtime (read root `package.json`, scan `{packages_root}/`). Only ask the user if inference is impossible.
 
 Then greet the user and present the mode selection:
 
 ```
-Update Project Documentation
+Update Project Documentation — {project_name}
 
 Select update mode:
 [F] Full Update    — Scan + packages (parallel) + context + index

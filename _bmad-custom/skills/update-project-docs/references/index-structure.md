@@ -1,14 +1,14 @@
 # Index Structure Template
 
-Template for the `_bmad-docs/index.md` file.
-Used by `step-04-update-index.md` to guide the index subagent.
+Template for the `{docs_output_path}/index.md` file.
+Used by `04-update-index.md` to guide the index subagent.
 
 ---
 
 ## File Structure
 
 ```markdown
-# Lufa Documentation Index
+# {{project_name}} Documentation Index
 
 > Central navigation for all project documentation.
 > Last updated: {date}
@@ -40,7 +40,7 @@ Used by `step-04-update-index.md` to guide the index subagent.
 ## Package Dependency Map
 ```
 
-{ASCII diagram of package dependencies}
+{ASCII diagram of package dependencies — generated from actual workspace graph}
 
 ```
 
@@ -48,41 +48,15 @@ Used by `step-04-update-index.md` to guide the index subagent.
 
 ## Package Documentation
 
-### Applications
+{One section per category discovered under {docs_output_path}/documentation/.
+Section title = category name. Table rows = packages in that category.
+Both the doc link (documentation/) and context link (context/) appear in the same row.}
+
+### {Category Name}
 
 | Package | Description | Docs |
 | ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/apps/{name}.md) \| [Context](packages/apps/{name}.context.md) |
-
-### CDN
-
-| Package | Description | Docs |
-| ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/cdn/{name}.md) \| [Context](packages/cdn/{name}.context.md) |
-
-### Configuration
-
-| Package | Description | Docs |
-| ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/config/{name}.md) \| [Context](packages/config/{name}.context.md) |
-
-### Design System
-
-| Package | Description | Docs |
-| ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/design-system/{name}.md) \| [Context](packages/design-system/{name}.context.md) |
-
-### Plugins
-
-| Package | Description | Docs |
-| ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/plugins/{name}.md) \| [Context](packages/plugins/{name}.context.md) |
-
-### Proof of Concept
-
-| Package | Description | Docs |
-| ------- | ----------- | ---- |
-| {name} | {description} | [Doc](packages/poc/{name}.md) \| [Context](packages/poc/{name}.context.md) |
+| {name} | {description} | [Doc](documentation/{category}/{name}.md) \| [Context](context/{category}/{name}.context.md) |
 
 ---
 
@@ -90,19 +64,18 @@ Used by `step-04-update-index.md` to guide the index subagent.
 
 ### For New Developers
 1. Read [Project Context](project-context.md)
-2. Explore the [Design System](packages/design-system/lufa_design-system.md) core package
-3. Understand the [Microfrontend Architecture](packages/apps/lufa_microfrontend_main-container.md)
-4. Review [Design System Tokens](packages/design-system/lufa_design-system-tokens.md) and [Themes](packages/design-system/lufa_design-system-themes.md)
+2. Explore the core packages listed above
+3. Review the architecture documentation
 
 ### For AI Agents
 1. **ALWAYS** start with [Project Context](project-context.md)
-2. Check relevant package `.context.md` files
-3. Refer to Design System documentation for component/token usage
+2. Check relevant package `.context.md` files in `context/` before making changes
+3. Refer to package documentation in `documentation/` for API details
 
 ### For Feature Development
-1. Check Design System component guidelines
-2. Review existing microfrontend patterns
-3. Follow Playwright test strategy
+1. Check existing package guidelines
+2. Review architecture patterns in project context
+3. Follow the testing conventions
 
 ---
 
@@ -119,23 +92,26 @@ Used by `step-04-update-index.md` to guide the index subagent.
 
 ## Link Format Rules
 
-All links should be relative to `_bmad-docs/`:
+All links should be relative to `{docs_output_path}/`:
 
 ```markdown
-<!-- Within _bmad-docs -->
-
+<!-- Root files -->
 [Project Context](project-context.md)
-[Package Doc](packages/design-system/lufa_design-system.md)
+
+<!-- Package documentation -->
+[Package Doc](documentation/{category}/my-package.md)
+
+<!-- AI context files -->
+[Package Context](context/{category}/my-package.context.md)
 
 <!-- To docs/ folder (if exists) -->
-
 [Architecture](../docs/Architecture/...)
 ```
 
 ## Package Table Format
 
 ```markdown
-| Package                        | Description                   | Docs                                                                                                                   |
-| ------------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| @grasdouble/lufa_design-system | Core Design System components | [Doc](packages/design-system/lufa_design-system.md) \| [Context](packages/design-system/lufa_design-system.context.md) |
+| Package           | Description         | Docs                                                                                                           |
+| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------- |
+| @scope/my-package | Short description   | [Doc](documentation/{category}/my-package.md) \| [Context](context/{category}/my-package.context.md) |
 ```

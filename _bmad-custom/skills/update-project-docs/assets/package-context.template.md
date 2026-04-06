@@ -26,11 +26,10 @@
 
 ```typescript
 // ✅ CORRECT - Standard import
-// ❌ AVOID - Default imports (unless documented)
-import SomethingDefault, { feature1, feature2 } from '{package-name}';
+import { feature1, feature2 } from '{package-name}';
 // ✅ CORRECT - Specific entry point (if available)
 import { specificFeature } from '{package-name}/{entry}';
-// ❌ AVOID - Deep imports
+// ❌ AVOID - Deep imports into internals
 import something from '{package-name}/src/internal/module';
 ```
 
@@ -97,8 +96,8 @@ import something from '{package-name}/src/internal/module';
 
 ### Used By
 
-- `@grasdouble/{consumer1}` - {how it uses this}
-- `@grasdouble/{consumer2}` - {how it uses this}
+- `{consumer1}` - {how it uses this}
+- `{consumer2}` - {how it uses this}
 
 ---
 

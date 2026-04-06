@@ -94,8 +94,7 @@ const configured = advancedFeature({
 ```typescript
 // Example of how this package integrates with others
 import { feature } from '{package-name}';
-
-import { otherFeature } from '@grasdouble/{other-package}';
+import { otherFeature } from '{other-package-name}';
 
 // Combined usage
 ```
@@ -104,10 +103,9 @@ import { otherFeature } from '@grasdouble/{other-package}';
 
 ### Internal (Workspace)
 
-| Package              | Purpose      |
-| -------------------- | ------------ |
-| `@grasdouble/{dep1}` | {why needed} |
-| `@grasdouble/{dep2}` | {why needed} |
+| Package           | Purpose      |
+| ----------------- | ------------ |
+| `{workspace-dep}` | {why needed} |
 
 ### External
 
@@ -136,7 +134,7 @@ Test files location: `__tests__/`
 Run tests:
 
 ```bash
-pnpm --filter {package-name} test
+{package-manager} --filter {package-name} test
 ```
 
 ## Related Documentation

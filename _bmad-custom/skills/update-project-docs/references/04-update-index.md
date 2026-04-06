@@ -7,11 +7,11 @@ description: Regenerate _bmad-docs/index.md using a dedicated subagent
 
 ## Goal
 
-Delegate generation of `{project-root}/_bmad-docs/index.md` to a single subagent that inventories all existing documentation files and builds a clean navigation index.
+Delegate generation of `{project-root}/{docs_output_path}/index.md` to a single subagent that inventories all existing documentation files and builds a clean navigation index.
 
 ## Subagent Launch
 
-Load `./subagent-index.prompt.md`. Pass `{current_commit}`. The subagent will scan `{project-root}/_bmad-docs/packages/` and produce a complete `index.md` following the structure in `./index-structure.md`.
+Load `./subagent-index.prompt.md`. Pass `{current_commit}`. The subagent will scan `{project-root}/{docs_output_path}/documentation/` and `{project-root}/{docs_output_path}/context/` and produce a complete `index.md` following the structure in `./index-structure.md`.
 
 After the subagent returns its draft, show the user a preview of key sections (Quick Links, package counts, categories present).
 
