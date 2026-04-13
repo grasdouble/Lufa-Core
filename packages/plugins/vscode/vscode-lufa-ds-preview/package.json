@@ -79,18 +79,18 @@
   "devDependencies": {
     "@grasdouble/lufa_config_eslint": "workspace:^",
     "@grasdouble/lufa_config_prettier": "workspace:^",
-    "@secretlint/secretlint-rule-no-dotenv": "^11.3.1",
-    "@secretlint/secretlint-rule-preset-recommend": "^11.3.1",
-    "@types/node": "^25.3.3",
-    "@types/vscode": "^1.109.0",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@secretlint/secretlint-rule-no-dotenv": "^11.7.1",
+    "@secretlint/secretlint-rule-preset-recommend": "^11.7.1",
+    "@types/node": "^25.6.0",
+    "@types/vscode": "^1.115.0",
+    "@vitest/coverage-v8": "^4.1.4",
     "@vscode/vsce": "^3.7.1",
-    "esbuild": "^0.27.3",
-    "eslint": "^10.0.2",
-    "prettier": "^3.8.1",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.2.0",
+    "prettier": "^3.8.2",
     "sort-package-json": "^3.6.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.4"
   },
   "engines": {
     "vscode": "^1.108.0"
