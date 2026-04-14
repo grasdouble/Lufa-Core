@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.7
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+
 ## 0.3.6
 
 ### Patch Changes

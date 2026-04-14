@@ -1,5 +1,11 @@
 # @grasdouble/lufa_design-system-playwright
 
+## 1.2.2
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+
 ## 1.2.1
 
 ### Patch Changes

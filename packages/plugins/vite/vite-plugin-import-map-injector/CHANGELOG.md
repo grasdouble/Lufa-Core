@@ -1,5 +1,11 @@
 # @grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector
 
+## 0.2.6
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+
 ## 0.2.5
 
 ### Patch Changes
