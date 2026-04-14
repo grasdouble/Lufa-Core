@@ -18,7 +18,7 @@ const config: Config = {
     v4: {
       useCssCascadeLayers: false,
     },
-    experimental_faster: {
+    faster: {
       rspackBundler: true, // Use Rspack instead of Webpack for faster builds
     },
   },
