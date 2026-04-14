@@ -53,8 +53,8 @@
     "@docusaurus/core": "3.9.2",
     "@docusaurus/faster": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
-    "@docusaurus/theme-common": "^3.9.2",
-    "@docusaurus/theme-live-codeblock": "^3.9.2",
+    "@docusaurus/theme-common": "^3.10.0",
+    "@docusaurus/theme-live-codeblock": "^3.10.0",
     "@easyops-cn/docusaurus-search-local": "^0.55.1",
     "@grasdouble/lufa_design-system": "workspace:^",
     "@grasdouble/lufa_design-system-themes": "workspace:^",
@@ -63,8 +63,8 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.9.2",
@@ -74,9 +74,9 @@
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@grasdouble/lufa_config_tsconfig": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@types/node": "^25.3.3",
-    "eslint": "^10.0.2",
-    "prettier": "^3.8.1",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.0",
+    "prettier": "^3.8.2",
     "sort-package-json": "^3.6.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
