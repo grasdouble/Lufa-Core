@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           token: ${{ secrets.LUFA_CI_SECRET_READ }}
+          persist-credentials: false
 
       # Setup using composite action (partial - manual install due to npmrc config)
       - name: Install pnpm
