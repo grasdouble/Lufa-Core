@@ -1,5 +1,13 @@
 # @grasdouble/lufa_plugin_vscode_lufa-ds-preview
 
+## 0.4.7
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+- Updated dependencies [d90bfed]
+  - @grasdouble/lufa_design-system-tokens@1.2.2
+
 ## 0.4.6
 
 ### Patch Changes
