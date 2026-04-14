@@ -60,5 +60,5 @@ jobs:
           version: pnpm changeset version # The command to run to bump the version
           createGithubReleases: true # Set this to true if you want to create a GitHub release
         env:
-          GITHUB_TOKEN: ${{ secrets.LUFA_CI_SECRET_READ }}
+          GITHUB_TOKEN: ${{ secrets.LUFA_CI_SECRET_WRITE }}
           NPM_TOKEN: ${{ secrets.LUFA_CI_SECRET_WRITE }}
