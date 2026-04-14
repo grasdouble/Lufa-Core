@@ -60,7 +60,3 @@ dist
 
 # Git history tools (scripts and docs for commit rewriting)
 scripts/git-history-tools/
-
-# BMad temporary outputs (session reports, verifications, etc.)
-# Note: analysis/, planning-artifacts/, implementation-artifacts/ are committed (BMM phase outputs)
-_bmad-output/tmp/

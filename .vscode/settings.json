@@ -28,7 +28,6 @@
   "chat.useAgentSkills": true,
   "chat.agent.codeBlockProgress": true,
   "chat.viewSessions.orientation": "sideBySide",
-  "chat.viewRestorePreviousSession": true,
   "chat.tools.terminal.enableAutoApprove": true,
   "chat.tools.terminal.autoApproveWorkspaceNpmScripts": true,
   "chat.tools.terminal.preventShellHistory": true,
