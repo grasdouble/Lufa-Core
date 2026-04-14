@@ -1,16 +1,13 @@
 ---
-package: '@grasdouble/lufa_design-system-themes'
-shortName: lufa_design-system-themes
-category: design-system
-version: '1.0.1'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system-themes"
+version: "1.1.1"
 ---
 
 # @grasdouble/lufa_design-system-themes
 
-Pre-built visual theme variants for the Lufa Design System. Each theme is a standalone CSS file that overrides the full adaptive token set — brand, neutral, and semantic — across light, dark, and high-contrast modes.
+Pre-built CSS theme variants for the Lufa Design System. Each theme is a standalone CSS file that overrides the full adaptive token set — brand, neutral, and feedback — across light, dark, and high-contrast modes, plus structural personality tokens (shape, motion, shadows, background pattern).
 
 ---
 
@@ -24,9 +21,10 @@ The package depends on `@grasdouble/lufa_design-system-tokens` for the base toke
 
 ## Purpose
 
-- Provide a curated set of complete, accessibility-validated color themes.
+- Provide a curated set of complete, accessibility-validated (WCAG AA) color themes.
 - Allow applications to switch between radically different visual identities using a single HTML attribute.
 - Support all three rendering modes (light, dark, high-contrast) per theme.
+- Enable scoped multi-theme layouts — different DOM subtrees can use different themes simultaneously.
 - Serve as a reference implementation and template for creating additional custom themes.
 
 ---
@@ -44,54 +42,133 @@ Themes work by redefining the same CSS custom property names that the base token
 
 ### Selector Strategy
 
-Each theme file uses two selector forms:
+Each theme file uses these selector blocks:
 
 ```css
-/* Default (no mode specified = light) */
+/* Structural tokens — apply to all modes */
+[data-theme='ocean'] {
+  --lufa-semantic-ui-border-radius-*: ...;
+  --lufa-semantic-ui-transition-*: ...;
+  --lufa-semantic-ui-shadow-*: ...;
+  --lufa-semantic-ui-background-pattern: ...;
+  /* Optional: typography overrides (selected themes only) */
+}
+
+/* Light mode (default when no data-mode specified) */
 [data-theme='ocean'],
 [data-theme='ocean'][data-mode='light'] { ... }
 
 /* Dark mode */
 [data-theme='ocean'][data-mode='dark'] { ... }
 
-/* High contrast mode */
+/* High-contrast mode */
 [data-theme='ocean'][data-mode='high-contrast'] { ... }
 ```
 
-This means the theme activates by default in light mode and mode-specific overrides are applied by adding the `data-mode` attribute.
+The combined selector `[data-theme='X'], [data-theme='X'][data-mode='light']` means light is the default when no `data-mode` attribute is present.
 
 ### Token Categories per Theme File
 
-Each theme file defines the following token groups:
+#### Structural Tokens (mode-invariant, on `[data-theme='X']`)
 
-| Token Group         | Naming Pattern                         | Description                                                            |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------------------- |
-| **Brand tokens**    | `--lufa-core-brand-*`                  | Primary, secondary, accent colors and their hover/active states        |
-| **Neutral tokens**  | `--lufa-core-neutral-*`                | Backgrounds, surfaces, borders, and text hierarchy                     |
-| **Semantic tokens** | `--lufa-core-semantic-*`               | Success, error, warning, info states with subtle/border/hover variants |
-| **RGB variables**   | `--lufa-{color}-rgb`                   | Raw RGB triplets used to compose alpha tokens                          |
-| **Alpha tokens**    | `--lufa-color-alpha-{color}-{opacity}` | 9 transparency levels (3–50%) for each of 6 colors = 54 tokens         |
-| **Shadow tokens**   | `--lufa-shadow-{size}`                 | 5 elevation sizes (xs, sm, md, lg, xl) built from a theme shadow color |
-| **Overlay tokens**  | `--lufa-overlay-{tone}-{intensity}`    | Light/dark tonal overlays for hover states, modals, and backdrops      |
-| **Glow tokens**     | `--lufa-glow-{type}-{intensity}`       | Neon luminescence effects — **Matrix and Cyberpunk only**              |
+| Token | Description |
+|---|---|
+| `--lufa-semantic-ui-border-radius-{small\|default\|medium\|large}` | Shape personality — from `none` to `full` |
+| `--lufa-semantic-ui-transition-duration-{fast\|normal}` | Motion speed — from `instant` to `slow` |
+| `--lufa-semantic-ui-transition-timing-function-default` | Easing curve |
+| `--lufa-semantic-ui-shadow-{small\|medium\|large\|extra-large}` | Elevation with brand-tinted color |
+| `--lufa-semantic-ui-background-pattern` | Decorative background CSS gradient or pattern |
+| `--lufa-core-typography-heading-font-family` | Heading font (mono for cyber/technical themes) |
+| `--lufa-core-typography-body-font-family` | Body font (mono for Matrix theme only) |
+| `--lufa-core-typography-heading-letter-spacing` | Heading tracking |
 
-### File Structure per Theme
+#### Color Tokens (per mode block)
 
+**Brand**
+
+```css
+--lufa-core-color-brand-primary-default
+--lufa-core-color-brand-primary-hover
+--lufa-core-color-brand-primary-active
+--lufa-core-color-brand-primary-on-background
+--lufa-core-color-brand-secondary-default
+--lufa-core-color-brand-secondary-hover
+--lufa-core-color-brand-secondary-active
+--lufa-core-color-brand-secondary-on-background
+--lufa-core-color-brand-accent-visited
 ```
-[data-theme='mytheme']                    ← RGB variables + 54 alpha tokens
-[data-theme='mytheme'][data-mode='light'] ← Shadow color, shadow sizes, overlays
-[data-theme='mytheme'][data-mode='dark']  ← Adjusted shadow color, overlays
-[data-theme='mytheme'][data-mode='high-contrast'] ← Accessibility-optimized values
+
+**Neutral**
+
+```css
+--lufa-core-color-neutral-background
+--lufa-core-color-neutral-surface-default
+--lufa-core-color-neutral-surface-hover
+--lufa-core-color-neutral-surface-active
+--lufa-core-color-neutral-surface-raised
+--lufa-core-color-neutral-border-default
+--lufa-core-color-neutral-border-strong
+--lufa-core-color-neutral-text-primary
+--lufa-core-color-neutral-text-secondary
+--lufa-core-color-neutral-text-tertiary
+--lufa-core-color-neutral-text-disabled
 ```
+
+**Feedback** (repeated for `success`, `error`, `warning`, `info`)
+
+```css
+--lufa-core-color-feedback-{state}-default
+--lufa-core-color-feedback-{state}-subtle
+--lufa-core-color-feedback-{state}-border
+--lufa-core-color-feedback-{state}-hover
+--lufa-core-color-feedback-{state}-active
+--lufa-core-color-feedback-{state}-on-background
+```
+
+#### Effect Tokens (per mode block)
+
+```css
+/* All themes */
+--lufa-semantic-effect-glow-box-primary-default
+--lufa-semantic-effect-glow-box-primary-hover
+
+/* Cyber themes only (Matrix, Cyberpunk, Volt, Ocean) — text and focus glows */
+--lufa-semantic-effect-glow-text-primary-default
+--lufa-semantic-effect-glow-text-primary-hover
+--lufa-semantic-effect-glow-border-focus
+--lufa-semantic-effect-glow-box-focus
+```
+
+#### Component Override Tokens (WCAG AA fixes)
+
+Each theme includes targeted component-level overrides to fix cases where the core token cascade produces insufficient contrast ratios. These are documented inline with the contrast ratio:
+
+```css
+/* Example — Ocean light mode */
+/* neutral-text-primary (#0c4a6e) on #f0f9ff = 8.87:1 */
+--lufa-component-button-type-outline-variant-neutral-border-active: #0c4a6e;
+```
+
+Categories of component overrides present across themes:
+
+| Token prefix | Purpose |
+|---|---|
+| `--lufa-semantic-interactive-background-active` | Interactive pressed-state background |
+| `--lufa-semantic-interactive-text-active` | Interactive pressed-state text |
+| `--lufa-component-button-type-outline-*` | Outline button border/bg in hover and active states |
+| `--lufa-component-button-type-solid-*` | Solid button bg/text in hover and active states |
+| `--lufa-component-button-type-ghost-*` | Ghost button bg/text in active state |
+| `--lufa-component-input-border-error` | Input error border (Cyberpunk dark only) |
 
 ### Build Process
 
-The build script (`scripts/copy-themes.ts`) simply copies the source CSS files from `src/` to `dist/`. No compilation or transformation occurs — theme files ship as authored.
+The build script (`scripts/copy-themes.ts`) copies source CSS files from `src/` to `dist/`. No compilation or transformation occurs — theme files ship exactly as authored.
 
 ```
 pnpm build
-  → pnpm clean       (rm -rf dist)
-  → tsx scripts/copy-themes.ts  (copies 10 .css files from src/ to dist/)
+  → pnpm clean               (rm -rf dist)
+  → tsx scripts/copy-themes.ts
+        copies src/{theme}.css → dist/{theme}.css  (10 files)
 ```
 
 ---
@@ -100,76 +177,52 @@ pnpm build
 
 ### Natural / Organic Themes
 
-| Theme      | `data-theme` value | Identity                   | Primary Colors                             |
-| ---------- | ------------------ | -------------------------- | ------------------------------------------ |
-| **Ocean**  | `ocean`            | Marine, flowing, calm      | Cyan 600 (#0891b2), Teal 500 (#14b8a6)     |
-| **Forest** | `forest`           | Organic, grounded, natural | Emerald 600 (#059669), Green 600 (#16a34a) |
-| **Coffee** | `coffee`           | Retro, warm, nostalgic     | Amber 900 (#78350f), Yellow 800 (#a16207)  |
+| Theme | `data-theme` | Shape | Motion | Primary (light) |
+|---|---|---|---|---|
+| **Ocean** | `ocean` | Very rounded / full | Slow, wave-like, ease-out | Cyan `#0e7490` |
+| **Forest** | `forest` | Organic, medium rounded | Natural, ease-in-out | Emerald `#047857` |
+| **Coffee** | `coffee` | Comfortable, cozy | Slow, unhurried, ease | Amber `#78350f` |
 
 ### Atmospheric / Elemental Themes
 
-| Theme       | `data-theme` value | Identity                     | Primary Colors                           |
-| ----------- | ------------------ | ---------------------------- | ---------------------------------------- |
-| **Sunset**  | `sunset`           | Warm, elegant, calm          | Orange 600 (#c2410c), Rose 700 (#be123c) |
-| **Volcano** | `volcano`          | Powerful, intense, high-heat | Red 600 (#dc2626), Orange 800 (#9a3412)  |
-| **Nordic**  | `nordic`           | Minimalist, arctic, clean    | Sky 500 (#0369a1), Slate 500 (#64748b)   |
+| Theme | `data-theme` | Shape | Motion | Primary (light) |
+|---|---|---|---|---|
+| **Sunset** | `sunset` | Full pill | Bouncy, ease-bounce | Orange `#c2410c` |
+| **Volcano** | `volcano` | Medium | Standard | Red `#dc2626` |
+| **Nordic** | `nordic` | Minimal, slight | Fast, linear | Sky `#0369a1` |
 
 ### Industrial / Mechanical Themes
 
-| Theme         | `data-theme` value | Identity                     | Primary Colors                             |
-| ------------- | ------------------ | ---------------------------- | ------------------------------------------ |
-| **Steampunk** | `steampunk`        | Victorian, brass, industrial | Copper (#8b4513), Oxidized Green (#2e8b57) |
-| **Volt**      | `volt`             | Industrial, high-visibility  | Lime 700 (#4d7c0f), Pure Black (#000000)   |
+| Theme | `data-theme` | Shape | Motion | Primary (light) |
+|---|---|---|---|---|
+| **Steampunk** | `steampunk` | Slight rounding | Measured | Copper `#8b4513` |
+| **Volt** | `volt` | Razor sharp, none | Instant snap, linear | Lime `#4d7c0f` |
 
 ### Cyber / Digital Themes
 
-| Theme         | `data-theme` value | Identity                     | Primary Colors                               |
-| ------------- | ------------------ | ---------------------------- | -------------------------------------------- |
-| **Cyberpunk** | `cyberpunk`        | Futuristic, neon, night-city | Fuchsia (#b300b3), Dark Cyan (#006666)       |
-| **Matrix**    | `matrix`           | Digital, terminal, cinematic | Matrix Green (#007800), Deep Black (#000000) |
+| Theme | `data-theme` | Shape | Motion | Primary (light) | Glow |
+|---|---|---|---|---|---|
+| **Cyberpunk** | `cyberpunk` | Sharp, no softness | Fast, aggressive, ease-in | Fuchsia `#b300b3` | Full suite |
+| **Matrix** | `matrix` | Pure rectangles | Instant, linear | Matrix Green `#007800` | Full suite |
 
-**Note:** Cyberpunk and Matrix are the only two themes that include glow tokens (`--lufa-glow-*`). All other themes use only shadow and overlay tokens for depth effects.
+**Note:** Cyberpunk and Matrix have the most extensive glow effect tokens including text glow, focus glow, and box glow. All other themes include only `glow-box-primary-default/hover` (or `none` in high-contrast mode for accessibility).
 
 ---
 
 ## Key Components
 
-### `src/_token-template.css`
-
-The authoritative template file for creating new themes. Contains:
-
-- **Alpha tokens section** — copy-paste template for all 54 alpha tokens (6 colors × 9 opacity levels).
-- **Shadow tokens section** — standardized shadow size tokens with mode-specific shadow color guidance.
-- **Overlay tokens section** — light/dark/backdrop overlay tokens with per-mode opacity recommendations.
-- **Glow tokens section** — optional neon luminescence tokens for cyber/neon themes only.
-- **Implementation checklist** — step-by-step checklist for theme authors.
-- **Best practices** — 12 documented conventions.
-- **RGB extraction guide** — manual and DevTools methods for converting hex to RGB.
-- **Full steampunk example** — complete reference implementation.
-
-This file is validated by `scripts/validate-template.ts` to ensure it stays conformant to the design system conventions.
-
 ### `scripts/copy-themes.ts`
 
 The build script. Iterates over the hardcoded `themes` array and copies each `.css` from `src/` to `dist/`. Adding a new theme requires adding its filename to this array in addition to exporting it in `package.json`.
 
-### `scripts/validate-template.ts`
+### `src/{theme}.css` (10 files)
 
-A TypeScript validation script that programmatically checks `_token-template.css` against the expected structure. It validates:
+Each theme file is self-contained and follows a consistent four-block pattern:
 
-- CSS structure (tokens in `[data-theme]` selectors, not at root level)
-- Alpha token completeness (all 54 tokens, all 9 opacity levels per color)
-- Shadow token completeness (5 sizes, `--lufa-shadow-color` variable)
-- Shadow-xl spec compliance (`0 12px 24px`, not `0 16px 32px`)
-- Overlay token completeness (light and dark variants)
-- Glow token structure (4 box intensities, 4 text intensities, 3 inset intensities)
-- RGB variable naming convention (`--lufa-{color}-rgb`, not `--lufa-rgb-{color}`)
-- Documentation sections presence
-- All 3 mode variants documented
-
-### `scripts/validate-a11y.ts`
-
-An accessibility validation script runnable via `pnpm validate:a11y`.
+1. `[data-theme='X']` — structural/personality tokens
+2. `[data-theme='X'], [data-theme='X'][data-mode='light']` — light color palette
+3. `[data-theme='X'][data-mode='dark']` — dark color palette
+4. `[data-theme='X'][data-mode='high-contrast']` — maximum-contrast palette
 
 ---
 
@@ -177,151 +230,62 @@ An accessibility validation script runnable via `pnpm validate:a11y`.
 
 ### HTML Attribute API
 
-Themes are activated entirely through HTML attributes:
-
 ```html
 <!-- Activate a theme (defaults to light mode) -->
 <html data-theme="ocean">
-  <!-- Activate a theme in a specific mode -->
-  <html data-theme="ocean" data-mode="dark">
-    <html data-theme="ocean" data-mode="light">
-      <html data-theme="ocean" data-mode="high-contrast">
-        <!-- Scope a theme to a subtree -->
-        <section data-theme="matrix" data-mode="dark">...</section>
-      </html>
-    </html>
-  </html>
-</html>
+
+<!-- Specific mode -->
+<html data-theme="ocean" data-mode="dark">
+<html data-theme="ocean" data-mode="light">
+<html data-theme="ocean" data-mode="high-contrast">
+
+<!-- Scope a theme to a subtree -->
+<section data-theme="matrix" data-mode="dark">...</section>
 ```
 
 ### CSS Import API
 
 Each theme is exported as a direct path in `package.json#exports`:
 
-```css
-@import '@grasdouble/lufa_design-system-themes/ocean.css';
-@import '@grasdouble/lufa_design-system-themes/forest.css';
-@import '@grasdouble/lufa_design-system-themes/matrix.css';
-@import '@grasdouble/lufa_design-system-themes/cyberpunk.css';
-@import '@grasdouble/lufa_design-system-themes/nordic.css';
-@import '@grasdouble/lufa_design-system-themes/steampunk.css';
-@import '@grasdouble/lufa_design-system-themes/coffee.css';
-@import '@grasdouble/lufa_design-system-themes/sunset.css';
-@import '@grasdouble/lufa_design-system-themes/volcano.css';
-@import '@grasdouble/lufa_design-system-themes/volt.css';
+```json
+{
+  "./coffee.css":    "./dist/coffee.css",
+  "./cyberpunk.css": "./dist/cyberpunk.css",
+  "./forest.css":    "./dist/forest.css",
+  "./matrix.css":    "./dist/matrix.css",
+  "./nordic.css":    "./dist/nordic.css",
+  "./ocean.css":     "./dist/ocean.css",
+  "./steampunk.css": "./dist/steampunk.css",
+  "./sunset.css":    "./dist/sunset.css",
+  "./volcano.css":   "./dist/volcano.css",
+  "./volt.css":      "./dist/volt.css"
+}
 ```
 
 The base tokens package must be imported before any theme:
 
 ```css
-@import '@grasdouble/lufa_design-system-tokens/style.css'; /* required */
-@import '@grasdouble/lufa_design-system-themes/ocean.css'; /* then theme */
+@import '@grasdouble/lufa_design-system-tokens/style.css'; /* required first */
+@import '@grasdouble/lufa_design-system-themes/ocean.css';
 ```
 
-### CSS Token Reference
+### Validation Commands
 
-All token names follow the pattern established by `@grasdouble/lufa_design-system-tokens`. Themes redefine the existing tokens — they do not introduce new property names (except the optional glow tokens in cyber themes).
+| Script | Description |
+|---|---|
+| `pnpm validate:theme:all` | Validate all 10 themes against the required token set |
+| `pnpm validate:theme:{name}` | Validate a single theme (e.g. `pnpm validate:theme:ocean`) |
+| `pnpm validate:token-usage` | Verify all token names used in CSS are valid |
+| `pnpm validate:token-usage:unused` | Find unused tokens |
+| `pnpm validate:token-usage:verbose` | Verbose token usage report |
 
-#### Brand Tokens (31 adaptive tokens per theme)
-
-```css
---lufa-core-brand-primary-default
---lufa-core-brand-primary-hover
---lufa-core-brand-primary-active
---lufa-core-brand-secondary-default
---lufa-core-brand-secondary-hover
---lufa-core-brand-secondary-active
---lufa-core-brand-accent-visited
---lufa-core-brand-primary-on-background
---lufa-core-brand-secondary-on-background
-```
-
-#### Neutral Tokens
-
-```css
---lufa-core-neutral-background
---lufa-core-neutral-surface-default
---lufa-core-neutral-surface-hover
---lufa-core-neutral-border-default
---lufa-core-neutral-border-strong
---lufa-core-neutral-text-primary
---lufa-core-neutral-text-secondary
---lufa-core-neutral-text-tertiary
---lufa-core-neutral-text-disabled
-```
-
-#### Semantic Tokens (per state: success, error, warning, info)
-
-```css
---lufa-core-semantic-{state}-default
---lufa-core-semantic-{state}-subtle
---lufa-core-semantic-{state}-border
---lufa-core-semantic-{state}-hover
-```
-
-#### Alpha Tokens (54 per theme — 6 colors × 9 opacity levels)
-
-```css
---lufa-color-alpha-{primary|secondary|success|error|warning|info}-{3|5|8|10|15|20|30|40|50}
-/* e.g. */
---lufa-color-alpha-primary-10: rgba(var(--lufa-primary-rgb), 0.1);
---lufa-color-alpha-error-50:   rgba(var(--lufa-error-rgb), 0.5);
-```
-
-#### Shadow Tokens
-
-```css
---lufa-shadow-color   /* Theme-specific base color, mode-adjusted opacity */
---lufa-shadow-xs      /* 0 1px 2px  */
---lufa-shadow-sm      /* 0 2px 4px  */
---lufa-shadow-md      /* 0 4px 8px  */
---lufa-shadow-lg      /* 0 8px 16px */
---lufa-shadow-xl      /* 0 12px 24px */
-```
-
-#### Overlay Tokens
-
-```css
---lufa-overlay-light-subtle        /* rgba(255,255,255, 0.05) */
---lufa-overlay-light               /* rgba(255,255,255, 0.10) */
---lufa-overlay-light-strong        /* rgba(255,255,255, 0.20) */
---lufa-overlay-dark-subtle         /* rgba(0,0,0, 0.05–0.20)  */
---lufa-overlay-dark                /* rgba(0,0,0, 0.10–0.40)  */
---lufa-overlay-dark-strong         /* rgba(0,0,0, 0.30–0.60)  */
---lufa-overlay-backdrop-light      /* rgba(0,0,0, 0.30–0.60)  */
---lufa-overlay-backdrop            /* rgba(0,0,0, 0.50–0.80)  */
---lufa-overlay-backdrop-strong     /* rgba(0,0,0, 0.70–0.95)  */
-```
-
-#### Glow Tokens (Cyberpunk and Matrix only)
-
-```css
---lufa-glow-color                  /* Primary glow color (rgba) */
---lufa-glow-color-secondary        /* Secondary glow color (rgba) */
-
-/* Box glows (4 intensity levels) */
---lufa-glow-box-subtle
---lufa-glow-box
---lufa-glow-box-strong
---lufa-glow-box-intense
-
-/* Text glows (4 intensity levels) */
---lufa-glow-text-subtle
---lufa-glow-text
---lufa-glow-text-strong
---lufa-glow-text-intense
-
-/* Inset glows (3 intensity levels) */
---lufa-glow-inset-subtle
---lufa-glow-inset
---lufa-glow-inset-strong
-```
+Validation is powered by `@grasdouble/lufa_design-system-cli` (`lufa-ds-cli theme-validate`).
 
 ---
 
 ## Usage Examples
 
-### Basic theme in HTML
+### Basic HTML Setup
 
 ```html
 <!DOCTYPE html>
@@ -338,7 +302,7 @@ All token names follow the pattern established by `@grasdouble/lufa_design-syste
 </html>
 ```
 
-### Scoped theme (mixed themes on one page)
+### Scoped / Multi-theme Page
 
 ```html
 <html data-theme="nordic" data-mode="light">
@@ -351,17 +315,26 @@ All token names follow the pattern established by `@grasdouble/lufa_design-syste
 </html>
 ```
 
-### CSS import order
+### Importing All Themes (for theme switchers)
+
+Real usage from `packages/design-system/storybook/src/style.css` and `packages/design-system/docusaurus/src/css/custom.css`:
 
 ```css
-/* globals.css */
 @import '@grasdouble/lufa_design-system-tokens/style.css';
+
 @import '@grasdouble/lufa_design-system-themes/ocean.css';
-/* Multiple themes can be imported — only the active data-theme applies */
 @import '@grasdouble/lufa_design-system-themes/forest.css';
+@import '@grasdouble/lufa_design-system-themes/matrix.css';
+@import '@grasdouble/lufa_design-system-themes/cyberpunk.css';
+@import '@grasdouble/lufa_design-system-themes/sunset.css';
+@import '@grasdouble/lufa_design-system-themes/nordic.css';
+@import '@grasdouble/lufa_design-system-themes/volcano.css';
+@import '@grasdouble/lufa_design-system-themes/coffee.css';
+@import '@grasdouble/lufa_design-system-themes/volt.css';
+@import '@grasdouble/lufa_design-system-themes/steampunk.css';
 ```
 
-### React hook with theme persistence
+### React Hook with Theme Persistence
 
 ```tsx
 // hooks/useTheme.ts
@@ -386,11 +359,11 @@ export function useTheme() {
 }
 ```
 
-### Prevent flash of wrong theme (FOUC)
+### Prevent Flash of Wrong Theme (FOUC)
 
 ```html
 <head>
-  <!-- Inline script before any stylesheets -->
+  <!-- Inline script BEFORE any stylesheets -->
   <script>
     (function () {
       const theme = localStorage.getItem('lufa-theme') || 'light';
@@ -402,7 +375,7 @@ export function useTheme() {
 </head>
 ```
 
-### SSR hydration safety
+### SSR Hydration Safety
 
 ```tsx
 function App() {
@@ -418,37 +391,13 @@ function App() {
 }
 ```
 
-### Using glow tokens (Cyberpunk/Matrix)
+### Adding a New Theme
 
-```css
-/* Glowing card with elevation */
-.cyber-card {
-  box-shadow: var(--lufa-shadow-md), var(--lufa-glow-box);
-}
-
-/* Neon button hover state */
-.cyber-button:hover {
-  box-shadow: var(--lufa-shadow-sm), var(--lufa-glow-box-strong);
-}
-
-/* Glowing heading text */
-.hero-title {
-  text-shadow: var(--lufa-glow-text-intense);
-}
-
-/* Inner glow on a panel */
-.cyber-panel {
-  box-shadow: var(--lufa-glow-inset);
-}
-```
-
-### Adding a new theme
-
-1. Copy `src/_token-template.css` to `src/your-theme.css`
-2. Fill in all token values for all three modes (light, dark, high-contrast)
-3. Add `'your-theme.css'` to the `themes` array in `scripts/copy-themes.ts`
-4. Add `"./your-theme.css": "./dist/your-theme.css"` to `package.json#exports`
-5. Run `pnpm build` then `pnpm validate:template` to confirm the output is valid
+1. Copy an existing `src/*.css` as a starting template.
+2. Fill in all token values for all three mode blocks (light, dark, high-contrast).
+3. Add the filename to the `themes` array in `scripts/copy-themes.ts`.
+4. Add `"./your-theme.css": "./dist/your-theme.css"` to `package.json#exports`.
+5. Run `pnpm build` then `pnpm validate:theme:your-theme` to confirm validity.
 
 ---
 
@@ -456,55 +405,70 @@ function App() {
 
 ### Runtime Dependencies
 
-| Package                                 | Version       | Role                                                     |
-| --------------------------------------- | ------------- | -------------------------------------------------------- |
-| `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Provides the base token definitions that themes override |
+| Package | Version | Role |
+|---|---|---|
+| `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Provides all primitive and adaptive tokens that themes override |
+
+Themes are purely additive CSS overrides. The tokens package **must** be loaded before any theme CSS.
 
 ### Dev Dependencies
 
-| Package                            | Purpose                                              |
-| ---------------------------------- | ---------------------------------------------------- |
-| `tsx`                              | Executes the build and validation TypeScript scripts |
-| `typescript`                       | Type checking for scripts                            |
-| `eslint` / `prettier`              | Code quality for TypeScript scripts in `scripts/`    |
-| `@grasdouble/lufa_config_eslint`   | Shared ESLint configuration                          |
-| `@grasdouble/lufa_config_prettier` | Shared Prettier configuration                        |
-| `@grasdouble/lufa_config_tsconfig` | Shared TypeScript configuration                      |
+| Package | Purpose |
+|---|---|
+| `@grasdouble/lufa_design-system-cli` | `lufa-ds-cli theme-validate` used by validate scripts |
+| `tsx` | Executes the TypeScript build script (`copy-themes.ts`) |
+| `typescript` | Type-checking the build script |
+| `@grasdouble/lufa_config_eslint` | Shared ESLint configuration |
+| `@grasdouble/lufa_config_prettier` | Shared Prettier configuration |
+| `@grasdouble/lufa_config_tsconfig` | Shared TypeScript configuration |
+| `@ianvs/prettier-plugin-sort-imports` | Import sorting in Prettier |
+| `sort-package-json` | Package.json key ordering |
+
+### Known In-monorepo Consumers
+
+| Package | Usage |
+|---|---|
+| `@grasdouble/lufa_design-system-storybook` | Imports all 10 themes for component stories |
+| `@grasdouble/lufa_design-system-docusaurus` | Imports all 10 themes for the documentation site |
 
 ---
 
-## Scripts
+## Configuration
 
-| Script              | Command                                        | Description                                   |
-| ------------------- | ---------------------------------------------- | --------------------------------------------- |
-| `build`             | `pnpm clean && tsx scripts/copy-themes.ts`     | Copies theme CSS from `src/` to `dist/`       |
-| `clean`             | `rm -rf dist`                                  | Removes the dist directory                    |
-| `validate:template` | `tsx scripts/validate-template.ts`             | Validates `_token-template.css` conformance   |
-| `validate:a11y`     | `tsx scripts/validate-a11y.ts`                 | Validates accessibility in theme color values |
-| `validate`          | `pnpm validate:template && pnpm validate:a11y` | Runs all validation checks                    |
-| `lint`              | `eslint scripts --ext .ts`                     | Lints TypeScript scripts                      |
-| `typecheck`         | `tsc -p tsconfig.json --noEmit`                | Type-checks scripts without emitting          |
+### tsconfig.json
+
+The TypeScript config covers only the `scripts/` directory. Theme source files are plain CSS and require no transpilation.
+
+```json
+{
+  "extends": "@grasdouble/lufa_config_tsconfig/tsconfig.base.json",
+  "include": ["scripts"]
+}
+```
+
+### Package Publishing
+
+Published to `https://npm.pkg.github.com` under `@grasdouble` scope with public access.
 
 ---
 
 ## Accessibility
 
-All theme color values are selected to meet WCAG AA contrast standards. Key design decisions:
+All theme color values are selected to meet WCAG AA contrast standards (minimum 4.5:1 for text, 3:1 for UI components). Design decisions:
 
-- **Light mode**: Darker, more saturated brand colors are used to ensure sufficient contrast against light backgrounds. For example, Cyberpunk light mode uses `#b300b3` (not pure `#ff00ff`) to achieve a 5.65:1 contrast ratio.
-- **Dark mode**: Brighter, lighter color variants are used against dark backgrounds.
-- **High-contrast mode**: Maximum contrast — typically pure black/white backgrounds with fully saturated foreground colors — targeting WCAG AAA.
-- The `validate:a11y` script provides automated contrast checking.
+- **Light mode**: Darker, more saturated brand colors ensure sufficient contrast against light backgrounds. For example, Cyberpunk light uses `#b300b3` (not pure `#ff00ff`) to achieve the required ratio.
+- **Dark mode**: Brighter, lighter color variants against dark backgrounds.
+- **High-contrast mode**: Maximum contrast — typically pure `#000000` backgrounds and fully saturated foreground colors, targeting WCAG AAA (21:1 for text in many cases).
+- **Glow effects** are disabled (`none`) in high-contrast mode for all themes where they could reduce readability (Ocean, Sunset, Coffee, Volt high-contrast blocks explicitly set `none`).
+- **Component overrides** are documented inline with measured contrast ratios, e.g. `/* #001a00 on #c6f7c6 = 15.27:1 ✓ */`.
 
 ---
 
 ## Related Documentation
 
-| Resource             | Path                                                        |
-| -------------------- | ----------------------------------------------------------- |
-| Design System README | `packages/design-system/themes/README.md`                   |
-| Token Architecture   | `packages/design-system/tokens/_docs/ARCHITECTURE.md`       |
-| Token Conventions    | `packages/design-system/tokens/_docs/TOKENS_CONVENTIONS.md` |
-| Base Tokens Package  | `packages/design-system/tokens/`                            |
-| Token Template       | `packages/design-system/themes/src/_token-template.css`     |
-| CHANGELOG            | `packages/design-system/themes/CHANGELOG.md`                |
+| Resource | Path |
+|---|---|
+| Design System README | `packages/design-system/themes/README.md` |
+| Token Architecture | `packages/design-system/tokens/_docs/ARCHITECTURE.md` |
+| Base Tokens Package | `packages/design-system/tokens/` |
+| CHANGELOG | `packages/design-system/themes/CHANGELOG.md` |

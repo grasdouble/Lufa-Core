@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_microfrontend_main-container'
-shortName: lufa_microfrontend_main-container
-category: apps
-version: '0.6.13'
-private: true
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_microfrontend_main-container"
+version: "0.6.15"
 ---
 
 # @grasdouble/lufa_microfrontend_main-container
@@ -114,7 +111,7 @@ Configures three custom plugins:
 ### `@grasdouble/lufa_design-system-storybook`
 
 - **Active route**: `/storybook`
-- **Loading**: Inline inline synthetic Single-SPA module (not resolved via import map)
+- **Loading**: Inline synthetic Single-SPA module (not resolved via import map)
 - **Mechanism**: Creates an `<iframe>` pointing to `https://lufa-storybook.sebastien-lemouillour.fr`
 - **Lifecycle**: `bootstrap` (noop), `mount` (creates and appends iframe to `#app`), `unmount` (removes iframe by id `storybook-iframe`)
 
@@ -138,7 +135,7 @@ const loadApp =
 ### Starting the Development Server
 
 ```bash
-# From the monorepo root
+# From the monorepo root (starts both container and home microfrontend)
 pnpm app:mf:dev
 
 # Or directly from the package
@@ -156,7 +153,7 @@ localStorage.setItem('devtools', 'true');
 location.reload();
 ```
 
-This activates the `import-map-overrides` devtools panel (bottom-left corner) and switches to the dev-mode import map, where `@grasdouble/lufa_microfrontend_home` resolves to `http://localhost:4101/home.mjs`.
+This activates the `import-map-overrides` devtools panel and switches to the dev-mode import map, where `@grasdouble/lufa_microfrontend_home` resolves to `http://localhost:4101/home.mjs`.
 
 ### Registering a New Microfrontend
 
@@ -215,10 +212,42 @@ These are NOT bundled. They are loaded at runtime by the browser via import maps
 | `react-dom@19.0.0`  | `https://esm.sh/react-dom@19.0.0`         |
 | `react-dom/client`  | `https://esm.sh/react-dom@19.0.0/client`  |
 
+## Configuration
+
+### TypeScript
+
+Extends `@grasdouble/lufa_config_tsconfig/react-app.json`. Covers `src/**/*.ts` and `src/**/*.tsx`. No custom compiler options beyond the shared preset.
+
+### ESLint
+
+Extends `@grasdouble/lufa_config_eslint/react.mjs`. Configured with the local `tsconfig.json` for typed linting.
+
+### Prettier
+
+Uses `@grasdouble/lufa_config_prettier`. The `.prettierignore` excludes `dist/` from formatting.
+
+### Lint-Staged
+
+Runs on commit:
+- `eslint --fix` + `prettier --write` on JS/TS files
+- `pnpm typecheck` on TypeScript files
+- `sort-package-json` on `package.json`
+- `prettier --write` on JSON, Markdown, CSS, HTML files
+
+## Testing
+
+This package has **no automated tests**. It is a thin orchestration shell with minimal logic. The only testable unit is the `loadApp` factory, which is a trivial one-liner. Correctness is validated by running the full microfrontend stack.
+
+Manual verification steps:
+1. `pnpm app:mf:dev` — confirm container loads at `http://localhost:5173`
+2. Set `localStorage.devtools = 'true'` and reload — confirm devtools panel appears
+3. Navigate to `/` — confirm `lufa_microfrontend_home` mounts
+4. Navigate to `/storybook` — confirm Storybook iframe loads
+5. `pnpm --filter @grasdouble/lufa_microfrontend_main-container build` — confirm clean build with no errors
+
 ## Related Documentation
 
 - [Microfrontend Architecture Overview](../../../packages/apps/microfrontend/README.md)
 - [@grasdouble/lufa_microfrontend_home](./lufa_microfrontend_home.md) — The primary microfrontend registered at `/`
-- [@grasdouble/lufa_design-system](../ui/lufa_design-system.md) — Design system whose CSS is imported globally
 - [@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector](../plugins/lufa_plugin_vite_vite-plugin-import-map-injector.md) — Vite plugin that handles import map injection
 - [@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble](../plugins/lufa_plugin_vite_vite-plugin-react-preamble.md) — Vite plugin for React Fast Refresh support

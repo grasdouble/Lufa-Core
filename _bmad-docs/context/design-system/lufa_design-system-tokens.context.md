@@ -3,8 +3,8 @@ package: '@grasdouble/lufa_design-system-tokens'
 shortName: lufa_design-system-tokens
 category: design-system
 type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+lastUpdated: '2026-04-07'
+generatedAtCommit: 'ab53a003edb177c2298250479fbe4465ee920bc3'
 ---
 
 # Context: @grasdouble/lufa_design-system-tokens
@@ -12,28 +12,33 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 ## Quick facts
 
 - **Package name:** `@grasdouble/lufa_design-system-tokens`
-- **Version:** 1.1.0 | **License:** MIT | **Private:** false
+- **Version:** 1.2.1 | **License:** MIT | **Private:** false
 - **Source:** `packages/design-system/tokens/`
-- **Build tool:** Style Dictionary v5.2.0
+- **Build tool:** Style Dictionary v5.3.3
 - **Token format:** DTCG (Design Tokens Community Group)
 - **Total tokens:** 698 | **CSS custom properties:** 1025
 
 ## What this package does
 
-Single source of truth for all Lufa design decisions. Publishes static CSS and JSON artifacts — no runtime JS dependency. Consuming packages import the built CSS for styling and optionally the JSON for runtime value access.
+Single source of truth for all Lufa design decisions. Publishes static CSS and JSON artifacts — no runtime JS dependency. Consuming packages import the built CSS for styling and optionally the JSON for runtime value access. Also provides tiered CSS template files so theme authors can progressively override tokens at starter, extended, or advanced complexity levels.
 
 ## Package exports
 
 ```json
 {
-  ".": "./dist/tokens-values.json", // default JS import (flat values)
-  "./tokens.css": "./dist/tokens.css", // CSS custom properties (all modes)
-  "./values": "./dist/tokens-values.json", // named JS/TS import
-  "./metadata": "./dist/tokens-metadata.json" // full metadata (description, extensions)
+  ".":                    "./dist/tokens-values.json",           // default JS import (flat values)
+  "./tokens.css":         "./dist/tokens.css",                   // all CSS custom properties (all modes)
+  "./values":             "./dist/tokens-values.json",           // named JS/TS import
+  "./metadata":           "./dist/tokens-metadata.json",         // full metadata (description, extensions)
+  "./merged":             "./dist/tokens-source-merged.json",    // raw DTCG source, unresolved references
+  "./themeable":          "./dist/themeable-tokens.css",         // all themeable tokens (no level filter)
+  "./themeable-starter":  "./dist/themeable-tokens-starter.css", // starter-level themeable tokens only
+  "./themeable-extended": "./dist/themeable-tokens-extended.css",// starter + extended themeable tokens
+  "./themeable-advanced": "./dist/themeable-tokens-advanced.css" // all themeable (starter+extended+advanced)
 }
 ```
 
-Additional build artifact (not exported): `dist/tokens.map.json` — for the Lufa DS Preview VSCode extension.
+Additional build artifact (not exported): `dist/tokens.map.json` — for the Lufa DS Preview VSCode extension, consumed via filesystem path.
 
 ## 4-level token hierarchy
 
@@ -41,13 +46,34 @@ Additional build artifact (not exported): `dist/tokens.map.json` — for the Luf
 Component (235) → Semantic (175) → Core (85) → Primitive (203)
 ```
 
-Each level exclusively references the level below via DTCG `{path}` syntax. Primitive tokens contain raw values only.
+Each level exclusively references the level below via DTCG `{path}` syntax. Primitive tokens contain raw values only. Cross-level references (e.g. component → primitive) are forbidden by the build validators.
+
+## Theme level system
+
+Tokens that support theming carry `themeable: true` in `$extensions.lufa`. They also carry a `themeLevel` property indicating the complexity tier at which a theme author is expected to override them:
+
+| Level      | Meaning                                                                  |
+| ---------- | ------------------------------------------------------------------------ |
+| `starter`  | Essential overrides — brand color, primary accent, basic surface colors  |
+| `extended` | Broader overrides — semantic colors, surface hierarchy, background style |
+| `advanced` | Full control — every themeable token, including effects and animation    |
+
+The levels are **cumulative**: `starter ⊂ extended ⊂ advanced`. The three CSS template exports (`themeable-starter`, `themeable-extended`, `themeable-advanced`) each contain progressively more custom property stubs for theme authors to fill in.
+
+```json
+"$extensions": {
+  "lufa": {
+    "themeable": true,
+    "themeLevel": "starter"
+  }
+}
+```
 
 ## Source directory structure
 
 ```
 src/
-├── primitives/          # Level 1 — raw values (15 files)
+├── primitives/          # Level 1 — raw values (16 files)
 │   ├── color.json           # gray/blue/red/green/yellow/purple + hc + alpha palettes
 │   ├── spacing.json         # 0–96px (12 steps)
 │   ├── radius.json          # none/sm/base/md/lg/xl/2xl/full
@@ -62,20 +88,23 @@ src/
 │   ├── typography-font-sizes.json      # xs–8xl (px + fluid clamp)
 │   ├── typography-font-weights.json    # normal/medium/semibold/bold
 │   ├── typography-letter-spacing.json
-│   └── typography-line-heights.json
+│   ├── typography-line-heights.json
+│   └── colors-alpha.json    # alpha color scale (neutral alpha palette)
 │
 ├── core/                # Level 2 — design intent applied to primitives (15 files)
 │   ├── color/
 │   │   ├── colors-brand.json      # primary (blue) + secondary (purple) + visited
 │   │   ├── colors-neutral.json    # background/surface/border/text hierarchy
-│   │   └── colors-semantic.json   # success/error/warning/info (default/subtle/border/hover)
+│   │   ├── colors-feedback.json   # success/error/warning/info (default/subtle/border/hover)
+│   │   └── colors-alpha.json      # alpha variants of core colors for overlays/effects
 │   ├── layout/
 │   │   └── (9 files)              # containers, grid, header, hero, modal, page, section, sidebar
 │   └── typography/
 │       └── (9 files)              # body, button, caption, code, heading, label, medium, small, strong
 │
-├── semantic/            # Level 3 — UI context tokens (28 files across 7 dirs)
+├── semantic/            # Level 3 — UI context tokens (28+ files across 7 dirs)
 │   ├── ui/
+│   │   ├── background.json    # page/surface/overlay backgrounds; background-pattern (themeable/extended)
 │   │   ├── context.json       # background/overlay/text/border context tokens
 │   │   ├── spacing.json       # tight/compact/default/comfortable/spacious
 │   │   ├── shadow.json        # small/medium/large/extra-large
@@ -86,6 +115,8 @@ src/
 │   │   ├── height.json
 │   │   └── transition.json
 │   ├── interactive/
+│   │   ├── action.json        # NEW: primary/secondary/destructive/success/warning/info/neutral intents
+│   │   │                      #      each with default/hover/active/on states
 │   │   ├── focus.json         # ring + ring-offset + background
 │   │   ├── background.json    # hover/pressed/selected overlays
 │   │   ├── border.json
@@ -99,7 +130,8 @@ src/
 │   ├── elevation/
 │   │   └── z-index.json       # base(0)/dropdown(1000)/sticky(1100)/fixed(1200)/modal-backdrop(1300)/modal(1400)/popover(1500)/toast(1600)
 │   ├── effect/
-│   │   └── glow.json          # box.none/primary.default/primary.hover/focus + text + border glows
+│   │   └── glow.json          # uses neutral alpha tokens (not hardcoded brand colors) for focus glows
+│   │                          # box.none/primary.default/primary.hover/focus + text + border glows
 │   ├── layout/
 │   │   └── breakpoints.json   # semantic breakpoint aliases
 │   ├── typography/
@@ -108,7 +140,7 @@ src/
 │       └── components.json    # button variants: primary/secondary/ghost/outline/destructive/success/warning/info
 │
 └── component/           # Level 4 — component-specific tokens (10 files)
-    ├── button.json    # padding(sm/md/lg), height, font-size, border-radius, glow, variants, states
+    ├── button.json    # 3 types (solid/ghost/outline) × 7 variants × states; padding(sm/md/lg), height, glow
     ├── card.json
     ├── input.json
     ├── badge.json
@@ -125,16 +157,17 @@ src/
 ```
 --lufa-{level}-{category}-{name}[-{variant}][-{state}]
 
---lufa-primitive-color-blue-600           (primitive color)
---lufa-primitive-spacing-16               (primitive spacing)
---lufa-core-brand-primary-default         (core brand)
---lufa-core-neutral-text-primary          (core neutral)
---lufa-semantic-ui-spacing-default        (semantic ui)
---lufa-semantic-ui-text-primary           (semantic context)
---lufa-semantic-interactive-focus-ring    (semantic interactive)
---lufa-semantic-z-index-modal             (semantic elevation)
---lufa-component-button-padding-md        (component)
---lufa-component-button-variant-primary-background-default
+--lufa-primitive-color-blue-600                              (primitive color)
+--lufa-primitive-spacing-16                                  (primitive spacing)
+--lufa-core-brand-primary-default                            (core brand)
+--lufa-core-neutral-text-primary                             (core neutral)
+--lufa-semantic-ui-spacing-default                           (semantic ui)
+--lufa-semantic-ui-text-primary                              (semantic context)
+--lufa-semantic-interactive-focus-ring                       (semantic interactive)
+--lufa-semantic-interactive-action-primary-background-default (semantic action)
+--lufa-semantic-z-index-modal                                (semantic elevation)
+--lufa-component-button-padding-md                           (component)
+--lufa-component-button-solid-primary-background-default     (component button variant)
 ```
 
 ## Multi-mode system
@@ -169,6 +202,24 @@ Mode-aware tokens carry a `modes` object in `$extensions.lufa.modes`:
 
 Tokens without a `modes` object are constant across all modes.
 
+## Semantic interactive action tokens (new in v1.2.1)
+
+`src/semantic/interactive/action.json` defines intent-based action tokens for interactive components (buttons, links, etc.). Each intent has a full set of states:
+
+| Intent        | States                                     |
+| ------------- | ------------------------------------------ |
+| `primary`     | background.default/hover/active, on        |
+| `secondary`   | background.default/hover/active, on        |
+| `destructive` | background.default/hover/active, on        |
+| `success`     | background.default/hover/active, on        |
+| `warning`     | background.default/hover/active, on        |
+| `info`        | background.default/hover/active, on        |
+| `neutral`     | background.default/hover/active, on        |
+
+CSS variable pattern: `--lufa-semantic-interactive-action-{intent}-{property}-{state}`
+
+Example: `--lufa-semantic-interactive-action-primary-background-hover`
+
 ## Key color tokens quick reference
 
 | CSS Variable                             | Light value     | Use                         |
@@ -194,13 +245,22 @@ Tokens without a `modes` object are constant across all modes.
 - WCAG contrast ratios are **automatically computed** at build time by the `add-wcag-metadata.js` preprocessor
 - High-contrast mode uses pure RGB values (`#000000`, `#ffffff`, `#0000ff`, `#ff0000`, `#00ff00`, `#ffff00`) for WCAG AAA compliance
 - Focus rings use 2px offset (`primitive.border-width.scale.base`) — a WCAG/Material Design constant, not themeable
-- Default focus glow: `0 0 0 3px rgba(59, 130, 246, 0.25)` (blue-500 at 25% opacity)
+- Glow tokens (`effect/glow.json`) reference **neutral alpha tokens** (not hardcoded brand colors) so theme overrides propagate correctly into focus glows
 - Disabled opacity: 0.38 (Material Design standard)
 - `test:wcag` script runs automated contrast validation on every build
 
 ## Build system details
 
 **Entry point:** `style-dictionary.config.js`
+
+**Key scripts:**
+
+| Script                  | Purpose                                                                  |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `build`                 | Run Style Dictionary + post-process all dist artifacts                   |
+| `merge:tokens`          | Run `scripts/merge-tokens.mjs` → produce `dist/tokens-source-merged.json`|
+| `test:wcag`             | Validate all foreground/background token pairs against WCAG thresholds   |
+| `validate:token-usage`  | ESLint check that components never import JSON tokens directly            |
 
 **Custom transforms:**
 
@@ -210,8 +270,10 @@ Tokens without a `modes` object are constant across all modes.
 **Custom formats:**
 
 - `css/variables-with-modes` — outputs `[data-theme]` + `[data-mode]` selectors
+- `css/themeable-template` — outputs CSS template stubs for themeable tokens (filtered by themeLevel)
 - `json/nested-with-metadata` — preserves `description` + `extensions` in nested JSON
 - `json/vscode-map` — flat CSS-var-to-value map for VSCode extension
+- `json/source-merged` — raw DTCG source merged from all src/ files, references unresolved
 
 **Build-time validators (`build/validators/`):**
 
@@ -244,8 +306,34 @@ import tokens from '@grasdouble/lufa_design-system-tokens/values';
 const blue600 = tokens.primitive.color.blue['600']; // "#2563eb"
 ```
 
-**Rule: Components must never import JSON tokens directly. Use CSS variables only.**
+**Accessing raw DTCG source (build tooling only):**
+
+```typescript
+import merged from '@grasdouble/lufa_design-system-tokens/merged';
+// merged contains unresolved {references} — not for runtime use
+```
+
+**Accessing themeable token templates (theme authoring):**
+
+```css
+/* Import the complexity tier that fits your theme scope */
+@import '@grasdouble/lufa_design-system-tokens/themeable-starter';
+/* Fill in the CSS custom property stubs to create a theme */
+```
+
+**Critical rule: Components must never import JSON tokens directly. Use CSS variables only.**
 (Enforced by `pnpm validate:token-usage` and ESLint.)
+
+## Anti-patterns
+
+| Anti-pattern                                           | Correct approach                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| Hard-coding `#2563eb` in component CSS                 | Use `var(--lufa-core-brand-primary-default)`                  |
+| Importing `@grasdouble/lufa_design-system-tokens` JSON in a component | Use CSS variables via CSS Modules              |
+| Referencing a primitive token directly in a component  | Reference a semantic or component-level token                 |
+| Skipping a level (component → primitive)               | Follow the hierarchy: component → semantic → core → primitive |
+| Using `./merged` export at runtime                     | `./merged` is for build tooling only (unresolved references)  |
+| Overriding tokens outside `[data-theme]` scope         | Always scope overrides inside `[data-theme]` attribute        |
 
 ## Dependency graph
 
@@ -259,15 +347,19 @@ This package has **no runtime dependencies**. It is a pure dev/build artifact.
 
 Dev dependencies only:
 
-- `style-dictionary` ^5.2.0 — the entire build system
+- `style-dictionary` ^5.3.3 — the entire build system
 - `@grasdouble/lufa_config_*` workspace packages — shared linting/formatting/TS configs
 
 ## Common integration points
 
-| Scenario                  | Which export                    | How                                             |
-| ------------------------- | ------------------------------- | ----------------------------------------------- |
-| Component CSS styling     | `./tokens.css`                  | `@import` in root CSS or bundler config         |
-| Chart/canvas color values | `./values`                      | `import tokens from '…/values'`                 |
-| Custom theme override     | `./tokens.css` + `[data-theme]` | Set CSS vars on scoped container                |
-| Design tooling / docs     | `./metadata`                    | Access `description`, `extensions.lufa.useCase` |
-| VSCode extension preview  | `dist/tokens.map.json`          | Filesystem access (not a named export)          |
+| Scenario                    | Which export                    | How                                              |
+| --------------------------- | ------------------------------- | ------------------------------------------------ |
+| Component CSS styling        | `./tokens.css`                  | `@import` in root CSS or bundler config          |
+| Chart/canvas color values    | `./values`                      | `import tokens from '…/values'`                  |
+| Custom theme override        | `./tokens.css` + `[data-theme]` | Set CSS vars on scoped container                 |
+| Starter theme authoring      | `./themeable-starter`           | CSS template with starter-level token stubs      |
+| Extended theme authoring     | `./themeable-extended`          | CSS template with starter+extended token stubs   |
+| Advanced theme authoring     | `./themeable-advanced`          | CSS template with all themeable token stubs      |
+| Design tooling / docs        | `./metadata`                    | Access `description`, `extensions.lufa.useCase`  |
+| Build tooling / token merge  | `./merged`                      | Raw DTCG JSON with unresolved references         |
+| VSCode extension preview     | `dist/tokens.map.json`          | Filesystem access (not a named export)           |

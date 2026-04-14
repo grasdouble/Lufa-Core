@@ -1,10 +1,7 @@
 ---
-package: '@grasdouble/lufa_config_tsconfig'
-shortName: lufa_config_tsconfig
-category: config
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_config_tsconfig"
 ---
 
 # Context: @grasdouble/lufa_config_tsconfig
@@ -14,7 +11,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 | Field           | Value                                                |
 | --------------- | ---------------------------------------------------- |
 | Full name       | `@grasdouble/lufa_config_tsconfig`                   |
-| Version         | `0.1.1`                                              |
+| Version         | `0.1.2`                                              |
 | Private         | `false`                                              |
 | Source path     | `packages/config/tsconfig/`                          |
 | No JS/TS source | Config-only package — four JSON files, no build step |
@@ -70,6 +67,12 @@ Or in workspace packages:
 | `node.json`          | Node.js server, CLI tool, or build script                       |
 | `react-app.json`     | React SPA or microfrontend consumed by a bundler (Vite/Webpack) |
 | `react-library.json` | Publishable React component library requiring `.d.ts` output    |
+
+---
+
+## Key Types
+
+This package exports no TypeScript types. It is a pure JSON configuration package.
 
 ---
 
@@ -206,7 +209,7 @@ tsconfig.typecheck.json    ← type-check only config, may extend this package s
 
 ## Dependencies Context
 
-This package has zero declared dependencies. It is a leaf in the dependency graph — nothing in this package depends on other Lufa packages.
+This package has zero declared runtime dependencies. The only `devDependency` is `sort-package-json` (`^3.6.1`), used exclusively by `lint-staged` to sort `package.json` fields. It is a leaf in the dependency graph — nothing in this package depends on other Lufa packages.
 
 **Packages that depend on `@grasdouble/lufa_config_tsconfig`** (workspace consumers):
 
@@ -225,3 +228,23 @@ This package has zero declared dependencies. It is a leaf in the dependency grap
 | `cdn/autobuild-server`                         | `node.json`          |
 | `plugins/vite/vite-plugin-react-preamble`      | `node.json`          |
 | `plugins/vite/vite-plugin-import-map-injector` | `node.json`          |
+
+---
+
+## Quick Reference
+
+| Task                                | Action                                                                      |
+| ----------------------------------- | --------------------------------------------------------------------------- |
+| Add to a new package                | `pnpm add -D @grasdouble/lufa_config_tsconfig` then set `extends` in tsconfig |
+| Choose a preset for a Node CLI      | `node.json`                                                                 |
+| Choose a preset for a React app     | `react-app.json`                                                            |
+| Choose a preset for a React lib     | `react-library.json`                                                        |
+| Override a single compiler option   | Add it under `compilerOptions` in the consumer's local `tsconfig.json`      |
+| Add path aliases                    | Set `baseUrl` + `paths` in the consumer's `compilerOptions`                 |
+
+---
+
+## See Also
+
+- [`@grasdouble/lufa_config_eslint`](../config/lufa_config_eslint.context.md) — ESLint configuration
+- [`@grasdouble/lufa_config_prettier`](../config/lufa_config_prettier.context.md) — Prettier configuration

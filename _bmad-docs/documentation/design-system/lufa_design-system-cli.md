@@ -1,326 +1,526 @@
 ---
-package: '@grasdouble/lufa_design-system-cli'
-shortName: lufa_design-system-cli
-category: design-system
-version: '1.0.1'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system-cli"
+version: "1.1.1"
 ---
 
 # @grasdouble/lufa_design-system-cli
 
 ## Overview
 
-`@grasdouble/lufa_design-system-cli` is the theme validation toolchain for the Lufa Design System. It ships both a standalone CLI binary (`lufa-validate-theme`) and a programmatic API that consumers can import in TypeScript/JavaScript. Given a custom theme CSS file, the tool enforces three categories of rules: token completeness, WCAG AA colour contrast, and CSS value format correctness.
+`@grasdouble/lufa_design-system-cli` is a Node.js command-line tool that validates custom theme CSS files against the Lufa Design System requirements. It provides two commands: `theme-validate` for checking theme correctness and `theme-template` for generating starter theme files.
+
+The CLI is distributed as a binary (`lufa-ds-cli`) and requires Node.js 20 or later. It is ESM-only (`"type": "module"`).
 
 ## Purpose
 
-Custom themes in the Lufa Design System must override all 438+ CSS custom properties defined in `@grasdouble/lufa_design-system-tokens`. This package provides the automated enforcement layer that prevents incomplete, inaccessible, or malformed themes from reaching production.
+Custom themes in the Lufa Design System override core CSS custom properties (CSS variables). This package provides automated quality gates ensuring that themes:
 
-Key goals:
+- Use valid CSS value formats for each token category (hex colors, dimensions, durations, font weights, etc.)
+- Meet WCAG 2.2 AA contrast ratios across all theme modes (`light`, `dark`, `high-contrast`)
+- Can be validated in CI/CD pipelines, pre-commit hooks, or as npm scripts
 
-- **Completeness** – every required token is present in the theme file.
-- **Accessibility** – colour pairs meet WCAG 2.1 AA contrast ratios (4.5:1 for text, 3.0:1 for UI components).
-- **Format correctness** – hex colours, dimensions, durations, font-weights, and z-indices follow expected syntaxes.
-- **Template generation** – output a pre-filled 629-line starter CSS file that teams can customise.
+It also scaffolds new theme files from the official Lufa token templates at three complexity levels: **starter**, **extended**, and **advanced**.
 
 ## Architecture
 
 ```
 src/
-├── cli.ts              # CLI entry-point (Commander program, bin: lufa-validate-theme)
-├── index.ts            # Programmatic API entry-point (public exports)
-├── templates/
-│   └── theme-template.css   # 629-line starter template (all 438+ tokens)
+├── cli.ts                  Entry point — Commander program, sub-commands, output logic
 ├── utils/
-│   ├── parse-css.ts    # CSS parsing, property extraction, var() resolution
-│   └── wcag.ts         # WCAG 2.1 luminance & contrast-ratio calculations
+│   ├── parse-css.ts        CSS file parsing, custom property extraction, var() resolution
+│   ├── contrast.ts         Color pair provider — derives fg/bg pairs from token metadata
+│   └── wcag.ts             WCAG 2.1/2.2 contrast ratio math and level constants
 └── validators/
-    ├── completeness.ts # Checks all required tokens are defined
-    ├── contrast.ts     # Checks 55 predefined colour-pair contrast ratios
-    └── format.ts       # Checks value syntax per token-name convention
+    ├── a11y.ts             Accessibility validator — WCAG AA per theme mode
+    └── format.ts           Format validator — token value syntax checking
 ```
 
-The CLI (`cli.ts`) is a thin orchestration layer: it parses arguments with [Commander](https://github.com/tj/commander.js), calls `parseCSSFile` to extract properties, then delegates to the three validators sequentially, collecting errors and reporting results to stdout with [Chalk](https://github.com/chalk/chalk) formatting.
+### Data Flow
 
-The programmatic API (`index.ts`) re-exports all validators, utilities, and key types so downstream tooling can call them without spawning a subprocess.
+```
+theme.css
+    │
+    ▼
+parseThemeFileByMode()          (a11y path — per data-mode block)
+parseCSSFile()                  (format path — flat property list)
+    │
+    ▼
+┌──────────────────────────────────────────────┐
+│  validateFormat(CSSCustomProperty[])         │
+│  • token name → expected format rule         │
+│  • returns FormatResult                      │
+└──────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  validateA11y(themePath)                     │
+│  1. Load tokens.css from tokens package      │
+│  2. Parse theme file per mode                │
+│  3. Merge base + theme overrides             │
+│  4. Resolve var() chains → hex               │
+│  5. Check contrast vs WCAG AA thresholds     │
+│  • returns A11yResult                        │
+└──────────────────────────────────────────────┘
+    │
+    ▼
+console output + process.exit(0 | 1 | 2)
+```
 
-### Token-level taxonomy
+### Color Pair Discovery
 
-CSS custom properties are categorised into four levels, identified by name prefix:
+The accessibility validator derives all foreground/background color pairs from token metadata — no hardcoded pairs. `contrast.ts` reads `@grasdouble/lufa_design-system-tokens/metadata` and builds pairs from two complementary sources:
 
-| Level         | Prefix              | Description                                     |
-| ------------- | ------------------- | ----------------------------------------------- |
-| 1 – Primitive | `--lufa-primitive-` | Raw values (colours, spacing sizes, durations)  |
-| 2 – Core      | `--lufa-core-`      | Brand colours and neutral palette aliases       |
-| 3 – Semantic  | `--lufa-semantic-`  | UI-state meanings (primary, hover, disabled, …) |
-| 4 – Component | `--lufa-component-` | Per-component token overrides                   |
+1. **Explicit annotations** — tokens with `extensions.lufa.contrastWith` (array of dot-notation token paths) and `extensions.lufa.contrastType` (`"text"` | `"ui"`). Used for cross-namespace pairs that cannot be inferred automatically.
+2. **Sibling inference** — for every `-text` or `-border` token, attempts to find a corresponding `-background` sibling in the same path. A skip-pattern list prevents false positives (disabled states, overlays, focus rings, dividers, etc.).
+
+Explicit pairs take precedence; sibling-inferred pairs fill the rest. The two sets are deduplicated by `fg|bg` key.
+
+### Token Taxonomy (recognized by format validator)
+
+| Level | CSS prefix | Description |
+|-------|-----------|-------------|
+| Primitive | `--lufa-primitive-` | Raw values — colors, spacing, durations |
+| Core | `--lufa-core-` | Brand palette and neutral aliases |
+| Semantic | `--lufa-semantic-` | UI-state meanings (primary, hover, disabled) |
+| Component | `--lufa-component-` | Per-component token overrides |
 
 ## Key Components
 
-### `src/cli.ts` – CLI entry-point
+### `src/cli.ts` — Entry Point
 
-Registered as the `lufa-validate-theme` binary. Accepts one positional argument (path to a theme CSS file) and three options.
+The Commander-based CLI binary. Defines two sub-commands (`theme-validate`, `theme-template`), handles argument parsing, orchestrates runs across single files or directories, and controls console output with Chalk.
 
-Execution flow:
+**Types defined:**
 
-1. If `--template` is present, reads `dist/templates/theme-template.css` and writes it to stdout, then exits.
-2. Otherwise, calls `parseCSSFile(themeFile)` to extract `CSSCustomProperty[]`.
-3. Runs `validateCompleteness`, `validateContrast`, and `validateFormat` in sequence.
-4. Reports each section with coloured output; exits with code `1` on any error, `2` on usage/runtime errors, `0` on success.
+| Type | Definition |
+|------|-----------|
+| `TemplateLevel` | `'starter' \| 'extended' \| 'advanced'` |
+| `ValidateOptions` | `{ a11y?: boolean; format?: boolean; dir?: string }` |
 
-### `src/index.ts` – Programmatic API
+**Key helpers:**
 
-Exports all three validators, all utility functions from `parse-css.ts` and `wcag.ts`, the `ValidationResult` type, and the convenience wrapper `validateTheme(themePath)`.
+| Function | Description |
+|----------|-------------|
+| `resolveFiles(themeFile, dir)` | Returns CSS file paths from a single file arg or a directory scan (`*.css`) |
+| `selectCheck(options)` | Returns the appropriate check function based on `--a11y` / `--format` flags |
+| `runCheckAll(file)` | Runs format + a11y, reports combined output |
+| `runCheckA11y(file)` | Runs a11y check only |
+| `runCheckFormat(file)` | Runs format check only |
+| `runTemplate(level, outputName)` | Copies template CSS from tokens package to CWD |
+| `handleFatalError(error)` | Prints error, exits with code 2 |
 
-### `src/utils/parse-css.ts` – CSS parser
+**Template source map:**
 
-Uses a regex-based approach (no external CSS parser dependency at runtime) to extract `CSSCustomProperty` objects `{ name, value, line }`. Also provides:
+| Level | Tokens package export |
+|-------|-----------------------|
+| `starter` | `@grasdouble/lufa_design-system-tokens/themeable-starter` |
+| `extended` | `@grasdouble/lufa_design-system-tokens/themeable-extended` |
+| `advanced` | `@grasdouble/lufa_design-system-tokens/themeable-advanced` |
 
-- `tokenNameFromCSSVar` / `cssVarNameFromToken` – convert between `--lufa-*` CSS var names and dot-notation token names.
-- `resolveCSSVarValue` – recursively follows `var(--lufa-*)` references, guarding against circular references.
-- `groupPropertiesByLevel` – buckets properties into the four taxonomy levels.
-- Type-check helpers: `isValidHexColor`, `isValidDimension`, `isValidDuration`.
+---
 
-### `src/utils/wcag.ts` – WCAG utilities
+### `src/utils/parse-css.ts` — CSS Parsing
 
-Pure functions implementing WCAG 2.1 §1.4.3 contrast calculation:
+Parses CSS files and provides utilities for working with CSS custom properties.
 
-- `hexToRgb` – parses 3- and 6-digit hex strings.
-- `getRelativeLuminance` – applies gamma correction per W3C spec.
-- `getContrastRatio` – returns the (L1 + 0.05) / (L2 + 0.05) ratio.
-- `WCAG_LEVELS` – typed constant object with AA/AAA thresholds for normal text, large text, and UI components.
-- `meetsWCAG_AA_Text`, `meetsWCAG_AA_UI`, `meetsWCAG_AAA`, `getWCAGLevel` – conformance predicates and labels.
+**Exported type:**
 
-### `src/validators/completeness.ts`
-
-Reads `tokens-metadata.json` from `@grasdouble/lufa_design-system-tokens` at runtime, extracts every token that has a `value` property (via recursive traversal), and compares the resulting list against the properties found in the theme. Returns `CompletenessResult` with lists of missing and extra tokens. Extra tokens are non-fatal (returned as warnings in the programmatic API).
-
-### `src/validators/contrast.ts`
-
-Hard-codes 55 foreground/background token-suffix pairs covering: text on page and surface backgrounds, status colours (success/error/warning/info), borders, interactive elements, buttons (primary, secondary, ghost, danger), badges (6 variants), inputs (4 states), tooltips, popovers, alerts, and cards. For each pair it resolves `var()` references, calculates the contrast ratio, and compares against 4.5:1 (text) or 3.0:1 (UI). Returns `ContrastResult`.
-
-### `src/validators/format.ts`
-
-Infers the expected value format from the token name suffix:
-
-| Token suffix contains                                    | Expected format                                     |
-| -------------------------------------------------------- | --------------------------------------------------- |
-| `-color-`                                                | hex `#RGB`/`#RRGGBB`, `rgb()`, `rgba()`, or `var()` |
-| `-spacing-`, `-radius-`, `-font-size-`                   | CSS dimension with unit                             |
-| `-duration-`                                             | CSS duration (`ms` or `s`)                          |
-| `-font-weight-`                                          | integer 100–900                                     |
-| `-z-index-`                                              | integer                                             |
-| `-shadow-`, `-font-family-`, `-easing-`, `-line-height-` | lenient (any value accepted)                        |
-
-Returns `FormatResult` with per-token `FormatError` objects including token name, invalid value, expected format description, and source line number.
-
-### `src/templates/theme-template.css`
-
-A 629-line CSS file containing all 438+ tokens as editable custom properties. Included in the published package under the sub-path export `./templates/theme-template.css`. Consumed by the `--template` CLI option to give developers a starting point.
-
-## CLI Commands
-
-### `lufa-validate-theme`
-
-Binary registered in `package.json#bin`.
-
-#### Synopsis
-
-```
-lufa-validate-theme [options] [theme-file]
+```typescript
+type CSSCustomProperty = {
+  name: string;   // e.g. '--lufa-primitive-color-blue-500'
+  value: string;  // e.g. '#3B82F6' or 'var(--lufa-core-brand-primary)'
+  line: number;   // 1-based line number in source CSS
+};
 ```
 
-#### Arguments
+**Exported functions:**
 
-| Argument       | Description                                                             |
-| -------------- | ----------------------------------------------------------------------- |
-| `[theme-file]` | Path to the CSS file to validate. Required unless `--template` is used. |
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `parseCSSFile` | `(filePath: string) => Promise<CSSCustomProperty[]>` | Reads and parses a CSS file |
+| `parseCSSContent` | `(content: string) => CSSCustomProperty[]` | Parses CSS string |
+| `tokenNameFromCSSVar` | `(cssVarName: string) => string` | `--lufa-foo-bar-500` → `foo.bar.500` |
+| `cssVarNameFromToken` | `(tokenName: string) => string` | `foo.bar.500` → `--lufa-foo-bar-500` |
+| `isCSSVarReference` | `(value: string) => boolean` | `true` if value matches `var(--.*)` |
+| `extractCSSVarName` | `(varReference: string) => string \| null` | Extracts `--varName` from `var(--varName)` |
+| `resolveCSSVarValue` | `(value, properties: Map<string,string>, visitedVars?) => string \| null` | Follows `var()` chains to a concrete value; detects circular references |
+| `isValidHexColor` | `(value: string) => boolean` | Validates 3- or 6-digit hex colors |
+| `isValidDimension` | `(value: string) => boolean` | Validates `px`, `rem`, `em`, `%`, `vh`, `vw`, `vmin`, `vmax`, or bare `0` |
+| `isValidDuration` | `(value: string) => boolean` | Validates `ms` or `s` durations |
+| `groupPropertiesByLevel` | `(properties: CSSCustomProperty[]) => Record<string, CSSCustomProperty[]>` | Groups by `primitive`, `core`, `semantic`, `component`, `unknown` |
 
-#### Options
+---
 
-| Option           | Description                                                                       |
-| ---------------- | --------------------------------------------------------------------------------- |
-| `-t, --template` | Output the starter theme template to stdout instead of validating.                |
-| `-v, --verbose`  | Show all errors/violations even when the list is long (default shows first 5–10). |
-| `--no-color`     | Disable Chalk colour output (useful for CI log files that do not support ANSI).   |
-| `-V, --version`  | Print CLI version.                                                                |
-| `-h, --help`     | Show help text.                                                                   |
+### `src/utils/contrast.ts` — Color Pair Provider
 
-#### Exit codes
+Derives the list of foreground/background color pairs to check from the design system token metadata.
 
-| Code | Meaning                                                                                     |
-| ---- | ------------------------------------------------------------------------------------------- |
-| `0`  | Theme passed all validations.                                                               |
-| `1`  | One or more validation failures (completeness, contrast, or format).                        |
-| `2`  | Usage error (missing argument) or runtime error (file not found, tokens package not built). |
+**Exported function:**
+
+```typescript
+// Returns [fgCssSuffix, bgCssSuffix, 'text' | 'ui'][]
+export async function getColorPairsToCheck(): Promise<ColorPair[]>
+```
+
+The function reads `@grasdouble/lufa_design-system-tokens/metadata`, walks the token tree recursively to collect all color token paths and explicit `contrastWith` annotations, then runs the sibling-inference algorithm to fill in pairs not covered by annotations.
+
+**Skip patterns** (tokens excluded from inference): `primitive`, `core`, `-disabled`, `overlay`, `backdrop`, `scrim`, `focus-ring`, `focus-background`, `focus-outline`, `-placeholder`, `-label`, `helper-text`, `divider`, `close-button`, `shared-`, `-modal-backdrop`, `modal-close`.
+
+---
+
+### `src/utils/wcag.ts` — WCAG Math
+
+Pure utility functions implementing WCAG 2.1 contrast ratio calculations.
+
+**Exported constant:**
+
+```typescript
+const WCAG_LEVELS = {
+  AA_NORMAL_TEXT: 4.5,   // normal text
+  AA_LARGE_TEXT: 3.0,    // large text (≥18pt or ≥14pt bold)
+  AAA_NORMAL_TEXT: 7.0,  // AAA normal text
+  AAA_LARGE_TEXT: 4.5,   // AAA large text
+  UI_COMPONENTS: 3.0,    // UI components and graphics
+} as const;
+```
+
+**Exported functions:**
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `hexToRgb` | `(hex: string) => {r, g, b} \| null` | Parses 3- or 6-digit hex to RGB |
+| `getRelativeLuminance` | `(rgb: {r, g, b}) => number` | WCAG relative luminance with gamma correction |
+| `getContrastRatio` | `(color1, color2: string) => number \| null` | `(L1 + 0.05) / (L2 + 0.05)` ratio |
+| `meetsWCAG_AA_Text` | `(ratio: number) => boolean` | `ratio >= 4.5` |
+| `meetsWCAG_AA_UI` | `(ratio: number) => boolean` | `ratio >= 3.0` |
+| `meetsWCAG_AAA` | `(ratio: number) => boolean` | `ratio >= 7.0` |
+| `getWCAGLevel` | `(ratio: number) => string` | Human-readable conformance level string |
+
+---
+
+### `src/validators/a11y.ts` — Accessibility Validator
+
+Validates WCAG 2.2 AA contrast requirements across all modes (`light`, `dark`, `high-contrast`) found in a theme file.
+
+**Exported types:**
+
+```typescript
+type A11yMode = 'light' | 'dark' | 'high-contrast';
+
+type A11yViolation = {
+  foreground: string;   // CSS var name, e.g. '--lufa-semantic-ui-text-primary'
+  background: string;   // CSS var name
+  ratio: number;        // actual ratio, rounded to 2 decimal places
+  required: number;     // 4.5 (text) or 3.0 (ui)
+  type: 'text' | 'ui';
+  mode: A11yMode;
+};
+
+type A11yModeResult = {
+  mode: A11yMode;
+  valid: boolean;
+  violations: A11yViolation[];
+  totalChecks: number;
+  skipped: number;       // pairs skipped because a token was missing
+};
+
+type A11yResult = {
+  valid: boolean;        // true only when ALL modes pass
+  modes: A11yModeResult[];
+  totalViolations: number;
+};
+```
+
+**Exported function:**
+
+```typescript
+export async function validateA11y(themePath: string): Promise<A11yResult>
+```
+
+**Resolution strategy** (mirrors browser cascade):
+1. Load `tokens.css` from `@grasdouble/lufa_design-system-tokens` — flat map of all `--lufa-*` vars (cached after first load).
+2. Parse theme file into per-mode token maps (by `data-mode` selector attribute).
+3. Merge: `new Map([...baseTokens, ...themeTokens])` — theme overrides win.
+4. For each color pair, resolve `var()` chains to hex values.
+5. Compute contrast ratio and check against WCAG AA threshold for the pair type.
+
+---
+
+### `src/validators/format.ts` — Format Validator
+
+Validates CSS custom property values conform to expected formats inferred from token name patterns.
+
+**Exported types:**
+
+```typescript
+type FormatError = {
+  token: string;           // CSS var name
+  value: string;           // the invalid value
+  expectedFormat: string;  // human-readable description
+  line: number;            // 1-based line in CSS file
+};
+
+type FormatResult = {
+  valid: boolean;
+  errors: FormatError[];
+  totalChecked: number;
+};
+```
+
+**Exported function:**
+
+```typescript
+export function validateFormat(properties: CSSCustomProperty[]): FormatResult
+```
+
+**Format rules by token name pattern:**
+
+| Pattern | Expected format |
+|---------|----------------|
+| `-color-` | `#RGB`, `#RRGGBB`, `rgb()`, `rgba()`, or `var(--lufa-*)` |
+| `-spacing-`, `-radius-` | CSS dimension (`px`, `rem`, `em`, `%`, `vh`, `vw`) or `var()` |
+| `-font-size-` | Dimension, `clamp()`, or `var()` |
+| `-duration-` | `ms` or `s` duration, or `var()` |
+| `-font-weight-` | Integer 100–900 or `var()` |
+| `-z-index-` | Integer or `var()` |
+| `-shadow-`, `-font-family-`, `-easing-`, `-line-height-` | Lenient (any value accepted) |
+| Other | No constraint |
+
+CSS variable references (`var(--lufa-*)`) are always accepted for any token type.
+
+## API Reference
+
+This package exposes a **CLI binary only**. There is no programmatic Node.js API for external consumers. All utilities are internal to the binary runtime.
+
+### Binary: `lufa-ds-cli`
+
+### Sub-command: `theme-validate [theme-file] [options]`
+
+Validate a theme CSS file against Lufa Design System requirements.
+
+| Argument / Option | Description |
+|-------------------|-------------|
+| `[theme-file]` | Path to the theme CSS file to validate |
+| `--a11y` | Run WCAG AA contrast check only |
+| `--format` | Run format check only |
+| `-d, --dir <directory>` | Validate all `*.css` files in a directory |
+| `-h, --help` | Display help |
+
+When no flag is given, all checks run (format + a11y). `--a11y` and `--format` are mutually exclusive.
+
+**Exit codes:**
+
+| Code | Meaning |
+|------|---------|
+| `0` | All checks passed |
+| `1` | One or more validation errors found |
+| `2` | CLI error (invalid arguments, file not found, unexpected error) |
+
+### Sub-command: `theme-template [level] [options]`
+
+Create a theme CSS starter file in the current working directory.
+
+| Argument / Option | Description |
+|-------------------|-------------|
+| `[level]` | `starter` (default), `extended`, or `advanced` |
+| `-o, --output-name <name>` | Output filename without `.css`; prompted interactively if omitted |
+| `-h, --help` | Display help |
 
 ## Usage Examples
 
-### CLI – validate a theme
+### Validate a single file (all checks)
 
 ```bash
-# Basic validation
-lufa-validate-theme ./my-brand-theme.css
-
-# Verbose: show every error
-lufa-validate-theme --verbose ./my-brand-theme.css
-
-# Disable colour for CI log capture
-lufa-validate-theme --no-color ./my-brand-theme.css
-
-# Generate a starter template
-lufa-validate-theme --template > my-brand-theme.css
+lufa-ds-cli theme-validate ./my-theme.css
 ```
 
-### CLI – typical validation output
+### Run only the a11y check
 
-```
-🔍 Validating theme: ./my-brand-theme.css
-
-Found 438 custom properties
-
-1. Completeness Check
-✓ All 438 required tokens are defined
-
-2. Contrast Check (WCAG AA)
-✗ 2 contrast violations found
-  Violations:
-    - --lufa-semantic-ui-text-secondary on --lufa-semantic-ui-background-page: 3.8:1 (needs 4.5:1 for text)
-    - --lufa-component-badge-warning-text on --lufa-component-badge-warning-background: 2.1:1 (needs 4.5:1 for text)
-
-3. Format Check
-✓ All 438 token values have valid formats
-
-❌ Theme validation failed
-
-Run with --verbose to see all errors
+```bash
+lufa-ds-cli theme-validate ./my-theme.css --a11y
 ```
 
-### Programmatic API – basic usage
+### Run only the format check
 
-```typescript
-import { validateTheme } from '@grasdouble/lufa_design-system-cli';
+```bash
+lufa-ds-cli theme-validate ./my-theme.css --format
+```
 
-const result = await validateTheme('./my-brand-theme.css');
+### Validate all CSS files in a directory
 
-if (result.valid) {
-  console.log('Theme is valid!');
-} else {
-  console.error('Errors:', result.errors);
-  if (result.warnings) {
-    console.warn('Warnings:', result.warnings);
+```bash
+lufa-ds-cli theme-validate --dir ./themes/src
+
+# A11y only across all files in a directory
+lufa-ds-cli theme-validate --a11y --dir ./themes/src
+```
+
+### Generate a theme template
+
+```bash
+# Interactive (prompts for file name)
+lufa-ds-cli theme-template
+
+# Explicit level and name
+lufa-ds-cli theme-template extended --output-name my-brand
+lufa-ds-cli theme-template advanced -o my-brand
+```
+
+### Expected output — all passing
+
+```
+🔍 my-theme.css
+
+  ✓ Format — all token values are valid
+
+  A11y (WCAG AA):
+  ✓ [light] 102 checks passed
+  ✓ [dark] 102 checks passed
+  ✓ [high-contrast] 102 checks passed
+
+✅ All checks passed!
+```
+
+### Expected output — with failures
+
+```
+🔍 my-theme.css
+
+  ✗ --lufa-core-color-brand-primary-default (line 12): Invalid format — hex color (e.g., #3B82F6) or CSS variable reference (e.g., var(--lufa-...))
+
+  A11y (WCAG AA):
+  ✗ [dark] 1 violation(s) (102 checks, 0 skipped)
+      --lufa-semantic-ui-text-primary on --lufa-semantic-ui-background-page — 3.1:1 (needs 4.5:1 WCAG AA Text)
+  ✓ [light] 102 checks passed (3 skipped)
+  ✓ [high-contrast] 102 checks passed
+
+❌ Validation failed
+```
+
+### Theme CSS structure expected by the validator
+
+```css
+[data-theme='my-brand'][data-mode='light'] {
+  --lufa-core-color-brand-primary-default: #0e7490;
+  /* ... more core token overrides ... */
+}
+
+[data-theme='my-brand'][data-mode='dark'] {
+  --lufa-core-color-brand-primary-default: #22d3ee;
+}
+
+[data-theme='my-brand'][data-mode='high-contrast'] {
+  --lufa-core-color-brand-primary-default: #ffffff;
+}
+```
+
+### CI/CD — GitHub Actions
+
+```yaml
+name: Validate Theme
+on:
+  push:
+    paths: ['src/theme.css']
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install -g @grasdouble/lufa_design-system-cli
+      - run: lufa-ds-cli theme-validate src/theme.css
+```
+
+### CI/CD — NPM script
+
+```json
+{
+  "scripts": {
+    "validate-theme": "lufa-ds-cli theme-validate src/theme.css",
+    "prebuild": "npm run validate-theme"
   }
 }
 ```
 
-### Programmatic API – individual validators
+### CI/CD — Pre-commit hook (Husky)
 
-```typescript
-import {
-  parseCSSFile,
-  validateCompleteness,
-  validateContrast,
-  validateFormat,
-} from '@grasdouble/lufa_design-system-cli';
-
-const properties = await parseCSSFile('./my-brand-theme.css');
-
-const completeness = await validateCompleteness(properties);
-// { valid: true, totalRequired: 438, totalDefined: 442, missingTokens: [], extraTokens: [...] }
-
-const contrast = validateContrast(properties);
-// { valid: false, violations: [...], totalChecks: 55 }
-
-const format = validateFormat(properties);
-// { valid: true, errors: [], totalChecked: 442 }
+```bash
+# .husky/pre-commit
+npx lufa-ds-cli theme-validate src/theme.css || exit 1
 ```
 
-### Programmatic API – WCAG utilities
+### Usage inside the monorepo (`themes` package)
 
-```typescript
-import { getContrastRatio, getWCAGLevel, WCAG_LEVELS } from '@grasdouble/lufa_design-system-cli';
-
-const ratio = getContrastRatio('#1E293B', '#F8FAFC');
-// 14.12
-
-console.log(getWCAGLevel(ratio ?? 0));
-// 'AAA (Normal Text)'
-
-console.log(ratio !== null && ratio >= WCAG_LEVELS.AA_NORMAL_TEXT);
-// true
-```
-
-### CSS variable name conversion
-
-```typescript
-import { cssVarNameFromToken, tokenNameFromCSSVar } from '@grasdouble/lufa_design-system-cli';
-
-tokenNameFromCSSVar('--lufa-primitive-color-blue-500');
-// 'primitive.color.blue.500'
-
-cssVarNameFromToken('primitive.color.blue.500');
-// '--lufa-primitive-color-blue-500'
-```
-
-### Template sub-path import (CSS)
-
-The theme template CSS file is exposed as a sub-path export and can be referenced directly in build tooling:
-
-```javascript
-// In a bundler config / PostCSS pipeline:
-import templateUrl from '@grasdouble/lufa_design-system-cli/templates/theme-template.css';
-```
-
-### CI/CD integration (GitHub Actions example)
-
-```yaml
-- name: Validate design system theme
-  run: npx lufa-validate-theme --no-color ./src/themes/brand.css
+```json
+{
+  "scripts": {
+    "validate:theme:all": "lufa-ds-cli theme-validate --dir src",
+    "validate:theme:ocean": "lufa-ds-cli theme-validate src/ocean.css"
+  }
+}
 ```
 
 ## Dependencies
 
-### Runtime dependencies
+### Runtime Dependencies
 
-| Package                                 | Version       | Role                                                                                              |
-| --------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Source of truth for all required token names (loaded from `dist/tokens-metadata.json` at runtime) |
-| `chalk`                                 | `^5.6.2`      | Coloured terminal output in the CLI                                                               |
-| `commander`                             | `^14.0.2`     | CLI argument parsing and help generation                                                          |
-| `postcss`                               | `^8.5.6`      | Listed as a dependency (available for future CSS parsing expansion)                               |
-| `postcss-value-parser`                  | `^4.2.0`      | Listed as a dependency (available for future value parsing expansion)                             |
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Provides `tokens.css` (base token var() scaffolding), `metadata` (color pair discovery), and `themeable-*` template CSS files |
+| `chalk` | `^5.6.2` | Colored terminal output (ESM-only, v5) |
+| `commander` | `^14.0.3` | CLI argument parsing and sub-command structure |
+| `postcss` | `^8.5.8` | Available as dependency; not currently invoked by source code |
+| `postcss-value-parser` | `^4.2.0` | Available as dependency; not currently invoked by source code |
 
-> Note: the current CSS parser in `parse-css.ts` is regex-based and does not invoke `postcss` or `postcss-value-parser` at runtime. They are available for future use or extension.
+### Key Dev Dependencies
 
-### Dev dependencies (key)
+| Package | Purpose |
+|---------|---------|
+| `tsx` | TypeScript execution for `pnpm dev` |
+| `vitest` | Test runner |
+| `typescript` | `^5.9.3` |
 
-| Package               | Role                                        |
-| --------------------- | ------------------------------------------- |
-| `vitest`              | Unit test runner                            |
-| `tsx`                 | Run TypeScript source directly (`pnpm dev`) |
-| `typescript`          | Type-checking and compilation               |
-| `eslint` / `prettier` | Code quality via shared config packages     |
+### Implicit Requirements
 
-### Engine requirement
+- **Node.js ≥ 20** — required by `engines` field and use of `import.meta.resolve`
+- `@grasdouble/lufa_design-system-tokens` must be **built** before running this CLI — the validator reads compiled `tokens.css` and `metadata` files from the tokens package's `dist/`
 
-Node.js **≥ 20** is required (uses `fs/promises`, `import.meta.url`, ESM).
+Build order in the monorepo: `tokens` → `cli`.
 
-## Related Documentation
+## Configuration
 
-Internal package documentation (relative to the source tree):
+No user-facing configuration file. All behavior is controlled via CLI flags.
 
-- `packages/design-system/cli/_docs/usage.md`
-- `packages/design-system/cli/_docs/validation-checks.md`
-- `packages/design-system/cli/_docs/examples.md`
-- `packages/design-system/cli/_docs/cli-options.md`
-- `packages/design-system/cli/_docs/ci-cd-integration.md`
-- `packages/design-system/cli/_docs/development.md`
-- `packages/design-system/cli/_docs/token-role-metadata.md`
+### Build
 
-Related packages:
+```bash
+pnpm build        # pnpm clean && tsc → dist/
+pnpm build:watch  # tsc --watch
+pnpm clean        # rm -rf dist
+```
 
-- `@grasdouble/lufa_design-system-tokens` – defines the 438+ tokens this CLI validates against
-- `@grasdouble/lufa_design-system-themes` – pre-built theme CSS files that pass this validator
-- `@grasdouble/lufa_design-system-main` – React component library that consumes the validated tokens
+### TypeScript
+
+Extends `@grasdouble/lufa_config_tsconfig/node.json`. Output: `./dist`, source root: `./src`. Emits declarations and declaration maps.
+
+### Tests
+
+```bash
+pnpm test           # vitest (watch mode)
+pnpm test:run       # vitest run (CI-friendly, single pass)
+pnpm test:coverage  # vitest --coverage
+pnpm test:ui        # vitest --ui
+```
+
+Test files are in `src/utils/__tests__/` and `src/validators/__tests__/`.
+
+### Lint / Format
+
+```bash
+pnpm lint               # eslint
+pnpm prettier:check     # check formatting
+pnpm prettier:write     # auto-fix formatting
+pnpm typecheck          # tsc --noEmit
+```

@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_design-system'
-shortName: lufa_design-system
-category: design-system
-version: '2.0.0'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system"
+version: "2.1.1"
 ---
 
 # @grasdouble/lufa_design-system
@@ -129,7 +126,16 @@ Wrapping flex layout for collections of small elements (badges, tags, buttons). 
 
 #### `Flex`
 
-Explicit flexbox layout primitive with full control over flex properties. Use when Stack/Cluster do not meet requirements.
+Explicit flexbox layout primitive with full control over flex properties. Extends all Box props. Use when Stack/Cluster do not meet requirements.
+
+| Prop        | Type                                                     | Default |
+| ----------- | -------------------------------------------------------- | ------- |
+| `direction` | `'row' \| 'column' \| 'row-reverse' \| 'column-reverse'` | —       |
+| `wrap`      | `'nowrap' \| 'wrap' \| 'wrap-reverse'`                   | —       |
+| `justify`   | `'start' \| 'end' \| 'center' \| 'between' \| 'around' \| 'evenly'` | — |
+| `align`     | `'start' \| 'end' \| 'center' \| 'baseline' \| 'stretch'` | —     |
+| `gap`       | `SpacingValue`                                           | —       |
+| `inline`    | `boolean`                                                | —       |
 
 #### `Grid`
 
@@ -148,19 +154,26 @@ Responsive max-width wrapper. Centers content horizontally with horizontal paddi
 
 #### `Center`
 
-Centers content horizontally and/or vertically within its container.
+Centers content horizontally and vertically using `flex + align-center + justify-center`. Inherits all Box props including responsive visibility. Accepts an `inline` prop for `inline-flex` display.
 
 #### `Bleed`
 
-Applies negative margins to break out of a parent Container's padding. Used for full-bleed images or sections inside constrained layouts.
+Applies negative margins to break out of a parent Container's padding. Used for full-bleed images or sections inside constrained layouts. Supports `inline` (horizontal, including `'full'` for 100vw) and `block` (vertical) bleed values.
 
 #### `Divider`
 
-Semantic `<hr>` replacement. Polymorphic (`as` prop). Supports `PolymorphicDividerProps` for orientation/decoration variants.
+Semantic `<hr>` replacement. Polymorphic (`as` prop, limited to `hr | div`).
+
+| Prop          | Type                                                       | Default        |
+| ------------- | ---------------------------------------------------------- | -------------- |
+| `orientation` | `'horizontal' \| 'vertical'`                               | `'horizontal'` |
+| `emphasis`    | `'subtle' \| 'default' \| 'moderate' \| 'strong' \| 'bold'` | `'default'`    |
+| `spacing`     | `'compact' \| 'default' \| 'comfortable'`                  | `'default'`    |
+| `lineStyle`   | `'solid' \| 'dashed'`                                      | `'solid'`      |
 
 #### `AspectRatio`
 
-Enforces a specific aspect ratio on its child. Accepts `AspectRatioComponentProps` for ratio configuration.
+Enforces a specific aspect ratio on its child using the CSS padding-top technique. Common ratios (16/9, 4/3, 3/2, 1/1, 9/16, 21/9, 3/4) use pre-generated CSS classes; custom ratios fall back to inline CSS variable `--aspect-ratio-padding`.
 
 ---
 
@@ -189,7 +202,7 @@ Lucide React icon wrapper with token-based sizing and color. Uses a string name 
 | `color` | `'currentColor' \| 'primary' \| 'secondary' \| 'success' \| 'error' \| 'warning' \| 'info' \| 'muted'` | `'currentColor'`          |
 | `title` | `string`                                                                                               | — (decorative if omitted) |
 
-Available icon names (36 total): `user`, `home`, `settings`, `menu`, `search`, `check`, `x`, `plus`, `minus`, `edit`, `trash`, `save`, `download`, `upload`, `chevron-down`, `chevron-up`, `chevron-left`, `chevron-right`, `arrow-left`, `arrow-right`, `alert-circle`, `info`, `check-circle`, `x-circle`, `loader`, `external-link`, `eye`, `eye-off`, `heart`, `star`
+Available icon names (30 total): `user`, `home`, `settings`, `menu`, `search`, `check`, `x`, `plus`, `minus`, `edit`, `trash`, `save`, `download`, `upload`, `chevron-down`, `chevron-up`, `chevron-left`, `chevron-right`, `arrow-left`, `arrow-right`, `alert-circle`, `info`, `check-circle`, `x-circle`, `loader`, `external-link`, `eye`, `eye-off`, `heart`, `star`
 
 #### `Badge`
 
@@ -340,7 +353,7 @@ Breakpoint-based show/hide class generation, used internally by layout component
 
 ### Complete Public Exports
 
-**Components (18)**
+**Components (19)**
 
 | Export                                                           | Category    | Default Element |
 | ---------------------------------------------------------------- | ----------- | --------------- |
@@ -371,7 +384,7 @@ Breakpoint-based show/hide class generation, used internally by layout component
 | `useTheme` / `ThemeName` / `ThemeMode` / `UseThemeReturn`                                            | Full theme + mode management  |
 | `useThemeMode` / `SystemPreference` / `UseThemeModeOptions` / `UseThemeModeReturn` / `ThemeModeType` | Accessibility mode management |
 
-**Utilities (10+ functions)**
+**Utilities (15+ exports)**
 
 `WCAG_STANDARDS`, `hexToRgb`, `getRelativeLuminance`, `getContrastRatio`, `meetsWCAG`, `meetsWCAGForUI`, `getContrastLevel`, `getSuggestedTextColor`, `isValidHex`, `Breakpoint`, `BREAKPOINTS`, `ResponsiveValue`, `ResponsiveVisibilityProps`, `getResponsiveVisibilityClasses`, `getAriaHiddenAttribute`
 
@@ -517,14 +530,32 @@ function ResponsiveNav() {
 ### Accessible Icon-Only Button
 
 ```tsx
-import { Button, VisuallyHidden } from '@grasdouble/lufa_design-system';
+import { Button, Icon, VisuallyHidden } from '@grasdouble/lufa_design-system';
 
 function CloseButton({ onClose }: { onClose: () => void }) {
   return (
-    <Button type="ghost" variant="neutral" onClick={onClose} aria-label="Close dialog">
+    <Button type="ghost" variant="neutral" onClick={onClose}>
       <Icon name="x" />
-      <VisuallyHidden>Close</VisuallyHidden>
+      <VisuallyHidden>Close dialog</VisuallyHidden>
     </Button>
+  );
+}
+```
+
+### Bleed in Prose Layout
+
+```tsx
+import { Bleed, Container, Text } from '@grasdouble/lufa_design-system';
+
+function Article() {
+  return (
+    <Container size="md">
+      <Text variant="body">Article text...</Text>
+      <Bleed inline="full">
+        <img src="hero.jpg" alt="Full-width hero" />
+      </Bleed>
+      <Text variant="body">More text...</Text>
+    </Container>
   );
 }
 ```
@@ -540,7 +571,7 @@ function CloseButton({ onClose }: { onClose: () => void }) {
 | `@grasdouble/lufa_design-system-tokens` | `workspace:^` | CSS custom property tokens (spacing, color, typography)       |
 | `@headlessui/react`                     | `^2.2.9`      | Accessible headless UI primitives (available for composition) |
 | `@heroicons/react`                      | `^2.2.0`      | Hero icon set (available, not currently in default ICON_MAP)  |
-| `lucide-react`                          | `^0.563.0`    | Primary icon library (powers `Icon` component)                |
+| `lucide-react`                          | `^0.577.0`    | Primary icon library (powers `Icon` component)                |
 | `clsx`                                  | `^2.1.1`      | CSS class name composition utility                            |
 
 ### Peer Dependencies
@@ -558,6 +589,55 @@ function CloseButton({ onClose }: { onClose: () => void }) {
 | `vite-plugin-externalize-deps`      | Excludes peer/runtime deps from bundle |
 | `@playwright/experimental-ct-react` | Component testing                      |
 | `typescript`                        | Type checking                          |
+
+---
+
+## Configuration
+
+### CSS Import (required)
+
+The package exports `./style.css` as a named export. Import it once at the application root:
+
+```tsx
+import '@grasdouble/lufa_design-system/style.css';
+```
+
+This CSS file includes all design tokens, responsive utility classes (`lufa-hide`, `lufa-show-from-{bp}`, `lufa-hide-from-{bp}`, `-override` variants), and component base styles.
+
+### Theme Configuration via HTML Attributes
+
+Themes and modes are applied by setting attributes on the `<html>` element. The `useTheme` and `useThemeMode` hooks handle this automatically, but attributes can also be set manually:
+
+```html
+<!-- Theme (omit for default theme) -->
+<html data-theme="ocean">
+
+<!-- Mode (omit for system auto-detect) -->
+<html data-mode="dark">
+
+<!-- High contrast mode -->
+<html data-mode="high-contrast">
+```
+
+Available themes: `default` (no attribute), `ocean`, `forest`  
+Available modes: `light`, `dark`, `high-contrast`
+
+### Build Integration
+
+The package exports only from `./dist/lufa-ui.mjs`. The consuming application must include `@grasdouble/lufa_design-system/style.css` separately; CSS is not auto-injected.
+
+### Responsive Breakpoints
+
+Breakpoints are aligned with token definitions:
+
+| Key   | Pixel Value |
+| ----- | ----------- |
+| `xs`  | 320px       |
+| `sm`  | 640px       |
+| `md`  | 768px       |
+| `lg`  | 1024px      |
+| `xl`  | 1280px      |
+| `2xl` | 1536px      |
 
 ---
 

@@ -1,20 +1,20 @@
 ---
-package: '@grasdouble/lufa_microfrontend_home'
-shortName: lufa_microfrontend_home
-category: apps
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_microfrontend_home"
 ---
 
-# Context: @grasdouble/lufa_microfrontend_home
+# lufa_microfrontend_home - AI Context
+
+> Quick reference for AI agents working with this package.
+> **Generated**: 2026-04-07
 
 ## Package Info
 
 | Field        | Value                                  |
 | ------------ | -------------------------------------- |
 | Name         | `@grasdouble/lufa_microfrontend_home`  |
-| Version      | `0.3.5`                                |
+| Version      | `0.3.7`                                |
 | Type         | `"module"` (ESM)                       |
 | Private      | `false` (published to GitHub Packages) |
 | Output       | `dist/home.mjs`                        |
@@ -22,25 +22,23 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 | Mount DOM ID | `lufa-container`                       |
 | Active route | `location.pathname === '/'`            |
 
----
-
 ## Critical Rules
 
 1. **Do NOT import from this package as a regular NPM dependency.** It is loaded at runtime via an import map by the Single-SPA main container. Never add it to another package's `dependencies`.
 
 2. **The host application must provide `<div id="lufa-container"></div>`.** The `mount` lifecycle will reject its Promise if this element does not exist.
 
-3. **`bootstrap`, `mount`, and `unmount` must all be exported** from the entry point. Removing or renaming any of them will break Single-SPA registration.
+3. **`bootstrap`, `mount`, and `unmount` must all be exported** from the entry point (`src/parcel.tsx`). Removing or renaming any of them will break Single-SPA registration.
 
-4. **Do not add `react` or `react-dom` to the bundle.** They are externalized. The host container is responsible for providing them. Adding them to the bundle would cause multiple React instances and hook errors.
+4. **Do not add `react` or `react-dom` to the bundle.** They are externalized. The host container is responsible for providing them. Bundling them would cause multiple React instances and hook errors.
 
 5. **Do not add `@grasdouble/lufa_design-system` to the bundle.** It is also externalized. The CSS is imported once via `parcel.tsx`; bundling the design system would duplicate it.
 
-6. **`clsx` is the only bundled dependency.** All other dependencies in `package.json` are externalized by `vite-plugin-externalize-deps`.
+6. **`clsx` is the only bundled dependency.** All other `dependencies` in `package.json` are externalized by `vite-plugin-externalize-deps`.
 
 7. **CSS is injected into the JS bundle** by `vite-plugin-css-injected-by-js`. There is no separate `.css` output file. Do not expect or import a `.css` file from the dist.
 
----
+8. **Do not use Tailwind CSS.** It was removed in `v0.3.0`. All styling must use vanilla CSS with design token CSS custom properties.
 
 ## Import Pattern
 
@@ -77,11 +75,9 @@ Production (`importMap.json`):
 }
 ```
 
----
-
 ## Key Types
 
-The package does not export any TypeScript types. The lifecycle functions conform to the `single-spa` `LifeCycles` type (from the `single-spa` package, used in the main container):
+The package does not export any TypeScript types. The lifecycle functions conform to the `single-spa` `LifeCycles` type (used in the main container):
 
 ```ts
 // Implicit contract — not re-exported by this package
@@ -93,8 +89,6 @@ interface LifeCycles {
   unmount: Lifecycle;
 }
 ```
-
----
 
 ## Common Patterns
 
@@ -144,13 +138,11 @@ pnpm --filter @grasdouble/lufa_microfrontend_home dev
 # Open http://localhost:4101
 ```
 
-Note: When running in isolation, the Single-SPA lifecycle is not active. The dev server will serve the module file but not automatically render it — you need either a host or to test the parcel integration via `pnpm app:mf:dev`.
-
----
+Note: When running in isolation, the Single-SPA lifecycle is not active. The dev server serves the module file but does not automatically render it — use `pnpm app:mf:dev` to test full parcel integration.
 
 ## Anti-patterns
 
-### Do NOT do this — storing root reference
+### Do NOT store a new root on unmount — reuse the existing one
 
 The current `unmount` implementation has a known issue: it creates a new `createRoot` instead of reusing the existing root instance. Do not copy this pattern:
 
@@ -194,15 +186,13 @@ export const unmount = () =>
 import { mount } from '@grasdouble/lufa_microfrontend_home';
 ```
 
-### Do NOT add Tailwind CSS
-
-Tailwind was removed in `v0.3.0`. All styling must use vanilla CSS with design tokens.
-
 ### Do NOT import CSS directly from this package
 
 There is no CSS file in `dist/`. CSS is bundled into `home.mjs` via `vite-plugin-css-injected-by-js`.
 
----
+### Do NOT add Tailwind CSS
+
+Tailwind was removed in `v0.3.0`. All styling must use vanilla CSS with design tokens.
 
 ## Dependencies Context
 
@@ -216,3 +206,27 @@ There is no CSS file in `dist/`. CSS is bundled into `home.mjs` via `vite-plugin
 | `@grasdouble/lufa_config_tsconfig` | TypeScript config                 | Extends `react-app.json`                                    |
 | `@grasdouble/lufa_config_eslint`   | Linting config                    | Shared ESLint rules                                         |
 | `@grasdouble/lufa_config_prettier` | Formatting config                 | Shared Prettier rules                                       |
+
+## Quick Reference
+
+| Task                          | Command                                                             |
+| ----------------------------- | ------------------------------------------------------------------- |
+| Start dev server              | `pnpm --filter @grasdouble/lufa_microfrontend_home dev`             |
+| Build                         | `pnpm --filter @grasdouble/lufa_microfrontend_home build`           |
+| Typecheck                     | `pnpm --filter @grasdouble/lufa_microfrontend_home typecheck`       |
+| Lint                          | `pnpm --filter @grasdouble/lufa_microfrontend_home lint`            |
+| Run with container            | `pnpm app:mf:dev`                                                   |
+| Build all microfrontends      | `pnpm app:mf:build`                                                 |
+| Preview production build      | `pnpm app:mf:preview`                                               |
+| Dev server URL                | `http://localhost:4101`                                             |
+| Output file                   | `dist/home.mjs`                                                     |
+| Mount DOM target              | `#lufa-container`                                                   |
+| Active Single-SPA route       | `location.pathname === '/'`                                         |
+
+## See Also
+
+- [lufa_microfrontend_home.md](../../documentation/apps/lufa_microfrontend_home.md) — Full documentation
+- [lufa_microfrontend_main-container.context.md](./lufa_microfrontend_main-container.context.md) — Container that loads this microfrontend
+- `packages/apps/microfrontend/main-container/src/main.ts` — Registration site
+- `packages/apps/microfrontend/main-container/src/importMap.dev.json` — Dev import map
+- `packages/apps/microfrontend/main-container/src/importMap.json` — Production import map

@@ -1,26 +1,23 @@
 ---
-package: '@grasdouble/cdn_autobuild-server'
-shortName: cdn_autobuild-server
-category: cdn
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/cdn_autobuild-server"
 ---
 
 # cdn_autobuild-server — AI Context File
 
 ## Package Info
 
-| Field            | Value                                                |
-| ---------------- | ---------------------------------------------------- |
-| Package name     | `@grasdouble/cdn_autobuild-server`                   |
-| Version          | `0.3.4`                                              |
-| Category         | `cdn`                                                |
-| Source path      | `packages/cdn/autobuild-server/src/`                 |
-| Entry point      | `src/index.ts` → `dist/index.mjs` / `dist/index.cjs` |
-| Node requirement | `>=18`                                               |
-| Registry         | GitHub Packages (`https://npm.pkg.github.com`)       |
-| Type             | Runnable server + importable library                 |
+| Field            | Value                                                 |
+| ---------------- | ----------------------------------------------------- |
+| Package name     | `@grasdouble/cdn_autobuild-server`                    |
+| Version          | `0.3.6`                                               |
+| Category         | `cdn`                                                 |
+| Source path      | `packages/cdn/autobuild-server/src/`                  |
+| Entry point      | `src/index.ts` → `dist/index.mjs` / `dist/index.cjs`  |
+| Node requirement | `>=18`                                                |
+| Registry         | GitHub Packages (`https://npm.pkg.github.com`)        |
+| Type             | Runnable server + importable library                  |
 
 ## Critical Rules
 
@@ -36,10 +33,10 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 ## Import Pattern
 
 ```ts
-// Full package import (library mode)
-
 // Type-only imports
 import type { ExtractedParams, LoadLibraryResult, PackageJson } from '@grasdouble/cdn_autobuild-server';
+
+// Function imports
 import { extractParams, loadLibrary, sendEntry } from '@grasdouble/cdn_autobuild-server';
 ```
 
@@ -55,8 +52,8 @@ type PackageJson = {
   name: string;
   version: string;
   type?: 'module' | 'commonjs'; // ESM gate check
-  main?: string; // Fallback entry
-  module?: string; // Preferred ESM entry
+  main?: string;                 // Fallback entry
+  module?: string;               // Preferred ESM entry
   exports?: Record<
     string,
     | string
@@ -70,12 +67,12 @@ type PackageJson = {
 
 /** Sanitised and path-resolved URL parameters */
 type ExtractedParams = {
-  scope?: string; // e.g. '@grasdouble'
+  scope?: string;      // e.g. '@grasdouble'
   exportPath?: string; // e.g. './dist/secondary.mjs' (always prefixed with './')
-  fullName: string; // e.g. '@grasdouble/ui_button@1.2.3'
-  dirName: string; // Filesystem-safe version of fullName
-  cdnPkgPath: string; // Absolute path in CDN_DIR
-  tmpPkgPath: string; // Absolute path in TMP_DIR
+  fullName: string;    // e.g. '@grasdouble/ui_button@1.2.3'
+  dirName: string;     // Filesystem-safe version of fullName
+  cdnPkgPath: string;  // Absolute path in CDN_DIR
+  tmpPkgPath: string;  // Absolute path in TMP_DIR
 };
 
 /** Return value of loadLibrary() */
@@ -104,7 +101,7 @@ export const whitelist: string[] = [
 // src/security.ts — getRateLimiter()
 rateLimit({
   windowMs: 10 * 60 * 1000, // change window (ms)
-  max: 1000, // change request cap
+  max: 1000,                 // change request cap
   // ...
 });
 ```
@@ -182,3 +179,23 @@ const result = await loadLibrary({
 | `sanitize-filename`     | Only sanitizes individual filename segments, not full paths. `@` and `/` in scope names must be handled before passing to `sanitize()`. The current code sanitizes scope and name separately, which is correct.                     |
 | `escape-html`           | Used exclusively for escaping `fullName` in error response bodies to prevent reflected XSS.                                                                                                                                         |
 | `@dotenvx/dotenvx`      | Loaded via side-effect import (`import '@dotenvx/dotenvx/config'`). Reads `.env` and `.env.development`/`.env.production` depending on the npm script used.                                                                         |
+
+## Quick Reference
+
+| Task                        | Symbol / location                                   |
+| --------------------------- | --------------------------------------------------- |
+| Parse & sanitize URL params | `extractParams()` — `src/utils.ts:27`               |
+| Fetch package from registry | `loadLibrary()` — `src/utils.ts:66`                 |
+| Resolve file entry point    | `sendEntry()` — `src/utils.ts:124`                  |
+| CORS whitelist              | `whitelist` — `src/security.ts:6`                   |
+| Rate limit config           | `getRateLimiter()` — `src/security.ts:47`           |
+| IP auto-unblock interval    | `unblockIPsAfterTimeout()` — `src/security.ts:66`   |
+| Main route handler          | `src/index.ts:65`                                   |
+| Self-unblock endpoint       | `GET /unblock-ip` — `src/index.ts:33`               |
+
+## See Also
+
+- [Full documentation](../../documentation/cdn/cdn_autobuild-server.md)
+- [`@grasdouble/lufa_config_tsconfig`](../../documentation/lufa/lufa_config_tsconfig.md)
+- [`@grasdouble/lufa_config_eslint`](../../documentation/lufa/lufa_config_eslint.md)
+- [`@grasdouble/lufa_config_prettier`](../../documentation/lufa/lufa_config_prettier.md)

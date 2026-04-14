@@ -1,10 +1,7 @@
 ---
-package: '@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector'
-shortName: lufa_plugin_vite_vite-plugin-import-map-injector
-category: plugins
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector"
 ---
 
 # Context: lufa_plugin_vite_vite-plugin-import-map-injector
@@ -12,7 +9,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 ## Package Identity
 
 - **NPM name**: `@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector`
-- **Version**: `0.2.3`
+- **Version**: `0.2.5`
 - **License**: MIT
 - **Published to**: GitHub Packages (`https://npm.pkg.github.com`)
 - **Public**: yes (`"private": false`)
@@ -101,12 +98,12 @@ if isDev:
 
 if !isDev (production):
   inject extImportMap as standard importmap
-  (prodImportMap is read but NOT injected separately —
-   the production map is available in files but not merged
-   into a separate script in the current implementation)
+  (prodImportMap entries are merged into mergedImportMap but the overridable
+   script tag is only pushed when isDev is true — so prodImportMap content
+   is parsed but never injected into the HTML in production builds.
+   This is the current behavior as of v0.2.5 and may be intentional or a
+   candidate for future development.)
 ```
-
-> **Note**: In the current implementation (`0.2.3`), `prodImportMap` is read and parsed but `mergedImportMap` in production mode will be empty (`imports: {}`), and the second overridable script is only added when `isDev` is true. The `prodImportMap` content is effectively unused in the current code path — it is parsed but never inserted into the HTML in production. This may be an area for future development.
 
 ## Known Consumers in This Monorepo
 
@@ -127,7 +124,7 @@ if !isDev (production):
 - **ESLint**: Extends `@grasdouble/lufa_config_eslint/node.mjs`. TypeScript-aware unsafe rules are disabled for `.mjs` files (since there are no type annotations).
 - **Prettier**: Extends `@grasdouble/lufa_config_prettier`.
 - **TypeScript**: Extends `@grasdouble/lufa_config_tsconfig/node.json` with `allowJs: true`, `checkJs: false`, includes only `index.mjs`.
-- **Lint-staged**: Runs ESLint + Prettier on `*.{js,mjs}` and Prettier on `*.{json,md}`.
+- **Lint-staged**: Runs ESLint + Prettier on `*.{js,mjs}`, `tsc --noEmit` (`pnpm typecheck`) on `*.ts`, and Prettier on `*.{json,md}`.
 
 ## Integration Context: Single-SPA Architecture
 

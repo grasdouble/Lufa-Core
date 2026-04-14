@@ -1,33 +1,59 @@
 ---
-package: '@grasdouble/lufa_microfrontend_home'
-shortName: lufa_microfrontend_home
-category: apps
-version: '0.3.5'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_microfrontend_home"
+version: "0.3.7"
 ---
 
 # @grasdouble/lufa_microfrontend_home
 
+Home page microfrontend for the Lufa platform. Implements the Single-SPA parcel lifecycle protocol and serves as the landing page at the root (`/`) route.
+
 ## Overview
+
+| Property    | Value                                     |
+| ----------- | ----------------------------------------- |
+| **Package** | `@grasdouble/lufa_microfrontend_home`     |
+| **Version** | `0.3.7`                                   |
+| **Path**    | `packages/apps/microfrontend/home`        |
+| **Type**    | Application (ESM microfrontend)           |
+| **Private** | No (published to GitHub Packages)         |
+
+## Purpose
 
 The `@grasdouble/lufa_microfrontend_home` package is the **home page microfrontend** for the Lufa platform. It implements the Single-SPA parcel lifecycle protocol, enabling it to be dynamically loaded and managed by the main container application at the root (`/`) route.
 
 This microfrontend displays the Lufa landing page — including the logo, a project title, and navigation links to external resources (Design System docs, Storybook, GitHub, LinkedIn).
 
----
-
-## Purpose
+Specific goals:
 
 - Serve as the **landing/home page** of the Lufa microfrontend architecture.
-- Demonstrate **Single-SPA integration patterns** — specifically the parcel lifecycle (bootstrap / mount / unmount) without using the `single-spa-react` helper library.
+- Demonstrate **Single-SPA integration patterns** — specifically the parcel lifecycle (`bootstrap` / `mount` / `unmount`) without using the `single-spa-react` helper library.
 - Consume components from the shared `@grasdouble/lufa_design-system` to enforce visual consistency across microfrontends.
 - Show how **design tokens** (CSS custom properties) are applied in a standalone microfrontend's styles.
 
----
-
 ## Architecture
+
+### Directory Tree
+
+```
+packages/apps/microfrontend/home/
+├── src/
+│   ├── assets/
+│   │   └── Lufa_Logo.webp          # Platform logo (served via import.meta.url)
+│   ├── App.module.css              # Scoped CSS Modules styles using design tokens
+│   ├── App.module.css.d.ts         # TypeScript type declarations for CSS Modules
+│   ├── App.tsx                     # Root React component (landing page UI)
+│   ├── getImageUrl.ts              # Utility: resolves bundled asset URLs
+│   └── parcel.tsx                  # Single-SPA lifecycle entry point (public API)
+├── CHANGELOG.md
+├── README.md
+├── eslint.config.mjs
+├── package.json
+├── prettier.config.mjs
+├── tsconfig.json
+└── vite.config.js
+```
 
 ### Build Strategy
 
@@ -35,7 +61,7 @@ The package is built as an **ES module library** using Vite:
 
 - **Entry point**: `src/parcel.tsx` (aliased to `index` in build config, output as `home.mjs`).
 - **Output format**: `es` (ESM), single file `dist/home.mjs`.
-- **CSS strategy**: `vite-plugin-css-injected-by-js` injects CSS directly into the JS bundle, so the microfrontend is self-contained — no separate `.css` file is emitted.
+- **CSS strategy**: `vite-plugin-css-injected-by-js` injects CSS directly into the JS bundle — no separate `.css` file is emitted.
 - **Externalized dependencies**: All `dependencies` (React, react-dom, `@grasdouble/lufa_design-system`) are externalized via `vite-plugin-externalize-deps` **except** `clsx`, which is bundled inline.
 - **Source maps**: Enabled. Minification is disabled to aid debugging.
 - **Dev server**: Runs at `http://localhost:4101` with HMR enabled.
@@ -64,8 +90,6 @@ The microfrontend is active **only when `location.pathname === '/'`**.
 ### Mount Target
 
 The parcel mounts into a DOM element with `id="lufa-container"`, which must be provided by the host application (main container).
-
----
 
 ## Key Components
 
@@ -121,8 +145,6 @@ CSS Modules file defining component-scoped styles. Uses Lufa design tokens (CSS 
 
 Contains `Lufa_Logo.webp` — the platform logo displayed on the home page.
 
----
-
 ## API Reference
 
 This package exposes **one public module** (via `exports["."]: "./dist/home.mjs"`):
@@ -138,8 +160,6 @@ This package exposes **one public module** (via `exports["."]: "./dist/home.mjs"
 These three exports conform to the [Single-SPA parcel lifecycle API](https://single-spa.js.org/docs/parcels-overview).
 
 **The `App` component is not a public export** — it is an internal implementation detail.
-
----
 
 ## Usage Examples
 
@@ -185,8 +205,6 @@ pnpm --filter @grasdouble/lufa_microfrontend_home build
 pnpm app:mf:build
 ```
 
----
-
 ## Dependencies
 
 ### Runtime Dependencies
@@ -206,10 +224,45 @@ pnpm app:mf:build
 | `@vitejs/plugin-react`             | React fast refresh and JSX transform        |
 | `vite-plugin-css-injected-by-js`   | Injects CSS into the JS bundle              |
 | `vite-plugin-externalize-deps`     | Externalizes runtime deps from the bundle   |
-| `typescript` `^5.9.3`              | TypeScript compiler                         |
+| `typescript` `^5.9.3`             | TypeScript compiler                         |
 | `@grasdouble/lufa_config_eslint`   | Shared ESLint config                        |
 | `@grasdouble/lufa_config_prettier` | Shared Prettier config                      |
 | `@grasdouble/lufa_config_tsconfig` | Shared TypeScript config (`react-app.json`) |
+
+## Configuration
+
+### TypeScript
+
+`tsconfig.json` extends `@grasdouble/lufa_config_tsconfig/react-app.json`. Covers `src/**/*.ts` and `src/**/*.tsx`.
+
+### Vite (`vite.config.js`)
+
+Key configuration options:
+
+| Option                    | Value                                   | Notes                                              |
+| ------------------------- | --------------------------------------- | -------------------------------------------------- |
+| `build.lib.entry`         | `src/parcel.jsx`                        | Single-SPA lifecycle entry point                   |
+| `build.lib.fileName`      | `() => 'home.mjs'`                      | Fixed output filename                              |
+| `build.lib.formats`       | `['es']`                                | ESM-only output                                    |
+| `build.minify`            | `false`                                 | Unminified for debuggability                       |
+| `build.sourcemap`         | `true`                                  | Source maps enabled                                |
+| `externalizeDeps.except`  | `['clsx']`                              | Only `clsx` is bundled; all other deps externalized|
+| `server.port`             | `4101`                                  | Dev server port                                    |
+
+### Lint-Staged
+
+On commit, the following checks run automatically:
+
+- `eslint --fix` + `prettier --write` on JS/TS files
+- `pnpm typecheck` on TypeScript files
+- `sort-package-json` on `package.json`
+- `prettier --write` on JSON, Markdown, CSS, HTML files
+
+## Testing
+
+No automated tests are currently defined for this package. There are no test scripts in `package.json` and no test files in the source tree.
+
+Manual verification is done by running the dev server (`pnpm dev`) and inspecting the rendered home page in the browser.
 
 ---
 
@@ -219,3 +272,4 @@ pnpm app:mf:build
 - **Design System**: `@grasdouble/lufa_design-system` — provides the `Stack` component and CSS design tokens
 - **Microfrontends Overview**: `packages/apps/microfrontend/README.md`
 - **Root workspace scripts**: `pnpm app:mf:dev`, `pnpm app:mf:build`, `pnpm app:mf:preview`
+- [@grasdouble/lufa_microfrontend_main-container](./lufa_microfrontend_main-container.md) — The container that loads this microfrontend

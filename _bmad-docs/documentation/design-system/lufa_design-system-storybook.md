@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_design-system-storybook'
-shortName: lufa_design-system-storybook
-category: design-system
-version: '1.1.0'
-private: true
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system-storybook"
+version: "1.2.1"
 ---
 
 # @grasdouble/lufa_design-system-storybook
@@ -16,7 +13,7 @@ Interactive component explorer and documentation environment for the Lufa Design
 
 This package is the Storybook instance for the Lufa Design System. It provides a live, interactive catalog of all design system components, token visualizations, and developer-focused documentation. It is a private, development-only package that is not published as a library — its output is a static Storybook build (`storybook-static/`) deployed for reference and QA.
 
-- **Storybook version**: 10.x
+- **Storybook version**: 10.x (`^10.2.15`)
 - **Framework**: `@storybook/react-vite` (React + Vite)
 - **Dev server port**: 6006
 - **Module type**: ESM (`"type": "module"`)
@@ -34,14 +31,14 @@ This package is the Storybook instance for the Lufa Design System. It provides a
 
 ### Build Toolchain
 
-| Tool                               | Version   | Role                                                       |
-| ---------------------------------- | --------- | ---------------------------------------------------------- |
-| Storybook                          | `^10.2.3` | Story runner and static builder                            |
-| `@storybook/react-vite`            | `^10.2.3` | React + Vite integration framework                         |
-| Vite                               | `^7.3.1`  | Underlying bundler                                         |
-| TypeScript                         | `^5.9.3`  | Type safety; `react-docgen-typescript` for prop extraction |
-| ESLint + `eslint-plugin-storybook` | `^10.2.3` | Story-specific lint rules                                  |
-| Prettier                           | `^3.8.1`  | Formatting                                                 |
+| Tool                               | Version    | Role                                                       |
+| ---------------------------------- | ---------- | ---------------------------------------------------------- |
+| Storybook                          | `^10.2.15` | Story runner and static builder                            |
+| `@storybook/react-vite`            | `^10.2.15` | React + Vite integration framework                         |
+| Vite                               | `^7.3.1`   | Underlying bundler                                         |
+| TypeScript                         | `^5.9.3`   | Type safety; `react-docgen-typescript` for prop extraction |
+| ESLint + `eslint-plugin-storybook` | `^10.2.15` | Story-specific lint rules                                  |
+| Prettier                           | `^3.8.1`   | Formatting                                                 |
 
 ### Storybook Configuration (`.storybook/`)
 
@@ -58,7 +55,7 @@ This package is the Storybook instance for the Lufa Design System. It provides a
 **Active addons**:
 
 - `@storybook/addon-docs` — MDX and auto-generated docs pages
-- (backgrounds addon explicitly disabled)
+- (backgrounds addon explicitly disabled via `features: { backgrounds: false }`)
 
 **Story sorting**: Stories are numerically sorted by title category, with `Playground` pinned first within each component.
 
@@ -66,11 +63,11 @@ This package is the Storybook instance for the Lufa Design System. It provides a
 
 ```
 src/
-├── style.css               # Storybook-specific global styles
+├── style.css               # Storybook-specific global styles + all theme @imports
 ├── style.css.d.ts          # CSS module type declaration
 ├── components/
 │   ├── helpers/            # Reusable story UI primitives (see below)
-│   └── ThemeSwitcher/      # Standalone theme-switcher component (CSS module)
+│   └── ThemeSwitcher/      # Standalone theme-switcher component
 ├── constants/
 │   └── storyColors.ts      # Color utilities for story authoring
 └── stories/
@@ -88,22 +85,20 @@ src/
 
 ### Story Helper Components (`src/components/helpers/`)
 
-These components are used exclusively within stories to maintain a consistent documentation UI.
+These components are used exclusively within stories to maintain a consistent documentation UI. All exported from `src/components/helpers/index.ts`.
 
 | Component             | Purpose                                                                |
 | --------------------- | ---------------------------------------------------------------------- |
 | `StoryContainer`      | Full-width wrapper (max 1400px, 40px padding) for fullscreen stories   |
 | `PropCard`            | Labeled card that highlights on click/hover to pair with a `CodeBlock` |
-| `CodeBlock`           | Syntax-highlighted code snippet with title and language label          |
+| `CodeBlock`           | Syntax-highlighted code snippet with title, tabs, and language label   |
 | `PlaygroundContainer` | Controls-driven interactive playground wrapper                         |
 | `MarginVisualizer`    | Overlays directional margin colors for Box margin stories              |
 | `PaddingVisualizer`   | Overlays directional padding colors for Box padding stories            |
-| `TokenCard`           | Renders a single design token with its current resolved value          |
+| `TokenCard`           | Renders a single design token with live resolved value and badges      |
 | `TokenComparison`     | Side-by-side comparison of two token groups across themes              |
 | `TokenMatrix`         | Grid rendering of a set of tokens at all theme/mode combinations       |
 | `TokenReferenceChain` | Visualizes primitive → semantic → component token resolution chain     |
-
-All are exported from `src/components/helpers/index.ts`.
 
 ### `ThemeAndModeWrapper` (`.storybook/ThemeAndModeWrapper.tsx`)
 
@@ -113,11 +108,11 @@ A React decorator applied globally via `preview.tsx`. On every theme/mode change
 2. Sets `data-mode` on `document.documentElement` (`light` | `dark` | `high-contrast`).
 3. Mirrors both attributes to the parent frame's `documentElement` to keep the docs tab in sync.
 
-Wraps content in a `div` using semantic background/text CSS variables so the story container itself is always theme-aware.
+Wraps story content in a `div` using semantic background/text CSS variables so the story canvas itself is always theme-aware.
 
 ### `STORY_COLORS` (`src/constants/storyColors.ts`)
 
-A color utility object with four sub-groups:
+A color utility object with five sub-groups:
 
 | Key                    | Type                  | Purpose                                                         |
 | ---------------------- | --------------------- | --------------------------------------------------------------- |
@@ -136,6 +131,8 @@ Stories are organized into 8 numbered categories that determine sidebar order.
 ### `1. Architecture` — Token Architecture (`src/stories/tokens/ThemeArchitecture.stories.tsx`)
 
 Comprehensive interactive testing environment for the three-layer token architecture. Demonstrates how primitive tokens are immutable while semantic and component tokens adapt to theme and mode.
+
+Stories: `Overview`, `ThemeableVsNonThemeable`, `ModeAwareTokens`, `PrimitiveImmutability`, `TokenReferenceChains`, `ComponentExamples`
 
 ### `2. Guides` (`src/stories/guides/`)
 
@@ -218,6 +215,10 @@ Story numbering in titles enforces sidebar ordering:
 
 Detailed authoring rules are in `_docs/story-guide.md`, `_docs/story-rules.md`, and `_docs/story-template.md`.
 
+## API Reference
+
+This package has **no public API exports**. It is a private Storybook application (`"private": true` in `package.json`). All modules under `src/` are internal to the Storybook build.
+
 ## Usage Examples
 
 ### Start the development server
@@ -243,6 +244,14 @@ pnpm build
 ```
 
 Outputs to `storybook-static/`.
+
+### Validate token usage
+
+```bash
+pnpm validate:token-usage              # Check all tokens used are valid
+pnpm validate:token-usage:unused       # Find unused tokens
+pnpm validate:token-usage:verbose      # Verbose output
+```
 
 ### Writing a new story
 
@@ -297,6 +306,18 @@ import { STORY_COLORS } from '../../constants/storyColors';
 </Box>
 ```
 
+### Using CodeBlock with tabs
+
+```tsx
+<CodeBlock
+  title="Code Example"
+  tabs={[
+    { label: 'JSX', content: '<Button variant="primary">Save</Button>' },
+    { label: 'HTML', content: '<button class="btn btn-primary">Save</button>' },
+  ]}
+/>
+```
+
 ## Dependencies
 
 ### Runtime Dependencies
@@ -306,21 +327,41 @@ import { STORY_COLORS } from '../../constants/storyColors';
 | `@grasdouble/lufa_design-system`        | `workspace:^` | Source of all documented components                          |
 | `@grasdouble/lufa_design-system-themes` | `workspace:^` | Theme CSS (applied via `data-theme` attribute)               |
 | `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Token JSON values (used in `storyColors.ts`)                 |
-| `lucide-react`                          | `^0.563.0`    | Icon library (used in Icon stories and Button icon examples) |
+| `lucide-react`                          | `^0.577.0`    | Icon library (used in Icon stories and Button icon examples) |
 | `react` + `react-dom`                   | `^19.2.4`     | React runtime                                                |
 
 ### Development Dependencies (key)
 
 | Package                               | Role                                                        |
 | ------------------------------------- | ----------------------------------------------------------- |
-| `storybook` + `@storybook/react-vite` | Core Storybook runner                                       |
+| `storybook` + `@storybook/react-vite` | Core Storybook runner (`^10.2.15`)                          |
 | `@storybook/addon-docs`               | MDX support and auto-docs                                   |
 | `@storybook/addon-themes`             | Installed but disabled (custom implementation used instead) |
-| `@vitejs/plugin-react`                | Vite React transform                                        |
+| `@vitejs/plugin-react`                | Vite React transform (`^5.1.4`)                             |
 | `eslint-plugin-storybook`             | Story-specific ESLint rules                                 |
 | `@grasdouble/lufa_config_eslint`      | Shared monorepo ESLint config                               |
 | `@grasdouble/lufa_config_prettier`    | Shared monorepo Prettier config                             |
 | `@grasdouble/lufa_config_tsconfig`    | Shared monorepo TypeScript base config                      |
+
+## Configuration
+
+### ESLint
+
+The package uses `plugin:storybook/recommended` for story-specific rules, configured inline in `package.json`:
+
+```json
+"eslintConfig": {
+  "extends": ["plugin:storybook/recommended"]
+}
+```
+
+### TypeScript
+
+`tsconfig.app.json` includes both `src/` and `.storybook/**/*` in compilation. Strict mode is enabled with `noUnusedLocals`, `noUnusedParameters`, and `noUncheckedSideEffectImports`.
+
+### Lint-staged
+
+Pre-commit hooks run ESLint + Prettier on JS/TS files, TypeScript type-checking on `.ts`/`.tsx` files, `sort-package-json` on `package.json`, and Prettier on JSON/MD/CSS/HTML files.
 
 ## Related Documentation
 

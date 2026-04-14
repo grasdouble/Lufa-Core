@@ -1,18 +1,15 @@
 ---
-package: '@grasdouble/lufa_plugin_vscode_lufa-ds-preview'
-shortName: lufa_plugin_vscode_lufa-ds-preview
-category: plugins
-version: '0.4.4'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_plugin_vscode_lufa-ds-preview"
+version: "0.4.6"
 ---
 
-# lufa_plugin_vscode_lufa-ds-preview
+# @grasdouble/lufa_plugin_vscode_lufa-ds-preview
 
 ## Overview
 
-`@grasdouble/lufa_plugin_vscode_lufa-ds-preview` (display name: **Lufa DS Preview**) is a VS Code extension that brings the Lufa design system directly into the editor. It provides inline color decorators, hover previews, and autocomplete enrichment for Lufa design tokens — covering CSS/SCSS/PostCSS variable syntax and TypeScript/TSX path-based token references.
+`@grasdouble/lufa_plugin_vscode_lufa-ds-preview` (display name: **Lufa DS Preview**) is a VS Code extension that brings the Lufa design system directly into the editor. It provides inline color decorators, hover value previews, and autocomplete enrichment for Lufa design tokens — covering CSS/SCSS/PostCSS variable syntax and TypeScript/TSX path-based token references.
 
 The extension ships with bundled token maps from `@grasdouble/lufa_design-system-tokens`, so it works out of the box without any extra configuration. Custom maps are also supported for workspace-specific overrides.
 
@@ -159,7 +156,7 @@ For each match, the OKLCH value is converted to RGB via `culori` and a `vscode.C
 
 **`createHoverProvider`**
 
-Uses a combined regex (`cssVarNameRe | tokenPathRe`) to find the token under the cursor and resolves its value via `resolveTokenValueFromMap`. Returns a Markdown hover with `\`token\` = \`value\``.
+Uses a combined regex (`cssVarNameRe | tokenPathRe`) to find the token under the cursor and resolves its value via `resolveTokenValueFromMap`. Returns a Markdown hover with `` `token` = `value` ``.
 
 **`createCompletionProvider`**
 
@@ -206,7 +203,7 @@ type TokenMap = {
 };
 ```
 
-`isValidMap(data)` performs runtime validation before caching.  
+`isValidMap(data)` performs runtime validation before caching.
 `getEmbeddedMapPath(extensionRootPath, mapFile, exists)` resolves `dist/maps/{mapFile}` relative to the extension bundle root.
 
 ### `src/reference-resolver.ts` — Lookup Utilities
@@ -330,13 +327,13 @@ View output at **View → Output → Lufa DS Preview**.
 
 | Package                            | Version       | Purpose                             |
 | ---------------------------------- | ------------- | ----------------------------------- |
-| `@types/vscode`                    | `^1.108.1`    | VS Code extension API types         |
+| `@types/vscode`                    | `^1.109.0`    | VS Code extension API types         |
 | `@vscode/vsce`                     | `^3.7.1`      | VSIX packaging                      |
-| `esbuild`                          | `^0.27.2`     | Bundler                             |
+| `esbuild`                          | `^0.27.3`     | Bundler                             |
 | `typescript`                       | `^5.9.3`      | TypeScript compiler (ES2020 target) |
 | `vitest`                           | `^4.0.18`     | Unit test runner                    |
 | `@vitest/coverage-v8`              | `^4.0.18`     | Coverage reporting                  |
-| `eslint`                           | `^9.39.2`     | Linting                             |
+| `eslint`                           | `^10.0.2`     | Linting                             |
 | `prettier`                         | `^3.8.1`      | Formatting                          |
 | `@grasdouble/lufa_config_eslint`   | `workspace:^` | Shared ESLint config                |
 | `@grasdouble/lufa_config_prettier` | `workspace:^` | Shared Prettier config              |
@@ -374,7 +371,6 @@ pnpm typecheck         # TypeScript type checking (tsconfig.typecheck.json)
 ## Related Documentation
 
 - `@grasdouble/lufa_design-system-tokens` — produces `tokens.map.json` consumed by this extension
-- `@grasdouble/lufa_design-system-primitives` — historical source of primitives map (now unified into tokens map)
 - Monorepo root `README.md` — overall project structure
 - `CHANGELOG.md` (this package) — full version history
 

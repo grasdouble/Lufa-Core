@@ -2,14 +2,14 @@
 name: index
 type: documentation-index
 project: lufa
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+lastUpdated: '2026-04-07'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
 ---
 
 # Lufa Documentation Index
 
 > Central navigation for all project documentation.
-> Last updated: 2026-02-24
+> Last updated: 2026-04-07
 
 ---
 
@@ -23,12 +23,12 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 
 ### Architecture Documentation
 
-| Document                                                                        | Purpose                                                                       |
-| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [Main Container](documentation/apps/lufa_microfrontend_main-container.md)       | Single-SPA root config — platform entry point and microfrontend orchestration |
-| [Design System](documentation/design-system/lufa_design-system.md)              | Primary React component library — token-driven, accessible UI components      |
-| [Design Tokens](documentation/design-system/lufa_design-system-tokens.md)       | 698-token DTCG hierarchy — foundation of the entire styling system            |
-| [Themes](documentation/design-system/lufa_design-system-themes.md)              | 10 pre-built CSS theme variants with light/dark/high-contrast support         |
+| Document                                                                  | Purpose                                                                       |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [Main Container](documentation/apps/lufa_microfrontend_main-container.md) | Single-SPA root config — platform entry point and microfrontend orchestration |
+| [Design System](documentation/design-system/lufa_design-system.md)        | Primary React component library — token-driven, accessible UI components      |
+| [Design Tokens](documentation/design-system/lufa_design-system-tokens.md) | 698-token DTCG hierarchy — foundation of the entire styling system            |
+| [Themes](documentation/design-system/lufa_design-system-themes.md)        | 10 pre-built CSS theme variants with light/dark/high-contrast support         |
 
 ---
 
@@ -79,44 +79,44 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 
 ### Applications
 
-| Package                                         | Description                                                                                    | Docs                                                                                                                                                             |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package | Description | Docs |
+| ------- | ----------- | ---- |
 | `@grasdouble/lufa_microfrontend_main-container` | Single-SPA root container — orchestrates loading, routing, and lifecycle of all microfrontends | [Doc](documentation/apps/lufa_microfrontend_main-container.md) \| [Context](context/apps/lufa_microfrontend_main-container.context.md) |
-| `@grasdouble/lufa_microfrontend_home`           | Home page microfrontend — implements Single-SPA parcel lifecycle for the root (`/`) route      | [Doc](documentation/apps/lufa_microfrontend_home.md) \| [Context](context/apps/lufa_microfrontend_home.context.md)                     |
+| `@grasdouble/lufa_microfrontend_home` | Home page microfrontend — implements Single-SPA parcel lifecycle for the root (`/`) route | [Doc](documentation/apps/lufa_microfrontend_home.md) \| [Context](context/apps/lufa_microfrontend_home.context.md) |
 
 ### CDN
 
-| Package                            | Description                                                                                         | Docs                                                                                                               |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Package | Description | Docs |
+| ------- | ----------- | ---- |
 | `@grasdouble/cdn_autobuild-server` | Self-fed CDN HTTP server — fetches, caches, and serves ESM-only npm/GitHub package assets on demand | [Doc](documentation/cdn/cdn_autobuild-server.md) \| [Context](context/cdn/cdn_autobuild-server.context.md) |
 
 ### Configuration
 
-| Package                            | Description                                                                                                           | Docs                                                                                                                           |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `@grasdouble/lufa_config_eslint`   | Shared ESLint flat-config presets — four composable profiles for JS, TypeScript, Node.js, and React                   | [Doc](documentation/config/lufa_config_eslint.md) \| [Context](context/config/lufa_config_eslint.context.md)     |
-| `@grasdouble/lufa_config_prettier` | Shared Prettier configuration — opinionated formatting baseline with import sorting and `package.json` key ordering   | [Doc](documentation/config/lufa_config_prettier.md) \| [Context](context/config/lufa_config_prettier.context.md) |
+| Package | Description | Docs |
+| ------- | ----------- | ---- |
+| `@grasdouble/lufa_config_eslint` | Shared ESLint flat-config presets — four composable profiles for JS, TypeScript, Node.js, and React | [Doc](documentation/config/lufa_config_eslint.md) \| [Context](context/config/lufa_config_eslint.context.md) |
+| `@grasdouble/lufa_config_prettier` | Shared Prettier configuration — opinionated formatting baseline with import sorting and cross-platform line endings | [Doc](documentation/config/lufa_config_prettier.md) \| [Context](context/config/lufa_config_prettier.context.md) |
 | `@grasdouble/lufa_config_tsconfig` | Shared TypeScript config presets — four archetypes (base, Node, React lib, React app) for consistent compiler options | [Doc](documentation/config/lufa_config_tsconfig.md) \| [Context](context/config/lufa_config_tsconfig.context.md) |
 
 ### Design System
 
-| Package                                     | Description                                                                                                             | Docs                                                                                                                                                             |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@grasdouble/lufa_design-system`            | Primary React component library — accessible, token-driven UI components compiled to a single ESM bundle                | [Doc](documentation/design-system/lufa_design-system.md) \| [Context](context/design-system/lufa_design-system.context.md)                       |
-| `@grasdouble/lufa_design-system-tokens`     | Design token foundation — 698 DTCG tokens across a 4-level hierarchy, emitting 1025 CSS custom properties               | [Doc](documentation/design-system/lufa_design-system-tokens.md) \| [Context](context/design-system/lufa_design-system-tokens.context.md)         |
-| `@grasdouble/lufa_design-system-themes`     | Pre-built CSS theme variants — 10 themes overriding the full adaptive token set across light/dark/high-contrast modes   | [Doc](documentation/design-system/lufa_design-system-themes.md) \| [Context](context/design-system/lufa_design-system-themes.context.md)         |
-| `@grasdouble/lufa_design-system-cli`        | Theme validation toolchain — enforces token completeness, WCAG AA contrast, and CSS value correctness for custom themes | [Doc](documentation/design-system/lufa_design-system-cli.md) \| [Context](context/design-system/lufa_design-system-cli.context.md)               |
-| `@grasdouble/lufa_design-system-docusaurus` | Official documentation website — Docusaurus 3 static site deployed to `lufa-ds.grasdouble.com`                          | [Doc](documentation/design-system/lufa_design-system-docusaurus.md) \| [Context](context/design-system/lufa_design-system-docusaurus.context.md) |
-| `@grasdouble/lufa_design-system-playwright` | Component test suite — behavioral, accessibility, and visual regression tests via Playwright CT                         | [Doc](documentation/design-system/lufa_design-system-playwright.md) \| [Context](context/design-system/lufa_design-system-playwright.context.md) |
-| `@grasdouble/lufa_design-system-storybook`  | Interactive component explorer — Storybook 10 instance for live component catalog and token visualization               | [Doc](documentation/design-system/lufa_design-system-storybook.md) \| [Context](context/design-system/lufa_design-system-storybook.context.md)   |
+| Package | Description | Docs |
+| ------- | ----------- | ---- |
+| `@grasdouble/lufa_design-system` | Primary React component library — accessible, token-driven UI components compiled to a single ESM bundle | [Doc](documentation/design-system/lufa_design-system.md) \| [Context](context/design-system/lufa_design-system.context.md) |
+| `@grasdouble/lufa_design-system-tokens` | Design token foundation — 698 DTCG tokens across a 4-level hierarchy, emitting 1025 CSS custom properties | [Doc](documentation/design-system/lufa_design-system-tokens.md) \| [Context](context/design-system/lufa_design-system-tokens.context.md) |
+| `@grasdouble/lufa_design-system-themes` | Pre-built CSS theme variants — 10 themes overriding the full adaptive token set across light/dark/high-contrast modes | [Doc](documentation/design-system/lufa_design-system-themes.md) \| [Context](context/design-system/lufa_design-system-themes.context.md) |
+| `@grasdouble/lufa_design-system-cli` | Theme validation toolchain — enforces token completeness, WCAG AA contrast, and CSS value correctness for custom themes | [Doc](documentation/design-system/lufa_design-system-cli.md) \| [Context](context/design-system/lufa_design-system-cli.context.md) |
+| `@grasdouble/lufa_design-system-docusaurus` | Official documentation website — Docusaurus 3 static site deployed to `lufa-ds.grasdouble.com` | [Doc](documentation/design-system/lufa_design-system-docusaurus.md) \| [Context](context/design-system/lufa_design-system-docusaurus.context.md) |
+| `@grasdouble/lufa_design-system-playwright` | Component test suite — behavioral, accessibility, and visual regression tests via Playwright CT | [Doc](documentation/design-system/lufa_design-system-playwright.md) \| [Context](context/design-system/lufa_design-system-playwright.context.md) |
+| `@grasdouble/lufa_design-system-storybook` | Interactive component explorer — Storybook 10 instance for live component catalog and token visualization | [Doc](documentation/design-system/lufa_design-system-storybook.md) \| [Context](context/design-system/lufa_design-system-storybook.context.md) |
 
 ### Plugins
 
-| Package                                                        | Description                                                                                                       | Docs                                                                                                                                                                                         |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package | Description | Docs |
+| ------- | ----------- | ---- |
 | `@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector` | Vite plugin — injects Import Map `<script>` tags into `index.html` for Single-SPA microfrontend module resolution | [Doc](documentation/plugins/lufa_plugin_vite_vite-plugin-import-map-injector.md) \| [Context](context/plugins/lufa_plugin_vite_vite-plugin-import-map-injector.context.md) |
-| `@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble`      | Vite plugin — injects React Fast Refresh preamble into `<head>` to enable HMR in remote Single-SPA dev setups     | [Doc](documentation/plugins/lufa_plugin_vite_vite-plugin-react-preamble.md) \| [Context](context/plugins/lufa_plugin_vite_vite-plugin-react-preamble.context.md)           |
-| `@grasdouble/lufa_plugin_vscode_lufa-ds-preview`               | VS Code extension — inline color decorators, hover previews, and autocomplete for Lufa design tokens              | [Doc](documentation/plugins/lufa_plugin_vscode_lufa-ds-preview.md) \| [Context](context/plugins/lufa_plugin_vscode_lufa-ds-preview.context.md)                             |
+| `@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble` | Vite plugin — injects React Fast Refresh preamble into `<head>` to enable HMR in remote Single-SPA dev setups | [Doc](documentation/plugins/lufa_plugin_vite_vite-plugin-react-preamble.md) \| [Context](context/plugins/lufa_plugin_vite_vite-plugin-react-preamble.context.md) |
+| `@grasdouble/lufa_plugin_vscode_lufa-ds-preview` | VS Code extension — inline color decorators, hover previews, and autocomplete for Lufa design tokens | [Doc](documentation/plugins/lufa_plugin_vscode_lufa-ds-preview.md) \| [Context](context/plugins/lufa_plugin_vscode_lufa-ds-preview.context.md) |
 
 ---
 
@@ -132,7 +132,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 ### For AI Agents
 
 1. **ALWAYS** start with [Project Context](project-context.md)
-2. Check relevant package `.context.md` files in `context/`
+2. Check relevant package `.context.md` files in `context/` before making changes
 3. Refer to package documentation in `documentation/` for API details
 
 ### For Feature Development
@@ -147,6 +147,6 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 
 | Category            | Count | Last Updated |
 | ------------------- | ----- | ------------ |
-| Packages Documented | 16    | 2026-02-24   |
-| Context Files       | 16    | 2026-02-24   |
-| Architecture Docs   | 1     | 2026-02-24   |
+| Packages Documented | 16    | 2026-04-07   |
+| Context Files       | 16    | 2026-04-07   |
+| Architecture Docs   | 1     | —            |

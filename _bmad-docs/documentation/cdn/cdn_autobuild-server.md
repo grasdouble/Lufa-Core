@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/cdn_autobuild-server'
-shortName: cdn_autobuild-server
-category: cdn
-version: '0.3.4'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/cdn_autobuild-server"
+version: "0.3.6"
 ---
 
 # @grasdouble/cdn_autobuild-server
@@ -19,7 +16,7 @@ The server enforces a strict **ESM-only** policy: CommonJS packages (those lacki
 ## Purpose
 
 - Provides a single HTTP endpoint that acts as a CDN for microfrontend bundles and shared npm libraries.
-- Eliminates the need for a pre-populated asset store by building/fetching assets lazily on first access.
+- Eliminates the need for a pre-populated asset store by fetching assets lazily on first access.
 - Supports versioned asset URLs so that consumers can pin exact dependency versions.
 - Integrates seamlessly with browser-native import maps or `<script type="module">` loading patterns.
 
@@ -76,9 +73,9 @@ Request: GET /:scope/:name@:version/:exportPath
 
 **Directory structure at runtime:**
 
-| Variable  | Default           | Purpose                                       |
-| --------- | ----------------- | --------------------------------------------- |
-| `TMP_DIR` | `$TMPDIR/tmp_cdn` | Temporary extraction dir for non-@grasdouble  |
+| Variable  | Default           | Purpose                                      |
+| --------- | ----------------- | -------------------------------------------- |
+| `TMP_DIR` | `$TMPDIR/tmp_cdn` | Temporary extraction dir for non-@grasdouble |
 | `CDN_DIR` | `$TMPDIR/cdn`     | Permanent cache dir; all packages served here |
 
 ## Key Components
@@ -108,14 +105,14 @@ Bootstraps the Express server, wires all middleware, and defines the single catc
 
 ### `src/security.ts` — Security Middleware
 
-| Export                   | Type                 | Description                                                                                    |
-| ------------------------ | -------------------- | ---------------------------------------------------------------------------------------------- |
-| `whitelist`              | `string[]`           | Domain allowlist for CORS: `sebastien-lemouillour.fr` (www and non-www)                        |
-| `CorsError`              | `class`              | Custom `Error` subclass used to signal CORS rejection with HTTP 403                            |
-| `corsOptions`            | `CorsOptions`        | Strict origin check; denies requests with no `Origin` header                                   |
-| `ipBlockMiddleware`      | `Middleware factory` | Rejects requests from IPs in the `blockedIPs` set with HTTP 403                                |
-| `getRateLimiter`         | `Function`           | Creates an `express-rate-limit` instance (1000 req / 10 min window); auto-blocks exceeding IPs |
-| `unblockIPsAfterTimeout` | `Function`           | Clears all blocked IPs every 15 minutes via `setInterval`                                      |
+| Export                   | Type                | Description                                                                                    |
+| ------------------------ | ------------------- | ---------------------------------------------------------------------------------------------- |
+| `whitelist`              | `string[]`          | Domain allowlist for CORS: `sebastien-lemouillour.fr` (www and non-www)                        |
+| `CorsError`              | `class`             | Custom `Error` subclass used to signal CORS rejection with HTTP 403                            |
+| `corsOptions`            | `CorsOptions`       | Strict origin check; denies requests with no `Origin` header                                   |
+| `ipBlockMiddleware`      | Middleware factory   | Rejects requests from IPs in the `blockedIPs` set with HTTP 403                                |
+| `getRateLimiter`         | `Function`          | Creates an `express-rate-limit` instance (1000 req / 10 min window); auto-blocks exceeding IPs |
+| `unblockIPsAfterTimeout` | `Function`          | Clears all blocked IPs every 15 minutes via `setInterval`                                      |
 
 **Rate limit behaviour:** When a client exceeds 1000 requests in a 10-minute window, its IP is added to `blockedIPs`. All subsequent requests receive HTTP 429 immediately (bypassing the limiter itself). The IP is auto-cleared from the set after 15 minutes.
 
@@ -232,7 +229,7 @@ pnpm preview
 
 ### Programmatic import (library mode)
 
-The package exposes dual CJS/ESM builds. It can be imported to reuse individual utilities:
+The package exposes dual CJS/ESM builds. Individual utilities can be imported directly:
 
 ```ts
 import { extractParams, loadLibrary, sendEntry } from '@grasdouble/cdn_autobuild-server';
@@ -270,16 +267,16 @@ curl https://cdn.example.com/lodash-es@4.17.21
 
 ### Runtime
 
-| Package              | Version | Purpose                                                    |
-| -------------------- | ------- | ---------------------------------------------------------- |
-| `@dotenvx/dotenvx`   | ^1.52.0 | Environment variable loading with `.env` file support      |
-| `cors`               | ^2.8.6  | CORS middleware for Express                                |
-| `escape-html`        | ^1.0.3  | HTML-escapes user-controlled strings in error messages     |
-| `express`            | ^5.2.1  | HTTP server framework                                      |
-| `express-rate-limit` | ^8.2.1  | Per-IP rate limiting middleware                            |
-| `fs-extra`           | ^11.3.3 | Extended filesystem utilities (copy, remove, readJson)     |
-| `pacote`             | ^21.1.0 | npm package fetcher/extractor (supports scoped registries) |
-| `sanitize-filename`  | ^1.6.3  | Strips dangerous characters from URL-derived filenames     |
+| Package              | Version  | Purpose                                                    |
+| -------------------- | -------- | ---------------------------------------------------------- |
+| `@dotenvx/dotenvx`   | ^1.52.0  | Environment variable loading with `.env` file support      |
+| `cors`               | ^2.8.6   | CORS middleware for Express                                |
+| `escape-html`        | ^1.0.3   | HTML-escapes user-controlled strings in error messages     |
+| `express`            | ^5.2.1   | HTTP server framework                                      |
+| `express-rate-limit` | ^8.2.1   | Per-IP rate limiting middleware                            |
+| `fs-extra`           | ^11.3.4  | Extended filesystem utilities (copy, remove, readJson)     |
+| `pacote`             | ^21.4.0  | npm package fetcher/extractor (supports scoped registries) |
+| `sanitize-filename`  | ^1.6.3   | Strips dangerous characters from URL-derived filenames     |
 
 ### Dev / Build
 
@@ -292,6 +289,31 @@ curl https://cdn.example.com/lodash-es@4.17.21
 | `@grasdouble/lufa_config_tsconfig` | Shared TypeScript base config (`node.json`)      |
 | `@grasdouble/lufa_config_eslint`   | Shared ESLint config                             |
 | `@grasdouble/lufa_config_prettier` | Shared Prettier config                           |
+
+## Configuration
+
+Configuration is entirely via environment variables, loaded by `@dotenvx/dotenvx` at startup:
+
+```bash
+# Required
+GITHUB_TOKEN=ghp_xxxxx          # GitHub Packages bearer token
+
+# Optional
+PORT=3000                        # Default: 3000
+TMP_DIR=/tmp/tmp_cdn             # Default: $TMPDIR/tmp_cdn
+CDN_DIR=/tmp/cdn                 # Default: $TMPDIR/cdn
+```
+
+Environment files used per script:
+
+| Script    | Env files loaded                           |
+| --------- | ------------------------------------------ |
+| `dev`     | `.env.development`, then `.env` (override) |
+| `preview` | `.env.production`, then `.env` (override)  |
+
+## Testing
+
+This package has no automated test suite. Validation is performed manually or via integration against a running server instance. The build is verified by type-checking (`pnpm typecheck`) and linting (`pnpm lint`) as part of the CI pipeline.
 
 ## Related Documentation
 

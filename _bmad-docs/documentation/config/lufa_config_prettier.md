@@ -1,11 +1,11 @@
 ---
-package: '@grasdouble/lufa_config_prettier'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_config_prettier"
+version: "0.1.4"
 shortName: lufa_config_prettier
 category: config
-version: '0.1.3'
 private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 ---
 
 # @grasdouble/lufa_config_prettier
@@ -14,10 +14,9 @@ Shared Prettier configuration for the Lufa monorepo. Provides a single, opiniona
 
 ## Overview
 
-`@grasdouble/lufa_config_prettier` is a zero-logic configuration-only package. It exports a single `prettier.Config` object defined in `prettier.config.mjs` that encodes the project-wide formatting rules and activates two Prettier plugins:
+`@grasdouble/lufa_config_prettier` is a zero-logic, configuration-only package. It exports a single `prettier.Config` object defined in `prettier.config.mjs` that encodes the project-wide formatting rules and activates one Prettier plugin:
 
-- **`@ianvs/prettier-plugin-sort-imports`** — deterministic, grouping-aware import ordering
-- **`prettier-plugin-packagejson`** — consistent `package.json` key sorting
+- **`@ianvs/prettier-plugin-sort-imports`** — deterministic, grouping-aware import ordering with full TypeScript 5, JSX, and decorator support.
 
 The config is consumed by every other package in the monorepo through a trivial spread pattern, making it easy to adopt wholesale or selectively override individual options.
 
@@ -28,7 +27,6 @@ The config is consumed by every other package in the monorepo through a trivial 
 | Uniform style across all packages | Single shared config object                                               |
 | No ESLint conflicts               | Formatting rules chosen to be compatible with `eslint-config-prettier`    |
 | Deterministic import order        | `@ianvs/prettier-plugin-sort-imports` with explicit monorepo-aware groups |
-| Consistent `package.json` layout  | `prettier-plugin-packagejson`                                             |
 | Cross-platform line endings       | `endOfLine: 'lf'` enforced everywhere                                     |
 
 ## Architecture
@@ -69,7 +67,6 @@ The entire public API of this package is the default export of this file.
 | Plugin                                | Role                                                                      |
 | ------------------------------------- | ------------------------------------------------------------------------- |
 | `@ianvs/prettier-plugin-sort-imports` | Sorts and groups `import` statements according to the `importOrder` array |
-| `prettier-plugin-packagejson`         | Sorts keys inside `package.json` files                                    |
 
 #### Formatting Rules
 
@@ -84,7 +81,7 @@ The entire public API of this package is the default export of this file.
 | `trailingComma`              | `'es5'`       | Trailing commas in objects and arrays       |
 | `bracketSpacing`             | `true`        | `{ foo: bar }` style                        |
 | `bracketSameLine`            | `false`       | Closing `>` of JSX elements on its own line |
-| `arrowParens`                | `'always'`    | `(x) => x` not `x => x`                     |
+| `arrowParens`                | `'always'`    | `(x) => x` not `x => x`                    |
 | `proseWrap`                  | `'preserve'`  | Do not reflow Markdown prose                |
 | `htmlWhitespaceSensitivity`  | `'css'`       | Follow CSS `display` for whitespace         |
 | `endOfLine`                  | `'lf'`        | Unix line endings everywhere                |
@@ -130,21 +127,21 @@ The exported value is a plain JavaScript object conforming to Prettier's `Config
 
 ```ts
 {
-  plugins: string[];          // ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-packagejson']
-  printWidth: number;         // 120
-  tabWidth: number;           // 2
-  useTabs: boolean;           // false
-  semi: boolean;              // true
-  singleQuote: boolean;       // true
-  quoteProps: string;
-  trailingComma: string;      // 'es5'
-  bracketSpacing: boolean;    // true
-  bracketSameLine: boolean;   // false
-  arrowParens: string;        // 'always'
-  proseWrap: string;
-  htmlWhitespaceSensitivity: string;
-  endOfLine: string;          // 'lf'
-  embeddedLanguageFormatting: string;
+  plugins: string[];                    // ['@ianvs/prettier-plugin-sort-imports']
+  printWidth: number;                   // 120
+  tabWidth: number;                     // 2
+  useTabs: boolean;                     // false
+  semi: boolean;                        // true
+  singleQuote: boolean;                 // true
+  quoteProps: string;                   // 'as-needed'
+  trailingComma: string;               // 'es5'
+  bracketSpacing: boolean;             // true
+  bracketSameLine: boolean;            // false
+  arrowParens: string;                 // 'always'
+  proseWrap: string;                   // 'preserve'
+  htmlWhitespaceSensitivity: string;   // 'css'
+  endOfLine: string;                   // 'lf'
+  embeddedLanguageFormatting: string;  // 'auto'
   importOrder: string[];
   importOrderParserPlugins: string[];
   importOrderTypeScriptVersion: string;
@@ -166,7 +163,7 @@ export default {
 };
 ```
 
-The `plugins` spread is required when the consumer wants to be explicit that it is not adding any extra plugins. Omitting it and relying solely on `...sharedConfig` also works.
+The explicit `plugins` spread is used by some consumers (e.g., the monorepo root) to make the plugin list visible in the consuming file. Omitting it and relying solely on `...sharedConfig` also works.
 
 ### Minimal adoption
 
@@ -220,6 +217,7 @@ The package itself ships a `lint-staged` configuration that can serve as a refer
 {
   "lint-staged": {
     "*.{js,mjs}": ["prettier --write"],
+    "package.json": ["sort-package-json"],
     "*.{json,md}": ["prettier --write"]
   }
 }
@@ -229,10 +227,15 @@ The package itself ships a `lint-staged` configuration that can serve as a refer
 
 ### Runtime dependencies (bundled with the package)
 
-| Package                               | Version  | Role                              |
-| ------------------------------------- | -------- | --------------------------------- |
-| `@ianvs/prettier-plugin-sort-imports` | `^4.7.0` | Import sorting plugin             |
-| `prettier-plugin-packagejson`         | `^3.0.0` | `package.json` key sorting plugin |
+| Package                               | Version  | Role                  |
+| ------------------------------------- | -------- | --------------------- |
+| `@ianvs/prettier-plugin-sort-imports` | `^4.7.1` | Import sorting plugin |
+
+### Dev dependencies
+
+| Package           | Version  | Role                                    |
+| ----------------- | -------- | --------------------------------------- |
+| `sort-package-json`| `^3.6.1` | Used in `lint-staged` to sort `package.json` keys |
 
 ### Peer dependencies
 
@@ -247,7 +250,7 @@ The following 13 packages (including the root) currently consume this config:
 | Package / Location                                   | Relationship                   |
 | ---------------------------------------------------- | ------------------------------ |
 | Root `prettier.config.mjs`                           | Spread + explicit plugin array |
-| `@grasdouble/lufa_design-system_main`                | Spread + explicit plugin array |
+| `@grasdouble/lufa_design-system_main`                | Spread                         |
 | `@grasdouble/lufa_design-system_tokens`              | Spread                         |
 | `@grasdouble/lufa_design-system_themes`              | Spread                         |
 | `@grasdouble/lufa_design-system_docusaurus`          | Spread                         |
@@ -262,10 +265,15 @@ The following 13 packages (including the root) currently consume this config:
 
 All consumers use `workspace:^` as the version specifier, pinning to the local workspace copy.
 
+## Configuration
+
+The package ships no configuration of its own beyond `prettier.config.mjs`. There are no environment variables, no runtime flags, and no secondary entry points.
+
+The `lint-staged` block in `package.json` applies only within the package itself during development and is not exported to consumers.
+
 ## Related Documentation
 
 - `@grasdouble/lufa_config_eslint` — ESLint configuration for the monorepo (`packages/config/eslint/`)
 - `@grasdouble/lufa_config_tsconfig` — Shared TypeScript configuration (`packages/config/tsconfig/`)
 - [Prettier configuration reference](https://prettier.io/docs/configuration)
 - [`@ianvs/prettier-plugin-sort-imports` docs](https://github.com/IanVS/prettier-plugin-sort-imports)
-- [`prettier-plugin-packagejson` docs](https://github.com/matzkoh/prettier-plugin-packagejson)

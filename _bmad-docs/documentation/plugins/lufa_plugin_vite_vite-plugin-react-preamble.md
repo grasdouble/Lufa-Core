@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble'
-shortName: lufa_plugin_vite_vite-plugin-react-preamble
-category: plugins
-version: '0.0.4'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble"
+version: "0.0.6"
 ---
 
 # lufa_plugin_vite_vite-plugin-react-preamble
@@ -98,7 +95,7 @@ The plugin currently accepts **no options**. The factory function signature is:
 function reactPreamblePlugin(): VitePlugin;
 ```
 
-The README describes optional parameters (`reactVersion`, `additionalImports`, `position`, `external`) but these are **not implemented** in the current source (`index.mjs` v0.0.4). The README appears to be aspirational/placeholder content.
+The README describes optional parameters (`reactVersion`, `additionalImports`, `position`, `external`) but these are **not implemented** in the current source (`index.mjs`). The README content appears to be aspirational/placeholder.
 
 ## Usage Examples
 
@@ -173,11 +170,31 @@ export default defineConfig({
 
 | Package                               | Version   | Role                               |
 | ------------------------------------- | --------- | ---------------------------------- |
-| `eslint`                              | `^9.39.2` | Linting                            |
+| `eslint`                              | `^10.0.2` | Linting                            |
 | `prettier`                            | `^3.8.1`  | Formatting                         |
 | `typescript`                          | `^5.9.3`  | Type-checking `.mjs` via `allowJs` |
-| `@ianvs/prettier-plugin-sort-imports` | `^4.7.0`  | Import sorting                     |
-| `prettier-plugin-packagejson`         | `^3.0.0`  | package.json formatting            |
+| `@ianvs/prettier-plugin-sort-imports` | `^4.7.1`  | Import sorting                     |
+| `sort-package-json`                   | `^3.6.1`  | package.json formatting            |
+
+## Configuration
+
+The current version exposes **no configuration options**. The only tunable behavior is implicit: if `config.env.MODE` is not `'development'`, the plugin is a no-op.
+
+### TypeScript
+
+`tsconfig.json` extends `@grasdouble/lufa_config_tsconfig/node.json` and uses `allowJs: true` / `checkJs: false` / `noEmit: true` to type-check `index.mjs` without emitting compiled output.
+
+### ESLint
+
+`eslint.config.mjs` extends `lufa_config_eslint/node.mjs`. Several `@typescript-eslint` unsafe-access rules are disabled for `*.mjs` files because the source is plain JavaScript.
+
+### Published Files
+
+```json
+"files": ["index.mjs", "README.md", "CHANGELOG.md"]
+```
+
+Only the entry point and documentation are published; tooling config files are excluded.
 
 ## Known Consumers
 
@@ -189,6 +206,8 @@ export default defineConfig({
 
 | Version | Changes                                                                            |
 | ------- | ---------------------------------------------------------------------------------- |
+| `0.0.6` | Update dependency                                                                  |
+| `0.0.5` | Add TypeScript typecheck step to lint-staged configuration                         |
 | `0.0.4` | Add typecheck scripts; align docs/test fixtures after stricter TypeScript checks   |
 | `0.0.3` | Fix prettier config; update scripts and README; add missing eslint/prettier config |
 | `0.0.2` | Initial extraction — transformed from Single-SPA PoC into a standalone package     |

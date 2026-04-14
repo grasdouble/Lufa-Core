@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_config_tsconfig'
-shortName: lufa_config_tsconfig
-category: config
-version: '0.1.1'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_config_tsconfig"
+version: "0.1.2"
 ---
 
 # @grasdouble/lufa_config_tsconfig
@@ -14,7 +11,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 
 `@grasdouble/lufa_config_tsconfig` is the shared TypeScript configuration package for the Lufa monorepo. It provides a set of pre-configured `tsconfig.json` presets that enforce consistent TypeScript compiler options across all packages and applications in the monorepo — eliminating per-package boilerplate and ensuring uniform strict-mode settings, module resolution strategies, and JSX transforms.
 
-The package exposes four JSON configuration files, each targeting a distinct project archetype: a base config, a Node.js server config, a React library config, and a React application config. All specialized configs extend the base, keeping inheritance shallow and overrides minimal.
+The package exposes four JSON configuration files, each targeting a distinct project archetype: a base config, a Node.js server config, a React library config, and a React application config. All specialised configs extend the base, keeping inheritance shallow and overrides minimal.
 
 ---
 
@@ -242,7 +239,7 @@ This package exposes no JavaScript or TypeScript runtime exports. Its public API
 
 ## Dependencies
 
-This package has **no runtime dependencies** and **no `devDependencies`** listed in its `package.json`. It is a pure JSON-file package with no build step required.
+This package has **no runtime dependencies**. The only `devDependency` is `sort-package-json` used by `lint-staged` to keep `package.json` fields sorted. It is a pure JSON-file package with no build step required.
 
 | Field           | Value                                          |
 | --------------- | ---------------------------------------------- |
@@ -253,10 +250,17 @@ This package has **no runtime dependencies** and **no `devDependencies`** listed
 
 ---
 
+## Configuration
+
+No runtime configuration is required or available. Each preset is a static JSON file consumed via the TypeScript `extends` field. Consumer packages control all project-specific settings (e.g. `outDir`, `include`, `paths`) in their own local `tsconfig.json`.
+
+---
+
 ## Changelog Summary
 
 | Version | Type  | Summary                                                                   |
 | ------- | ----- | ------------------------------------------------------------------------- |
+| `0.1.2` | patch | Update dependency (`sort-package-json`)                                   |
 | `0.1.1` | patch | Prettier config fix, README updates, lint/tsconfig improvements           |
 | `0.1.0` | minor | Improved configs — added dedicated Node config, ESLint/Prettier variants  |
 | `0.0.3` | patch | Updated `publishConfig`                                                   |
@@ -266,5 +270,5 @@ This package has **no runtime dependencies** and **no `devDependencies`** listed
 
 ## Related Documentation
 
-- `@grasdouble/lufa_config_eslint` — ESLint configuration (`packages/config/eslint/`)
-- `@grasdouble/lufa_config_prettier` — Prettier configuration (`packages/config/prettier/`)
+- [`@grasdouble/lufa_config_eslint`](lufa_config_eslint.md) — ESLint configuration (`packages/config/eslint/`)
+- [`@grasdouble/lufa_config_prettier`](lufa_config_prettier.md) — Prettier configuration (`packages/config/prettier/`)

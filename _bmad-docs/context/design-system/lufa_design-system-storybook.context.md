@@ -3,8 +3,9 @@ package: '@grasdouble/lufa_design-system-storybook'
 shortName: lufa_design-system-storybook
 category: design-system
 type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+version: '1.2.1'
+lastUpdated: '2026-04-07'
+generatedAtCommit: 'ab53a003edb177c2298250479fbe4465ee920bc3'
 ---
 
 # Context: @grasdouble/lufa_design-system-storybook
@@ -14,7 +15,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 | Field               | Value                                      |
 | ------------------- | ------------------------------------------ |
 | Package name        | `@grasdouble/lufa_design-system-storybook` |
-| Version             | `1.1.0`                                    |
+| Version             | `1.2.1`                                    |
 | Private             | `true` (not published)                     |
 | Source path         | `packages/design-system/storybook/`        |
 | Dev server          | `http://localhost:6006` (port 6006)        |
@@ -131,6 +132,16 @@ pnpm typecheck       # tsc -p tsconfig.json --noEmit
 ```
 
 Monorepo root aliases: `pnpm ds:storybook:dev`, `pnpm ds:storybook:build`, `pnpm ds:storybook:lint`, `pnpm ds:storybook:prettier`.
+
+## Notable Dependency Versions (as of 1.2.1)
+
+| Package                    | Version      |
+| -------------------------- | ------------ |
+| `storybook`                | `^10.2.15`   |
+| `@storybook/react-vite`    | `^10.2.15`   |
+| `lucide-react`             | `^0.577.0`   |
+| `react` / `react-dom`      | `^19.0.0`    |
+| `vite`                     | `^6.2.0`     |
 
 ## Workspace Dependencies
 

@@ -1,10 +1,7 @@
 ---
-package: '@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble'
-shortName: lufa_plugin_vite_vite-plugin-react-preamble
-category: plugins
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble"
 ---
 
 # Context: lufa_plugin_vite_vite-plugin-react-preamble
@@ -13,7 +10,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 
 ```
 Package : @grasdouble/lufa_plugin_vite_vite-plugin-react-preamble
-Version : 0.0.4
+Version : 0.0.6
 Type    : Vite plugin (ESM, no build step)
 Entry   : index.mjs
 Exports : default function reactPreamblePlugin() → VitePlugin
@@ -156,14 +153,14 @@ The plugin object exposes:
 - `configResolved`: standard Vite hook
 - `transformIndexHtml`: standard Vite hook with `order: 'pre'`
 
-**No options are accepted.** The README lists `reactVersion`, `additionalImports`, `position`, and `external` but these are not implemented in the current version (v0.0.4).
+**No options are accepted.** The README lists `reactVersion`, `additionalImports`, `position`, and `external` but these are not implemented in the current version (v0.0.6).
 
 ## Package Metadata
 
 ```json
 {
   "name": "@grasdouble/lufa_plugin_vite_vite-plugin-react-preamble",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "private": false,
   "type": "module",
   "main": "index.mjs",

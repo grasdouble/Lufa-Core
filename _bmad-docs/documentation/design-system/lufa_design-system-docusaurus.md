@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_design-system-docusaurus'
-shortName: lufa_design-system-docusaurus
-category: design-system
-version: '1.1.0'
-private: true
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system-docusaurus"
+version: "1.2.1"
 ---
 
 # @grasdouble/lufa_design-system-docusaurus
@@ -92,7 +89,7 @@ The site bridges Docusaurus's `data-theme` attribute (set on `<html>`) to the de
 
 ### `src/components/DarkModeCompatible.tsx`
 
-A small badge component used within MDX documentation pages to visually indicate that a component supports dark mode. Renders an inline badge styled with Infima CSS variables.
+A small badge component used within MDX documentation pages to visually indicate that a component supports dark mode. Renders an inline `div` styled with Infima CSS variables (`--ifm-color-success-*`). Exported as both a named export and the default export.
 
 ```tsx
 import { DarkModeCompatible } from '@site/src/components/DarkModeCompatible';
@@ -136,13 +133,17 @@ A full-page interactive playground (`/playground`) with two switchable views:
 - **Demo Site** — rendered by `_DemoSite.tsx`, shows a realistic application using the design system
 - **Component Library** — `ComponentShowcase` renders every major component category side by side
 
-Features a sticky sub-header with `PlaygroundThemeSwitcher` that applies `data-theme` and `data-mode` attributes directly to the playground container element, allowing isolated theme switching without affecting the rest of the Docusaurus UI.
+Features a sticky sub-header with `PlaygroundThemeSwitcher` that applies `data-theme` and `data-mode` attributes directly to the playground container element, allowing isolated theme switching without affecting the rest of the Docusaurus UI. The sub-header height is tracked with a `ResizeObserver` and exposed as a CSS custom property (`--playground-sub-header-height`).
 
 ### `src/pages/playground/_PlaygroundThemeSwitcher.tsx`
 
-A dropdown theme switcher supporting 11 built-in themes. Theme changes are applied by setting `data-theme` on a forwarded `containerRef`. Color mode (light/dark) is always delegated to Docusaurus's global toggle.
+A dropdown theme switcher supporting 11 built-in themes. Theme changes are applied by setting `data-theme` on a forwarded `containerRef`. Color mode (light/dark) is always delegated to Docusaurus's global toggle. Selected theme is persisted to `localStorage` under the key `lufa-playground-theme`.
 
 **Available themes:** default, ocean, forest, matrix, cyberpunk, sunset, nordic, volcano, coffee, volt, steampunk
+
+### `src/pages/playground/_DemoSite.tsx`
+
+A realistic demo website built entirely from design system components. Showcases a full-page application with header/navigation, hero section, features grid, pricing cards, newsletter form, and footer — all using `@grasdouble/lufa_design-system` components.
 
 ### `src/theme/ReactLiveScope/index.ts`
 
@@ -230,14 +231,14 @@ title: Button
 
 import { DarkModeCompatible } from '@site/src/components/DarkModeCompatible';
 import { LiveDemoSection } from '@site/src/components/LiveDemoSection';
-import ButtonExamples from '@site/src/dsExamples/interaction/button';
+import * as ButtonExamples from '@site/src/dsExamples/interaction/button';
 
 <DarkModeCompatible />
 
 The Button component supports three style types and five semantic variants.
 
 <LiveDemoSection title="Interactive Demo">
-  <ButtonExamples />
+  <ButtonExamples.LiveDemo />
 </LiveDemoSection>
 ```
 
@@ -284,13 +285,13 @@ function Demo() {
 | `@docusaurus/preset-classic`            | 3.9.2         | Standard docs/blog/theme preset             |
 | `@docusaurus/theme-common`              | ^3.9.2        | Shared theme utilities (useColorMode, etc.) |
 | `@docusaurus/theme-live-codeblock`      | ^3.9.2        | Interactive live code block theme           |
-| `@easyops-cn/docusaurus-search-local`   | ^0.52.3       | Local full-text search (no server required) |
+| `@easyops-cn/docusaurus-search-local`   | ^0.55.1       | Local full-text search (no server required) |
 | `@grasdouble/lufa_design-system`        | `workspace:^` | All design system components                |
 | `@grasdouble/lufa_design-system-themes` | `workspace:^` | All theme CSS variants                      |
 | `@grasdouble/lufa_design-system-tokens` | `workspace:^` | Design token values and validation          |
 | `@mdx-js/react`                         | ^3.1.1        | MDX React provider                          |
 | `clsx`                                  | ^2.1.1        | Conditional CSS class helper                |
-| `lucide-react`                          | ^0.563.0      | Icon library                                |
+| `lucide-react`                          | ^0.577.0      | Icon library                                |
 | `prism-react-renderer`                  | ^2.4.1        | Syntax highlighting                         |
 | `react` / `react-dom`                   | ^19.2.4       | React runtime                               |
 
@@ -307,7 +308,7 @@ function Demo() {
 | `tsx`                              | TypeScript execution for scripts               |
 | `typescript`                       | TypeScript compiler                            |
 
-## Configuration Details
+## Configuration
 
 ### `docusaurus.config.ts`
 

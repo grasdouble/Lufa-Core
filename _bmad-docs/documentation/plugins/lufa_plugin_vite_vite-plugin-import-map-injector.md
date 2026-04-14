@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector'
-shortName: lufa_plugin_vite_vite-plugin-import-map-injector
-category: plugins
-version: '0.2.3'
-private: false
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector"
+version: "0.2.5"
 ---
 
 # lufa_plugin_vite_vite-plugin-import-map-injector
@@ -238,6 +235,8 @@ None. The plugin uses only Node.js built-ins (`fs`, `path`).
 
 | Version | Change                                                             |
 | ------- | ------------------------------------------------------------------ |
+| `0.2.5` | Update dependency                                                  |
+| `0.2.4` | Add TypeScript typecheck step to lint-staged configuration         |
 | `0.2.3` | Add typecheck scripts; align docs after stricter TypeScript checks |
 | `0.2.2` | Fix Prettier config; update scripts and README                     |
 | `0.2.1` | Fix dev mode behavior                                              |

@@ -3,8 +3,8 @@ package: '@grasdouble/lufa_design-system'
 shortName: lufa_design-system
 category: design-system
 type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+lastUpdated: '2026-04-07'
+generatedAtCommit: 'ab53a003edb177c2298250479fbe4465ee920bc3'
 ---
 
 # lufa_design-system — AI Context File
@@ -14,7 +14,7 @@ generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
 | Field               | Value                                          |
 | ------------------- | ---------------------------------------------- |
 | **npm name**        | `@grasdouble/lufa_design-system`               |
-| **Version**         | `2.0.0`                                        |
+| **Version**         | `2.1.1`                                        |
 | **Private**         | No (published to GitHub Package Registry)      |
 | **License**         | MIT                                            |
 | **Module format**   | ESM only (`type: "module"`)                    |
@@ -165,7 +165,7 @@ type ResponsiveVisibilityProps = {
 };
 ```
 
-Available on: `Box`, `Stack`, `Flex`, `Grid`, `Container`.
+Available on: `Box`, `Stack`, `Flex`, `Grid`, `Container`, `Center`.
 
 ### ThemeName / ThemeMode (useTheme)
 
@@ -423,11 +423,11 @@ Provides all CSS custom properties as the design token layer:
 
 This token package is not a peer dependency — it is bundled via the workspace and its CSS is included in `style.css`.
 
-### `lucide-react`
+### `lucide-react` (^0.577.0)
 
 The `Icon` component maps 30 named icons from this library. New icons must be added to `ICON_MAP` in `src/content/Icon/Icon.tsx` and re-built.
 
-### `@headlessui/react`
+### `@headlessui/react` (^2.2.9)
 
 Listed as a dependency but not currently used in the default component set. Available for internal use when building accessible overlay patterns (dialogs, dropdowns).
 
@@ -449,3 +449,11 @@ Requires React 19.1+. All components use `forwardRef` and support ref forwarding
 - `react` and `react-dom` are externalized (not included in the bundle).
 - Published to GitHub Package Registry (`https://npm.pkg.github.com`) with public access.
 - Consumers must configure their package manager to resolve `@grasdouble/*` packages from the GitHub registry.
+
+## See Also
+
+- **Full documentation**: `_bmad-docs/documentation/design-system/lufa_design-system.md`
+- **Tokens package**: `@grasdouble/lufa_design-system-tokens`
+- **Themes package**: `@grasdouble/lufa_design-system-themes`
+- **Storybook**: `packages/design-system/storybook/`
+- **Playwright tests**: `packages/design-system/playwright/`

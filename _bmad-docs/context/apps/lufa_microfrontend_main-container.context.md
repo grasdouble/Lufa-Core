@@ -1,20 +1,20 @@
 ---
-package: '@grasdouble/lufa_microfrontend_main-container'
-shortName: lufa_microfrontend_main-container
-category: apps
-type: context
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_microfrontend_main-container"
 ---
 
-# Context: @grasdouble/lufa_microfrontend_main-container
+# lufa_microfrontend_main-container - AI Context
+
+> Quick reference for AI agents working with this package.
+> **Generated**: 2026-04-07
 
 ## Package Info
 
 | Field             | Value                                                               |
 | ----------------- | ------------------------------------------------------------------- |
 | Full name         | `@grasdouble/lufa_microfrontend_main-container`                     |
-| Version           | `0.6.13`                                                            |
+| Version           | `0.6.15`                                                            |
 | Private           | `true` (not published to npm registry as a library)                 |
 | Type              | Single-SPA root config application (app entry point, not a library) |
 | Source path       | `packages/apps/microfrontend/main-container/`                       |
@@ -100,7 +100,7 @@ registerApplication({
         iframe.style.width = '100%';
         iframe.style.height = '100vh';
         iframe.style.border = 'none';
-        document.getElementById('app')?.appendChild(iframe);
+        document.getElementById('lufa-container')?.appendChild(iframe);
         return Promise.resolve();
       },
       unmount: (): Promise<void> => {
@@ -134,7 +134,7 @@ registerApplication({
 }
 ```
 
-## Anti-Patterns
+## Anti-patterns
 
 ### Do NOT import React components directly in main.ts
 
@@ -169,7 +169,7 @@ app: loadApp('@grasdouble/lufa_microfrontend_home');
 
 ### Do NOT mount microfrontends to elements other than the designated container
 
-The `#lufa-container` div is the expected mount root. Using `#app` (as seen in the Storybook iframe integration) is a known inconsistency — new registrations should target `#lufa-container`.
+The `#lufa-container` div is the expected mount root. The Storybook iframe integration mounts to `#app` — this is a known inconsistency. New registrations should target `#lufa-container`.
 
 ## Dependencies Context
 
@@ -184,7 +184,7 @@ Core framework. Provides `registerApplication` and `start`. The container calls 
 
 Provides the `<import-map-overrides-full>` web component and the override runtime. Imported as a side effect in `main.ts`. The web component is declared in `index.html` and only renders when `localStorage.devtools === 'true'`. Allows developers to point individual import map entries to local servers without modifying source files.
 
-### `@grasdouble/lufa_design-system` (`workspace:^`)
+### `@grasdouble/lufa_design-system` (`workspace:^`, currently `2.1.1`)
 
 Imported exclusively for its global stylesheet:
 
@@ -209,3 +209,27 @@ Custom Vite plugin (workspace package). Required for React Fast Refresh to work 
 ### `vite-plugin-externalize-deps`
 
 Marks peer dependencies as external. Configured with `peerDeps: true` and `deps: false`, meaning only peer deps are externalized, not regular runtime dependencies. This ensures `single-spa`, `import-map-overrides`, and the design system are bundled while React (a peer dep) is not.
+
+## Quick Reference
+
+| Task                          | Command / File                                                         |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| Start dev server              | `pnpm app:mf:dev` (port 5173)                                          |
+| Enable devtools / dev imports | `localStorage.setItem('devtools', 'true')` in browser console + reload |
+| Add a new microfrontend       | Edit `src/main.ts` + `src/importMap.json` + `src/importMap.dev.json`   |
+| Build for production          | `pnpm --filter @grasdouble/lufa_microfrontend_main-container build`    |
+| Type-check                    | `pnpm --filter @grasdouble/lufa_microfrontend_main-container typecheck` |
+| Lint                          | `pnpm --filter @grasdouble/lufa_microfrontend_main-container lint`      |
+| Main entry point              | `src/main.ts`                                                          |
+| Root HTML                     | `index.html`                                                           |
+| Vite config                   | `vite.config.js`                                                       |
+| Prod import map               | `src/importMap.json`                                                   |
+| Dev import map                | `src/importMap.dev.json`                                               |
+| External deps map (React)     | `src/importMapExternal.json`                                           |
+
+## See Also
+
+- [Full Documentation](../../documentation/apps/lufa_microfrontend_main-container.md)
+- [lufa_microfrontend_home context](./lufa_microfrontend_home.context.md) — primary microfrontend loaded at `/`
+- [lufa_plugin_vite_vite-plugin-import-map-injector context](../plugins/lufa_plugin_vite_vite-plugin-import-map-injector.context.md)
+- [lufa_plugin_vite_vite-plugin-react-preamble context](../plugins/lufa_plugin_vite_vite-plugin-react-preamble.context.md)

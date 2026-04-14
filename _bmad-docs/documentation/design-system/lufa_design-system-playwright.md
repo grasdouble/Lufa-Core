@@ -1,11 +1,8 @@
 ---
-package: '@grasdouble/lufa_design-system-playwright'
-shortName: lufa_design-system-playwright
-category: design-system
-version: '1.1.0'
-private: true
-lastUpdated: '2026-02-24'
-generatedAtCommit: 'd27c912328f538971b6720513be2c817c2feff15'
+generatedAtCommit: "ab53a003edb177c2298250479fbe4465ee920bc3"
+lastUpdated: "2026-04-07"
+package: "@grasdouble/lufa_design-system-playwright"
+version: "1.2.1"
 ---
 
 # @grasdouble/lufa_design-system-playwright
@@ -24,6 +21,7 @@ This package is private and is never published. It exists solely as a quality ga
 - **Accessibility auditing**: Run automated axe-core scans against every rendered component.
 - **Visual regression**: Capture pixel-level screenshots for all component variants and alert on unintended changes.
 - **Cross-platform snapshot management**: Maintain separate snapshot sets for macOS (darwin) and Linux CI environments.
+- **Token usage validation**: Verify that design token references in test files are valid and not unused.
 
 ---
 
@@ -39,14 +37,20 @@ packages/design-system/playwright/
 │   ├── interaction/                # Interactive components (Button, Input, Label)
 │   └── utility/                    # Utility components (Portal, VisuallyHidden)
 ├── __snapshots__/                  # Visual regression baseline images
-│   ├── darwin/chromium/            # macOS-generated snapshots
-│   └── linux/chromium/             # Linux-generated snapshots (for CI parity)
+│   └── src/
+│       ├── composition/            # Snapshots for composition components
+│       ├── content/                # Snapshots for content components
+│       ├── foundation/             # Snapshots for foundation components
+│       └── interaction/            # Snapshots for interaction components
 ├── scripts/                        # Snapshot lifecycle scripts
 │   ├── compress-snapshots-manual.sh
 │   ├── compress-snapshots-precommit.sh
 │   ├── docker-update-snapshots-linux.sh
 │   └── validate-snapshot-system.sh
 ├── _docs/                          # Internal documentation
+├── playwright/                     # CT mount entry point
+│   ├── index.html                  # HTML shell (body uses design-system CSS variables)
+│   └── index.tsx                   # Theme bootstrap (imports CSS, sets data-theme / data-mode)
 ├── playwright-ct.config.ts         # Playwright CT configuration
 ├── playwright-ct.vite.config.ts    # Vite bundler config for CT
 └── package.json
@@ -61,6 +65,14 @@ packages/design-system/playwright/
 | Accessibility scanner | `@axe-core/playwright`              |
 | Snapshot compression  | `oxipng` (external CLI tool)        |
 | TypeScript            | `typescript ^5.9.3`                 |
+
+### Theme bootstrap (`playwright/index.tsx`)
+
+Before any test component mounts, the bootstrap:
+
+1. Imports `@grasdouble/lufa_design-system/style.css` to make all design tokens and component styles available.
+2. Sets `data-theme=""` on `<html>` (matching the design system's default token cascade).
+3. Bridges `prefers-color-scheme` to `data-mode="dark|light"` so Playwright's `colorScheme: 'dark'` option drives dark-mode visual regression tests correctly.
 
 ---
 
@@ -94,19 +106,19 @@ Each spec file follows a strict five-category structure:
 
 #### Content layer (`src/content/`)
 
-| Spec file        | Component tested | Key coverage                                                           |
-| ---------------- | ---------------- | ---------------------------------------------------------------------- |
-| `Badge.spec.tsx` | `Badge`          | Variant colors, sizes (sm/md/lg), dot indicator, polymorphic rendering |
-| `Icon.spec.tsx`  | `Icon`           | Icon name resolution, size, color                                      |
-| `Text.spec.tsx`  | `Text`           | Typography variants, truncation, semantic elements                     |
+| Spec file        | Component tested | Key coverage                                                                    |
+| ---------------- | ---------------- | ------------------------------------------------------------------------------- |
+| `Badge.spec.tsx` | `Badge`          | Variant colors (default/success/error/warning/info), sizes (sm/md/lg), dot indicator, polymorphic rendering |
+| `Icon.spec.tsx`  | `Icon`           | Icon name resolution, size, color                                               |
+| `Text.spec.tsx`  | `Text`           | Typography variants (h1–h6, body-large, body, body-small, caption, label), color, weight, align, transform, polymorphic `as` |
 
 #### Interaction layer (`src/interaction/`)
 
-| Spec file         | Component tested | Key coverage                                                                                     |
-| ----------------- | ---------------- | ------------------------------------------------------------------------------------------------ |
-| `Button.spec.tsx` | `Button`         | Type × variant matrix (3×7), sizes, radius, icons, loading/disabled states, polymorphic `as="a"` |
-| `Input.spec.tsx`  | `Input`          | Text input variants, states, validation feedback                                                 |
-| `Label.spec.tsx`  | `Label`          | Form label associations                                                                          |
+| Spec file         | Component tested | Key coverage                                                                                       |
+| ----------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+| `Button.spec.tsx` | `Button`         | Type × variant matrix (solid/outline/ghost × primary/secondary/success/danger/warning/info/neutral), sizes (sm/md/lg), radius, icons, loading/disabled states, polymorphic `as="a"` |
+| `Input.spec.tsx`  | `Input`          | Text input variants, error/disabled/fullWidth states                                               |
+| `Label.spec.tsx`  | `Label`          | Form label associations                                                                            |
 
 #### Composition layer (`src/composition/`)
 
@@ -118,7 +130,7 @@ Each spec file follows a strict five-category structure:
 
 | Spec file                 | Component tested | Key coverage               |
 | ------------------------- | ---------------- | -------------------------- |
-| `Portal.spec.tsx`         | `Portal`         | DOM portal mounting        |
+| `Portal.spec.tsx`         | `Portal`         | DOM portal mounting outside root |
 | `VisuallyHidden.spec.tsx` | `VisuallyHidden` | Screen-reader-only content |
 
 ---
@@ -129,7 +141,7 @@ Each spec file follows a strict five-category structure:
 
 Defines the Playwright CT configuration:
 
-- `testDir`: `./ ` (all spec files in the package)
+- `testDir`: `./` (all spec files in the package)
 - `snapshotDir`: `./__snapshots__`
 - Timeout: 10 000 ms per test
 - Fully parallel in development; single worker on CI
@@ -142,11 +154,11 @@ Defines the Playwright CT configuration:
 
 #### `playwright-ct.vite.config.ts`
 
-Vite configuration used by Playwright to bundle components during testing. Uses `@vitejs/plugin-react` and ensures `lucide-react` resolves correctly for icon rendering.
+Vite configuration used by Playwright to bundle components during testing. Uses `@vitejs/plugin-react` and ensures `lucide-react` resolves correctly for icon rendering. External bundling is disabled to ensure all dependencies are bundled into the test build.
 
 #### `tsconfig.json`
 
-Extends `@grasdouble/lufa_config_tsconfig/react-app.json`. Targets ES2020, includes strict unused-variable and side-effect import checks. Only `src/` and `playwright-ct.config.ts` are included.
+Extends `@grasdouble/lufa_config_tsconfig/react-app.json`. Targets ES2020, includes strict unused-variable and side-effect import checks.
 
 ---
 
@@ -167,14 +179,14 @@ Triggered automatically via `lint-staged` + Husky on every commit that stages PN
 ```bash
 pnpm docker:update-snapshots-linux
 # or from root:
-pnpm ds:test:docker:update-snapshots-linux
+pnpm ds:playwright:docker:update-snapshots-linux
 ```
 
 - Builds a Node.js + pnpm Linux container
 - Installs all dependencies inside (Linux binaries, no macOS conflicts)
 - Runs Playwright CT with `--update-snapshots`
 - Compresses output with `oxipng -o 6` (maximum)
-- Writes snapshots back to host filesystem
+- Writes snapshots back to host filesystem via bind mounts
 - Time: ~4–6 minutes
 
 #### Method 3 — GitHub Actions automated update
@@ -195,7 +207,7 @@ gh pr edit --add-label snapshot-update
 ```bash
 pnpm validate-system
 # or from root:
-pnpm ds:test:validate-system
+pnpm ds:playwright:validate-system
 ```
 
 Checks: oxipng installation, Docker availability, pre-commit hook wiring, lint-staged configuration, GitHub Actions workflow, label existence, documentation presence.
@@ -280,17 +292,24 @@ await expect(component).toHaveScreenshot('badge-all-variants.png');
 | `docker:update-snapshots-linux` | Generate Linux snapshots via Docker                |
 | `lint`                          | ESLint check                                       |
 | `lint:fix`                      | ESLint auto-fix                                    |
+| `prettier:check`                | Prettier format check                              |
+| `prettier:write`                | Prettier format write                              |
 | `typecheck`                     | TypeScript type check (no emit)                    |
+| `validate:token-usage`          | Validate design token usage in source files        |
+| `validate:token-usage:unused`   | Report unused design tokens                        |
+| `validate:token-usage:verbose`  | Verbose token usage report                         |
 | `validate-system`               | Validate snapshot management system health         |
 
 ### Root-level shortcuts
 
 ```bash
-pnpm ds:test                               # Run all CT tests
-pnpm ds:test:ui                            # UI mode
-pnpm ds:test:update-snapshots              # Update + compress
-pnpm ds:playwright:compress-snapshots            # Manual compress only
-pnpm ds:test:docker:update-snapshots-linux # Docker Linux snapshots
+pnpm ds:playwright:ci                                    # Run all CT tests (CI mode)
+pnpm ds:playwright:ui                                    # UI mode
+pnpm ds:playwright:update-snapshots                      # Update + compress
+pnpm ds:playwright:compress-snapshots                    # Manual compress only
+pnpm ds:playwright:docker:update-snapshots-linux         # Docker Linux snapshots
+pnpm ds:playwright:validate:token-usage                  # Token validation
+pnpm ds:playwright:validate-system                       # System health check
 ```
 
 ---
@@ -356,10 +375,10 @@ test.describe('MyComponent Component', () => {
 
 ```bash
 # 1. Run tests to see what changed
-pnpm ds:test:ui
+pnpm test-ct:ui
 
 # 2. Accept new baselines
-pnpm ds:test:update-snapshots
+pnpm test-ct:update-snapshots
 
 # 3. Commit (pre-commit hook compresses PNGs automatically)
 git add .
@@ -380,7 +399,7 @@ brew install oxipng
 oxipng --version
 
 # Check full system health
-pnpm ds:test:validate-system
+pnpm validate-system
 ```
 
 ---
@@ -392,15 +411,16 @@ pnpm ds:test:validate-system
 | Package                             | Version       | Purpose                                  |
 | ----------------------------------- | ------------- | ---------------------------------------- |
 | `@playwright/experimental-ct-react` | `^1.58.2`     | Core CT framework                        |
-| `@axe-core/playwright`              | `^4.11.0`     | Accessibility auditing                   |
+| `@axe-core/playwright`              | `^4.11.1`     | Accessibility auditing                   |
 | `react` / `react-dom`               | `^19.2.4`     | Component rendering                      |
 | `@types/react` / `@types/react-dom` | `^19.2.x`     | TypeScript types                         |
 | `typescript`                        | `^5.9.3`      | Type checking                            |
-| `lucide-react`                      | `^0.563.0`    | Icon library (required by design system) |
+| `lucide-react`                      | `^0.577.0`    | Icon library (required by design system) |
 | `@grasdouble/lufa_design-system`    | `workspace:^` | The component library under test         |
 | `@grasdouble/lufa_config_eslint`    | `workspace:^` | Shared ESLint config                     |
+| `@grasdouble/lufa_config_prettier`  | `workspace:^` | Shared Prettier config                   |
 | `@grasdouble/lufa_config_tsconfig`  | `workspace:^` | Shared TypeScript config                 |
-| `@types/node`                       | `^25.1.0`     | Node.js type definitions                 |
+| `@types/node`                       | `^25.3.3`     | Node.js type definitions                 |
 
 ### External tools (not installed via pnpm)
 
@@ -421,7 +441,7 @@ pnpm ds:test:validate-system
 | Compression scripts reference      | `scripts/README.md`                   |
 | Snapshot compression overview      | `_docs/snapshot-compression.md`       |
 | Test structure                     | `_docs/test-structure.md`             |
-| Configuration details              | `_docs/configuration.md`              |
+| Configuration details              | `_docs/configuration.md`             |
 | Writing tests guide                | `_docs/writing-tests.md`              |
 | CI/CD integration                  | `_docs/ci-cd.md`                      |
 | Troubleshooting                    | `_docs/troubleshooting.md`            |
