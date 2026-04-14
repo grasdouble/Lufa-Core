@@ -39,7 +39,7 @@ jobs:
       # Configure npm for GitHub Registry
       - name: Configure npm for GitHub Registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.LUFA_CI_SECRET_READ }}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.LUFA_CI_SECRET_WRITE }}" > ~/.npmrc
           echo "@grasdouble:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
       # Install dependencies
