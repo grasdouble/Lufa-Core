@@ -482,7 +482,7 @@ jobs:
       # Step 12: Trigger test workflow on the new commit
       - name: Trigger tests on updated snapshots
         if: steps.commit.outputs.updated == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             // Wait for the push to be processed
@@ -549,7 +549,7 @@ jobs:
       # Step 17: Remove snapshot-update label
       - name: Remove snapshot-update label
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             try {
