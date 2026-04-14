@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.6
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+
 ## 0.1.5
 
 ### Patch Changes

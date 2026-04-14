@@ -1,5 +1,13 @@
 # @grasdouble/lufa_design-system-themes
 
+## 1.1.2
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+- Updated dependencies [d90bfed]
+  - @grasdouble/lufa_design-system-tokens@1.2.2
+
 ## 1.1.1
 
 ### Patch Changes

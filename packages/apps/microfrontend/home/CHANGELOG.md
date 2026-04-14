@@ -1,5 +1,13 @@
 # @grasdouble/lufa_microfrontend_home
 
+## 0.3.8
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+- Updated dependencies [d90bfed]
+  - @grasdouble/lufa_design-system@2.1.2
+
 ## 0.3.7
 
 ### Patch Changes

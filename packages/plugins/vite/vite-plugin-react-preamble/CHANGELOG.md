@@ -1,5 +1,11 @@
 # @grasdouble/lufa_plugin_vite_vite-plugin-react-preamble
 
+## 0.0.7
+
+### Patch Changes
+
+- d90bfed: chore: update dependencies
+
 ## 0.0.6
 
 ### Patch Changes
