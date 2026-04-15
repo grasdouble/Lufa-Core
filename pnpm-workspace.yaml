@@ -14,3 +14,6 @@ preferWorkspacePackages: true
 publicHoistPattern:
   - '*secretlint*'
   - '@storybook/react-vite'
+
+onlyBuiltDependencies:
+  - esbuild
