@@ -106,22 +106,11 @@ export default defineConfig(({ command, mode, isPreview }) => {
             return output;
           },
         },
-        rolldownOptions: {
-          // Override externalizeDeps plugin to bundle lucide-react
-          external: (id) => {
-            // Don't externalize lucide-react - bundle it
-            if (id === 'lucide-react') {
-              return false;
-            }
-            // Externalize react (peer dependency)
-            if (id === 'react' || id.startsWith('react/')) {
-              return true;
-            }
-            // Let externalizeDeps plugin handle the rest
-            return false;
-          },
-        },
       },
+      // rolldownOptions: external is intentionally not set here.
+      // externalizeDeps plugin (with except: ['lucide-react']) handles externalization
+      // via rollupOptions.external (array-based specifier matching), which correctly
+      // externalizes CJS packages like react-dom without inlining their source.
     };
   };
 
