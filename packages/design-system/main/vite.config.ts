@@ -106,7 +106,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
             return output;
           },
         },
-        rollupOptions: {
+        rolldownOptions: {
           // Override externalizeDeps plugin to bundle lucide-react
           external: (id) => {
             // Don't externalize lucide-react - bundle it

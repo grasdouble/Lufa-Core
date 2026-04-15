@@ -25,7 +25,7 @@ export default defineConfig({
     target: 'esnext',
     modulePreload: false, // Single-SPA manages the loading of modules
     minify: false,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         format: 'esm',
         entryFileNames: '[name].js',

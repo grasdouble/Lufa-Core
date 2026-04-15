@@ -44,7 +44,7 @@
     "@grasdouble/lufa_design-system": "workspace:^",
     "@grasdouble/lufa_design-system-themes": "workspace:^",
     "@grasdouble/lufa_design-system-tokens": "workspace:^",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^1.8.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -58,16 +58,16 @@
     "@storybook/react-vite": "^10.3.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^10.2.0",
     "eslint-plugin-storybook": "^10.3.5",
     "globals": "^17.5.0",
     "prettier": "^3.8.3",
     "sort-package-json": "^3.6.1",
     "storybook": "^10.3.5",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^7.3.2"
+    "vite": "^8.0.8"
   },
   "publishConfig": {
     "access": "public",
