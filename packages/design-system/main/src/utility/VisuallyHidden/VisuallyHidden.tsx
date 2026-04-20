@@ -48,9 +48,7 @@ const VisuallyHiddenImpl = <T extends ElementType = 'span'>(
   );
 };
 
-export const VisuallyHidden = Object.assign(
-  forwardRef(VisuallyHiddenImpl) as <T extends ElementType = 'span'>(
-    props: VisuallyHiddenProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'VisuallyHidden' }
-);
+export const VisuallyHidden = forwardRef(VisuallyHiddenImpl) as (<T extends ElementType = 'span'>(
+  props: VisuallyHiddenProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+VisuallyHidden.displayName = 'VisuallyHidden';

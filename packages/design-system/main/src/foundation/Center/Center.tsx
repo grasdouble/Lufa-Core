@@ -48,9 +48,7 @@ const CenterImpl = <T extends ElementType = 'div'>(
   );
 };
 
-export const Center = Object.assign(
-  forwardRef(CenterImpl) as <T extends ElementType = 'div'>(
-    props: CenterComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Center' }
-);
+export const Center = forwardRef(CenterImpl) as (<T extends ElementType = 'div'>(
+  props: CenterComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Center.displayName = 'Center';

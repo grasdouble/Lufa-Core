@@ -164,9 +164,7 @@ const ClusterImpl = <T extends ElementType = 'div'>(
 };
 
 // Forward ref with generic type support and displayName
-export const Cluster = Object.assign(
-  forwardRef(ClusterImpl) as <T extends ElementType = 'div'>(
-    props: ClusterComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Cluster' }
-);
+export const Cluster = forwardRef(ClusterImpl) as (<T extends ElementType = 'div'>(
+  props: ClusterComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Cluster.displayName = 'Cluster';

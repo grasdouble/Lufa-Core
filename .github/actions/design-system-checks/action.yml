@@ -48,8 +48,17 @@ runs:
       shell: bash
       run: |
         echo "::group::Themes — lint"
-        pnpm --filter @grasdouble/lufa_design-system-themes run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-themes run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🎨 Themes — typecheck
@@ -57,8 +66,15 @@ runs:
       shell: bash
       run: |
         echo "::group::Themes — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system-themes run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-themes run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🎨 Themes — validate:token-usage
@@ -95,8 +111,17 @@ runs:
       shell: bash
       run: |
         echo "::group::Main — lint"
-        pnpm --filter @grasdouble/lufa_design-system run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🧩 Main — typecheck
@@ -104,8 +129,15 @@ runs:
       shell: bash
       run: |
         echo "::group::Main — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🧩 Main — validate:token-usage
@@ -142,8 +174,17 @@ runs:
       shell: bash
       run: |
         echo "::group::Storybook — lint"
-        pnpm --filter @grasdouble/lufa_design-system-storybook run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-storybook run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 📖 Storybook — typecheck
@@ -151,8 +192,15 @@ runs:
       shell: bash
       run: |
         echo "::group::Storybook — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system-storybook run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-storybook run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 📖 Storybook — validate:token-usage
@@ -180,8 +228,17 @@ runs:
       shell: bash
       run: |
         echo "::group::CLI — lint"
-        pnpm --filter @grasdouble/lufa_design-system-cli run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-cli run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🔧 CLI — typecheck
@@ -189,8 +246,15 @@ runs:
       shell: bash
       run: |
         echo "::group::CLI — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system-cli run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-cli run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🔧 CLI — validate:token-usage
@@ -218,8 +282,17 @@ runs:
       shell: bash
       run: |
         echo "::group::Docusaurus — lint"
-        pnpm --filter @grasdouble/lufa_design-system-docusaurus run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-docusaurus run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 📚 Docusaurus — typecheck
@@ -227,8 +300,15 @@ runs:
       shell: bash
       run: |
         echo "::group::Docusaurus — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system-docusaurus run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-docusaurus run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 📚 Docusaurus — validate:token-usage
@@ -256,8 +336,17 @@ runs:
       shell: bash
       run: |
         echo "::group::Playwright — lint"
-        pnpm --filter @grasdouble/lufa_design-system-playwright run lint
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-playwright run lint 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
+        WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        echo "warnings=${WARNINGS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🎭 Playwright — typecheck
@@ -265,8 +354,15 @@ runs:
       shell: bash
       run: |
         echo "::group::Playwright — typecheck"
-        pnpm --filter @grasdouble/lufa_design-system-playwright run typecheck
+        set +e
+        OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-playwright run typecheck 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        set -e
         echo "::endgroup::"
+        ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
+        echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
       continue-on-error: true
 
     - name: 🎭 Playwright — validate:token-usage
@@ -364,12 +460,49 @@ runs:
         PLAYWRIGHT_TYPECHECK: ${{ steps.playwright-typecheck.outcome }}
         PLAYWRIGHT_TOKEN_USAGE: ${{ steps.playwright-token-usage.outcome }}
         PLAYWRIGHT_PRETTIER: ${{ steps.playwright-prettier.outcome }}
+        THEMES_LINT_ERRORS: ${{ steps.themes-lint.outputs.errors }}
+        THEMES_LINT_WARNINGS: ${{ steps.themes-lint.outputs.warnings }}
+        THEMES_TYPECHECK_ERRORS: ${{ steps.themes-typecheck.outputs.errors }}
+        MAIN_LINT_ERRORS: ${{ steps.main-lint.outputs.errors }}
+        MAIN_LINT_WARNINGS: ${{ steps.main-lint.outputs.warnings }}
+        MAIN_TYPECHECK_ERRORS: ${{ steps.main-typecheck.outputs.errors }}
+        STORYBOOK_LINT_ERRORS: ${{ steps.storybook-lint.outputs.errors }}
+        STORYBOOK_LINT_WARNINGS: ${{ steps.storybook-lint.outputs.warnings }}
+        STORYBOOK_TYPECHECK_ERRORS: ${{ steps.storybook-typecheck.outputs.errors }}
+        CLI_LINT_ERRORS: ${{ steps.cli-lint.outputs.errors }}
+        CLI_LINT_WARNINGS: ${{ steps.cli-lint.outputs.warnings }}
+        CLI_TYPECHECK_ERRORS: ${{ steps.cli-typecheck.outputs.errors }}
+        DOCUSAURUS_LINT_ERRORS: ${{ steps.docusaurus-lint.outputs.errors }}
+        DOCUSAURUS_LINT_WARNINGS: ${{ steps.docusaurus-lint.outputs.warnings }}
+        DOCUSAURUS_TYPECHECK_ERRORS: ${{ steps.docusaurus-typecheck.outputs.errors }}
+        PLAYWRIGHT_LINT_ERRORS: ${{ steps.playwright-lint.outputs.errors }}
+        PLAYWRIGHT_LINT_WARNINGS: ${{ steps.playwright-lint.outputs.warnings }}
+        PLAYWRIGHT_TYPECHECK_ERRORS: ${{ steps.playwright-typecheck.outputs.errors }}
         OVERALL: ${{ steps.aggregate.outputs.overall }}
         FAILURES: ${{ steps.aggregate.outputs.failures }}
         RUN_URL: ${{ inputs.run-url }}
       run: |
         si() { [[ "$1" == "success" ]] && echo "✅" || echo "❌"; }
         sl() { [[ "$1" == "success" ]] && echo "Passed" || echo "Failed"; }
+        sd_lint() {
+          local status=$1 errors=${2:-0} warnings=${3:-0}
+          if [[ "$status" == "success" ]]; then
+            [[ "$warnings" -gt 0 ]] && echo "Passed ($warnings warning(s))" || echo "Passed"
+          else
+            local parts=""
+            [[ "$errors" -gt 0 ]] && parts="${errors} error(s)"
+            [[ "$warnings" -gt 0 ]] && { [[ -n "$parts" ]] && parts="$parts, "; parts="${parts}${warnings} warning(s)"; }
+            [[ -z "$parts" ]] && echo "Failed" || echo "Failed ($parts)"
+          fi
+        }
+        sd_tsc() {
+          local status=$1 errors=${2:-0}
+          if [[ "$status" == "success" ]]; then
+            echo "Passed"
+          else
+            [[ "$errors" -gt 0 ]] && echo "Failed ($errors error(s))" || echo "Failed"
+          fi
+        }
 
         {
           echo "<!-- ds-packages-ci-report -->"
@@ -393,30 +526,30 @@ runs:
           echo "|---------|-------|--------|"
           echo "| 🪙 Tokens | validate:tokens | $(si "$TOKENS_VALIDATE_TOKENS") $(sl "$TOKENS_VALIDATE_TOKENS") |"
           echo "| 🪙 Tokens | prettier:check | $(si "$TOKENS_PRETTIER") $(sl "$TOKENS_PRETTIER") |"
-          echo "| 🎨 Themes | lint | $(si "$THEMES_LINT") $(sl "$THEMES_LINT") |"
-          echo "| 🎨 Themes | typecheck | $(si "$THEMES_TYPECHECK") $(sl "$THEMES_TYPECHECK") |"
+          echo "| 🎨 Themes | lint | $(si "$THEMES_LINT") $(sd_lint "$THEMES_LINT" "$THEMES_LINT_ERRORS" "$THEMES_LINT_WARNINGS") |"
+          echo "| 🎨 Themes | typecheck | $(si "$THEMES_TYPECHECK") $(sd_tsc "$THEMES_TYPECHECK" "$THEMES_TYPECHECK_ERRORS") |"
           echo "| 🎨 Themes | validate:token-usage | $(si "$THEMES_TOKEN_USAGE") $(sl "$THEMES_TOKEN_USAGE") |"
           echo "| 🎨 Themes | validate:theme:all | $(si "$THEMES_VALIDATE") $(sl "$THEMES_VALIDATE") |"
           echo "| 🎨 Themes | prettier:check | $(si "$THEMES_PRETTIER") $(sl "$THEMES_PRETTIER") |"
-          echo "| 🧩 Main | lint | $(si "$MAIN_LINT") $(sl "$MAIN_LINT") |"
-          echo "| 🧩 Main | typecheck | $(si "$MAIN_TYPECHECK") $(sl "$MAIN_TYPECHECK") |"
+          echo "| 🧩 Main | lint | $(si "$MAIN_LINT") $(sd_lint "$MAIN_LINT" "$MAIN_LINT_ERRORS" "$MAIN_LINT_WARNINGS") |"
+          echo "| 🧩 Main | typecheck | $(si "$MAIN_TYPECHECK") $(sd_tsc "$MAIN_TYPECHECK" "$MAIN_TYPECHECK_ERRORS") |"
           echo "| 🧩 Main | validate:token-usage | $(si "$MAIN_TOKEN_USAGE") $(sl "$MAIN_TOKEN_USAGE") |"
           echo "| 🧩 Main | validate:components:strict | $(si "$MAIN_VALIDATE_COMPONENTS") $(sl "$MAIN_VALIDATE_COMPONENTS") |"
           echo "| 🧩 Main | prettier:check | $(si "$MAIN_PRETTIER") $(sl "$MAIN_PRETTIER") |"
-          echo "| 📖 Storybook | lint | $(si "$STORYBOOK_LINT") $(sl "$STORYBOOK_LINT") |"
-          echo "| 📖 Storybook | typecheck | $(si "$STORYBOOK_TYPECHECK") $(sl "$STORYBOOK_TYPECHECK") |"
+          echo "| 📖 Storybook | lint | $(si "$STORYBOOK_LINT") $(sd_lint "$STORYBOOK_LINT" "$STORYBOOK_LINT_ERRORS" "$STORYBOOK_LINT_WARNINGS") |"
+          echo "| 📖 Storybook | typecheck | $(si "$STORYBOOK_TYPECHECK") $(sd_tsc "$STORYBOOK_TYPECHECK" "$STORYBOOK_TYPECHECK_ERRORS") |"
           echo "| 📖 Storybook | validate:token-usage | $(si "$STORYBOOK_TOKEN_USAGE") $(sl "$STORYBOOK_TOKEN_USAGE") |"
           echo "| 📖 Storybook | prettier:check | $(si "$STORYBOOK_PRETTIER") $(sl "$STORYBOOK_PRETTIER") |"
-          echo "| 🔧 CLI | lint | $(si "$CLI_LINT") $(sl "$CLI_LINT") |"
-          echo "| 🔧 CLI | typecheck | $(si "$CLI_TYPECHECK") $(sl "$CLI_TYPECHECK") |"
+          echo "| 🔧 CLI | lint | $(si "$CLI_LINT") $(sd_lint "$CLI_LINT" "$CLI_LINT_ERRORS" "$CLI_LINT_WARNINGS") |"
+          echo "| 🔧 CLI | typecheck | $(si "$CLI_TYPECHECK") $(sd_tsc "$CLI_TYPECHECK" "$CLI_TYPECHECK_ERRORS") |"
           echo "| 🔧 CLI | validate:token-usage | $(si "$CLI_TOKEN_USAGE") $(sl "$CLI_TOKEN_USAGE") |"
           echo "| 🔧 CLI | prettier:check | $(si "$CLI_PRETTIER") $(sl "$CLI_PRETTIER") |"
-          echo "| 📚 Docusaurus | lint | $(si "$DOCUSAURUS_LINT") $(sl "$DOCUSAURUS_LINT") |"
-          echo "| 📚 Docusaurus | typecheck | $(si "$DOCUSAURUS_TYPECHECK") $(sl "$DOCUSAURUS_TYPECHECK") |"
+          echo "| 📚 Docusaurus | lint | $(si "$DOCUSAURUS_LINT") $(sd_lint "$DOCUSAURUS_LINT" "$DOCUSAURUS_LINT_ERRORS" "$DOCUSAURUS_LINT_WARNINGS") |"
+          echo "| 📚 Docusaurus | typecheck | $(si "$DOCUSAURUS_TYPECHECK") $(sd_tsc "$DOCUSAURUS_TYPECHECK" "$DOCUSAURUS_TYPECHECK_ERRORS") |"
           echo "| 📚 Docusaurus | validate:token-usage | $(si "$DOCUSAURUS_TOKEN_USAGE") $(sl "$DOCUSAURUS_TOKEN_USAGE") |"
           echo "| 📚 Docusaurus | prettier:check | $(si "$DOCUSAURUS_PRETTIER") $(sl "$DOCUSAURUS_PRETTIER") |"
-          echo "| 🎭 Playwright | lint | $(si "$PLAYWRIGHT_LINT") $(sl "$PLAYWRIGHT_LINT") |"
-          echo "| 🎭 Playwright | typecheck | $(si "$PLAYWRIGHT_TYPECHECK") $(sl "$PLAYWRIGHT_TYPECHECK") |"
+          echo "| 🎭 Playwright | lint | $(si "$PLAYWRIGHT_LINT") $(sd_lint "$PLAYWRIGHT_LINT" "$PLAYWRIGHT_LINT_ERRORS" "$PLAYWRIGHT_LINT_WARNINGS") |"
+          echo "| 🎭 Playwright | typecheck | $(si "$PLAYWRIGHT_TYPECHECK") $(sd_tsc "$PLAYWRIGHT_TYPECHECK" "$PLAYWRIGHT_TYPECHECK_ERRORS") |"
           echo "| 🎭 Playwright | validate:token-usage | $(si "$PLAYWRIGHT_TOKEN_USAGE") $(sl "$PLAYWRIGHT_TOKEN_USAGE") |"
           echo "| 🎭 Playwright | prettier:check | $(si "$PLAYWRIGHT_PRETTIER") $(sl "$PLAYWRIGHT_PRETTIER") |"
 

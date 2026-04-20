@@ -75,9 +75,7 @@ const GridImpl = <T extends ElementType = 'div'>(
   return <Box<T> ref={ref as React.Ref<never>} className={gridClassName} {...(props as BoxComponentProps<T>)} />;
 };
 
-export const Grid = Object.assign(
-  forwardRef(GridImpl) as <T extends ElementType = 'div'>(
-    props: GridProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Grid' }
-);
+export const Grid = forwardRef(GridImpl) as (<T extends ElementType = 'div'>(
+  props: GridProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Grid.displayName = 'Grid';

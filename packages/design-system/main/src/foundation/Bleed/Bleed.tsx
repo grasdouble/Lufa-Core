@@ -142,9 +142,7 @@ const BleedImpl = <T extends ElementType = 'div'>(
 };
 
 // Forward ref with generic type support and displayName
-export const Bleed = Object.assign(
-  forwardRef(BleedImpl) as <T extends ElementType = 'div'>(
-    props: BleedComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Bleed' }
-);
+export const Bleed = forwardRef(BleedImpl) as (<T extends ElementType = 'div'>(
+  props: BleedComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Bleed.displayName = 'Bleed';

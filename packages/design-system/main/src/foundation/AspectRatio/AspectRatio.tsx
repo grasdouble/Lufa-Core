@@ -173,9 +173,7 @@ const AspectRatioImpl = <T extends ElementType = 'div'>(
 };
 
 // Forward ref with generic type support and displayName
-export const AspectRatio = Object.assign(
-  forwardRef(AspectRatioImpl) as <T extends ElementType = 'div'>(
-    props: AspectRatioComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'AspectRatio' }
-);
+export const AspectRatio = forwardRef(AspectRatioImpl) as (<T extends ElementType = 'div'>(
+  props: AspectRatioComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+AspectRatio.displayName = 'AspectRatio';

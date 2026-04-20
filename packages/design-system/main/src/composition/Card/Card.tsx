@@ -50,8 +50,7 @@ const CardImpl = <T extends ElementType = 'div'>(
   );
 };
 
-const CardWithRef = forwardRef(CardImpl) as <T extends ElementType = 'div'>(
+export const Card = forwardRef(CardImpl) as (<T extends ElementType = 'div'>(
   props: CardComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-) => React.ReactElement;
-
-export const Card = Object.assign(CardWithRef, { displayName: 'Card' });
+) => React.ReactElement) & { displayName?: string };
+Card.displayName = 'Card';

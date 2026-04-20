@@ -367,9 +367,7 @@ const BoxImpl = <T extends ElementType = 'div'>(
 };
 
 // Forward ref with generic type support and displayName
-export const Box = Object.assign(
-  forwardRef(BoxImpl) as <T extends ElementType = 'div'>(
-    props: BoxComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Box' }
-);
+export const Box = forwardRef(BoxImpl) as (<T extends ElementType = 'div'>(
+  props: BoxComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Box.displayName = 'Box';

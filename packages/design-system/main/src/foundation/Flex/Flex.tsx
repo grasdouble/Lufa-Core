@@ -70,9 +70,7 @@ const FlexImpl = <T extends ElementType = 'div'>(
   return <Box<T> ref={ref as React.Ref<never>} className={flexClassName} {...(props as BoxComponentProps<T>)} />;
 };
 
-export const Flex = Object.assign(
-  forwardRef(FlexImpl) as <T extends ElementType = 'div'>(
-    props: FlexProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Flex' }
-);
+export const Flex = forwardRef(FlexImpl) as (<T extends ElementType = 'div'>(
+  props: FlexProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Flex.displayName = 'Flex';
