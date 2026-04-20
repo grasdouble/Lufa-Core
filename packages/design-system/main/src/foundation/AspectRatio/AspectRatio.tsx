@@ -157,7 +157,7 @@ const AspectRatioImpl = <T extends ElementType = 'div'>(
   );
 
   // For custom ratios not in the pre-generated map, use inline style
-  const customStyle =
+  const customStyle: React.CSSProperties | undefined =
     !ratioClassName && ratio
       ? {
           '--aspect-ratio-padding': calculatePaddingTop(ratio),
@@ -166,12 +166,7 @@ const AspectRatioImpl = <T extends ElementType = 'div'>(
       : style;
 
   return (
-    <Component
-      ref={ref as React.Ref<never>}
-      className={aspectRatioClassName}
-      style={customStyle as React.CSSProperties}
-      {...htmlProps}
-    >
+    <Component ref={ref as React.Ref<never>} className={aspectRatioClassName} style={customStyle} {...htmlProps}>
       <div className={styles['aspect-ratio-content']}>{children}</div>
     </Component>
   );
