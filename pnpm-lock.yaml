@@ -840,8 +840,8 @@ importers:
         specifier: workspace:^
         version: link:../../../config/prettier
       '@secretlint/secretlint-rule-no-dotenv':
-        specifier: ^11.7.1
-        version: 11.7.1
+        specifier: ^12.1.0
+        version: 12.1.0
       '@secretlint/secretlint-rule-preset-recommend':
         specifier: ^11.7.1
         version: 11.7.1
@@ -3687,9 +3687,9 @@ packages:
     resolution: {integrity: sha512-KJRbIShA9DVc5Va3yArtJ6QDzGjg3PRa1uYp9As4RsyKtKSSZjI64jVca57FZ8gbuk4em0/0Jq+uy6485wxIdg==}
     engines: {node: '>=20.0.0'}
 
-  '@secretlint/secretlint-rule-no-dotenv@11.7.1':
-    resolution: {integrity: sha512-U2dIwVklhTInTSw44DVX8l2Cd/txzx080HNFLbxQQmCxicgXUh+SZGrZr+JfAmQuL6BoZM9bfZV/LtPDREDFAA==}
-    engines: {node: '>=20.0.0'}
+  '@secretlint/secretlint-rule-no-dotenv@12.1.0':
+    resolution: {integrity: sha512-cdWYZdkaK/0zu7So+Cdbr5U1BIy/YskcEvGI2ivgyETPXoXUHCmhmiheszSYhhyGvoWWY2aeCQHTUHx0cYir8A==}
+    engines: {node: '>=22.0.0'}
 
   '@secretlint/secretlint-rule-preset-recommend@10.2.2':
     resolution: {integrity: sha512-K3jPqjva8bQndDKJqctnGfwuAxU2n9XNCPtbXVI5JvC7FnQiNg/yWlQPbMUlBXtBoBGFYp08A94m6fvtc9v+zA==}
@@ -3707,9 +3707,9 @@ packages:
     resolution: {integrity: sha512-Nqc90v4lWCXyakD6xNyNACBJNJ0tNCwj2WNk/7ivyacYHxiITVgmLUFXTBOeCdy79iz6HtN9Y31uw/jbLrdOAg==}
     engines: {node: '>=20.0.0'}
 
-  '@secretlint/types@11.7.1':
-    resolution: {integrity: sha512-bIkBwIdQScZX5xm3DsLp3oL5U/KKUYWgmst39dZsDi55X9tKuPd7/uVpO1PqNrDW1I0QD5t6es/2LonG5RjxXg==}
-    engines: {node: '>=20.0.0'}
+  '@secretlint/types@12.1.0':
+    resolution: {integrity: sha512-gi8djueEw5Gp21n2OqU0uO7ODRaqm5SkpabUdewXB3XrLESmAyG5G/lr2eBL9rQ2kngllJ5zPCl4CctPgS99JA==}
+    engines: {node: '>=22.0.0'}
 
   '@sideway/address@4.1.5':
     resolution: {integrity: sha512-IqO/DUQHUkPeixNQ8n0JA6102hT9CmaljNTPmQ1u8MEhBo/R4Q8eKLN/vGZxuebwOroDB4cbpjheD4+/sKFK4Q==}
@@ -14087,9 +14087,9 @@ snapshots:
     dependencies:
       '@secretlint/types': 10.2.2
 
-  '@secretlint/secretlint-rule-no-dotenv@11.7.1':
+  '@secretlint/secretlint-rule-no-dotenv@12.1.0':
     dependencies:
-      '@secretlint/types': 11.7.1
+      '@secretlint/types': 12.1.0
 
   '@secretlint/secretlint-rule-preset-recommend@10.2.2': {}
 
@@ -14102,7 +14102,7 @@ snapshots:
 
   '@secretlint/types@10.2.2': {}
 
-  '@secretlint/types@11.7.1': {}
+  '@secretlint/types@12.1.0': {}
 
   '@sideway/address@4.1.5':
     dependencies:
