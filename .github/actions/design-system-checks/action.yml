@@ -52,7 +52,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-themes run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -70,7 +69,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-themes run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
@@ -115,7 +113,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -133,7 +130,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
@@ -178,7 +174,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-storybook run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -196,7 +191,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-storybook run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
@@ -232,7 +226,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-cli run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -250,7 +243,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-cli run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
@@ -286,7 +278,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-docusaurus run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -304,7 +295,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-docusaurus run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
@@ -340,7 +330,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-playwright run lint 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP '\d+(?= error)' | tail -1)
         WARNINGS=$(echo "$OUTPUT" | grep -oP '\d+(?= warning)' | tail -1)
@@ -358,7 +347,6 @@ runs:
         OUTPUT=$(pnpm --filter @grasdouble/lufa_design-system-playwright run typecheck 2>&1)
         EXIT_CODE=$?
         echo "$OUTPUT"
-        set -e
         echo "::endgroup::"
         ERRORS=$(echo "$OUTPUT" | grep -oP 'Found \K\d+(?= error)' | head -1)
         echo "errors=${ERRORS:-0}" >> $GITHUB_OUTPUT
