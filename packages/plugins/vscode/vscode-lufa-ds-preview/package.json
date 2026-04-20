@@ -80,7 +80,7 @@
     "@grasdouble/lufa_config_eslint": "workspace:^",
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@secretlint/secretlint-rule-no-dotenv": "^11.7.1",
-    "@secretlint/secretlint-rule-preset-recommend": "^11.7.1",
+    "@secretlint/secretlint-rule-preset-recommend": "^12.1.0",
     "@types/node": "^25.6.0",
     "@types/vscode": "^1.115.0",
     "@vitest/coverage-v8": "^4.1.4",
