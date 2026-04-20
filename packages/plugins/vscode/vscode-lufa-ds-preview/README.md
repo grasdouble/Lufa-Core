@@ -216,4 +216,4 @@ pnpm format
 - **Packaged maps**: `dist/maps/primitives.map.json`, `dist/maps/tokens.map.json` (fallback: `node_modules/@grasdouble/lufa_design-system-*/dist/*.map.json`)
 - **Build output**: `dist/extension.js`
 - **TypeScript**: 5.9.3, targeting ES2020
-- **Packaging**: vsce 3.7.1 with secretlint validation (requires `publicHoistPattern[]=*secretlint*` in root `.npmrc`)
+- **Packaging**: vsce 3.7.1

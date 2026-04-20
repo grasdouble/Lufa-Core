@@ -50,8 +50,7 @@ const LabelImpl = <T extends ElementType = 'label'>(
   );
 };
 
-const LabelWithRef = forwardRef(LabelImpl) as <T extends ElementType = 'label'>(
+export const Label = forwardRef(LabelImpl) as (<T extends ElementType = 'label'>(
   props: LabelComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-) => React.ReactElement;
-
-export const Label = Object.assign(LabelWithRef, { displayName: 'Label' });
+) => React.ReactElement) & { displayName?: string };
+Label.displayName = 'Label';

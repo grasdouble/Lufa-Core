@@ -141,7 +141,7 @@ function flattenTokens(metadata: Record<string, unknown>): TokenMetadata[] {
 }
 
 // Get all tokens
-const allTokens = flattenTokens(tokensMetadata as Record<string, unknown>);
+const allTokens = flattenTokens(tokensMetadata);
 
 // Color swatch preview
 const ColorPreview = ({ value }: { value: string }) => (

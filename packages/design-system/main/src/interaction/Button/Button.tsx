@@ -263,9 +263,7 @@ const ButtonImpl = <T extends ElementType = 'button'>(
 };
 
 // Forward ref with generic type support
-const ButtonWithRef = forwardRef(ButtonImpl) as <T extends ElementType = 'button'>(
+export const Button = forwardRef(ButtonImpl) as (<T extends ElementType = 'button'>(
   props: ButtonComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-) => React.ReactElement;
-
-// Export with displayName
-export const Button = Object.assign(ButtonWithRef, { displayName: 'Button' });
+) => React.ReactElement) & { displayName?: string };
+Button.displayName = 'Button';

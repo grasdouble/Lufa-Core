@@ -201,9 +201,7 @@ const TextImpl = <T extends ElementType = 'p'>(
 };
 
 // Forward ref with generic type support and displayName
-export const Text = Object.assign(
-  forwardRef(TextImpl) as <T extends ElementType = 'p'>(
-    props: TextComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Text' }
-);
+export const Text = forwardRef(TextImpl) as (<T extends ElementType = 'p'>(
+  props: TextComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Text.displayName = 'Text';

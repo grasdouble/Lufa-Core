@@ -165,12 +165,10 @@ const DividerImpl = <T extends ElementType = 'hr'>(
 };
 
 // Forward ref with generic type support
-const DividerWithRef = forwardRef(DividerImpl) as <T extends ElementType = 'hr'>(
+export const Divider = forwardRef(DividerImpl) as (<T extends ElementType = 'hr'>(
   props: PolymorphicDividerProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-) => React.ReactElement | null;
-
-// Export with displayName
-export const Divider = Object.assign(DividerWithRef, { displayName: 'Divider' });
+) => React.ReactElement | null) & { displayName?: string };
+Divider.displayName = 'Divider';
 
 // ============================================
 // TYPE EXPORTS

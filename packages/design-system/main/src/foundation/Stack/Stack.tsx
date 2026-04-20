@@ -217,9 +217,7 @@ const StackImpl = <T extends ElementType = 'div'>(
 };
 
 // Forward ref with generic type support and displayName
-export const Stack = Object.assign(
-  forwardRef(StackImpl) as <T extends ElementType = 'div'>(
-    props: StackComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
-  ) => React.ReactElement,
-  { displayName: 'Stack' }
-);
+export const Stack = forwardRef(StackImpl) as (<T extends ElementType = 'div'>(
+  props: StackComponentProps<T> & { ref?: React.Ref<React.ComponentRef<T>> }
+) => React.ReactElement) & { displayName?: string };
+Stack.displayName = 'Stack';
