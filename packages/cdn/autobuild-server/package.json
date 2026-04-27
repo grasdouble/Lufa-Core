@@ -42,11 +42,11 @@
     ]
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.61.1",
+    "@dotenvx/dotenvx": "^1.63.0",
     "cors": "^2.8.6",
     "escape-html": "^1.0.3",
     "express": "^5.2.1",
-    "express-rate-limit": "^8.3.2",
+    "express-rate-limit": "^8.4.1",
     "fs-extra": "^11.3.4",
     "pacote": "^21.5.0",
     "sanitize-filename": "^1.6.4"

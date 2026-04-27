@@ -57,7 +57,7 @@
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.8.0"
+    "lucide-react": "^1.11.0"
   },
   "devDependencies": {
     "@grasdouble/lufa_config_eslint": "workspace:^",
@@ -70,7 +70,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^10.2.1",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.12",
     "prettier": "^3.8.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
