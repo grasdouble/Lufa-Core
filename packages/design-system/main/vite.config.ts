@@ -64,9 +64,8 @@ export default defineConfig(({ command, mode, isPreview }) => {
         dts({
           entryRoot: 'src',
           tsconfigPath: './tsconfig.build.json',
-          rollupTypes: false,
           insertTypesEntry: true,
-          outDir: 'dist',
+          outDirs: 'dist',
           exclude: ['**/*.test.*'],
         }),
         externalizeDeps({
