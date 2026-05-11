@@ -42,8 +42,8 @@
   "dependencies": {
     "@grasdouble/lufa_design-system": "workspace:^",
     "clsx": "^2.1.1",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@grasdouble/lufa_config_eslint": "workspace:^",
@@ -53,7 +53,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "eslint": "^10.2.1",
+    "eslint": "^10.3.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -61,8 +61,8 @@
     "prettier": "^3.8.3",
     "sort-package-json": "^3.6.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.0",
-    "vite": "^8.0.9",
+    "typescript-eslint": "^8.59.2",
+    "vite": "^8.0.11",
     "vite-plugin-css-injected-by-js": "^5.0.1",
     "vite-plugin-externalize-deps": "^0.10.0"
   },

@@ -145,23 +145,11 @@
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "concurrently": "^9.2.1",
-    "eslint": "^10.2.1",
+    "eslint": "^10.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "sort-package-json": "^3.6.1"
   },
-  "packageManager": "pnpm@10.33.0",
-  "pnpm": {
-    "overrides": {
-      "serialize-javascript": "^7.0.5"
-    },
-    "packageExtensions": {
-      "vite-plugin-css-injected-by-js": {
-        "dependencies": {
-          "picocolors": "^1.1.1"
-        }
-      }
-    }
-  }
+  "packageManager": "pnpm@11.1.0"
 }
