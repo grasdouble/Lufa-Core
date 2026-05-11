@@ -48,15 +48,6 @@ runs:
       shell: bash
       run: pnpm ds:cli:build
 
-    # pnpm creates workspace bin symlinks during `pnpm install`, before any build runs.
-    # At that point cli/dist/cli.js does not exist yet, so pnpm emits a WARN and skips
-    # the symlink — leaving `lufa-ds-cli` unavailable for packages that depend on it (e.g. themes).
-    # Re-running install after the CLI build forces pnpm to recreate any missing bin symlinks.
-    # --prefer-offline keeps this fast (~2s) since all packages are already in the pnpm store.
-    - name: 🔗 Refresh CLI bins
-      shell: bash
-      run: pnpm install --prefer-offline --frozen-lockfile
-
     - name: 🏗️ Build design themes
       if: steps.cache-build.outputs.cache-hit != 'true'
       shell: bash

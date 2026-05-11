@@ -13,6 +13,11 @@ preferWorkspacePackages: true
 
 publicHoistPattern:
   - '@storybook/react-vite'
-
-onlyBuiltDependencies:
-  - esbuild
+overrides:
+  serialize-javascript: ^7.0.5
+allowBuilds:
+  '@swc/core': true
+  '@vscode/vsce-sign': true
+  core-js: false
+  esbuild: true
+  keytar: false
