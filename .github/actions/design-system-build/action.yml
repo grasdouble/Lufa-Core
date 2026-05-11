@@ -48,30 +48,6 @@ runs:
       shell: bash
       run: pnpm ds:cli:build
 
-    # pnpm creates workspace bin symlinks during `pnpm install`, before any build runs.
-    # At that point cli/dist/cli.js does not exist yet, so pnpm emits a WARN and skips
-    # the symlink — leaving `lufa-ds-cli` unavailable for packages that depend on it (e.g. themes).
-    # In pnpm v11+, re-running install says "Already up to date" and does NOT recreate missing
-    # bin symlinks. We therefore create them directly after the CLI dist is built/restored.
-    - name: 🔗 Refresh CLI bins
-      shell: bash
-      run: |
-        CLI_JS="$(pwd)/packages/design-system/cli/dist/cli.js"
-        chmod +x "$CLI_JS"
-        # Recreate bin symlinks for every package that declares @grasdouble/lufa_design-system-cli
-        # as a dependency (pnpm may have skipped them when dist/cli.js was absent).
-        for pkg_json in $(find packages -name 'package.json' -not -path '*/node_modules/*'); do
-          if grep -q '"@grasdouble/lufa_design-system-cli"' "$pkg_json"; then
-            pkg_dir="$(dirname "$pkg_json")"
-            mkdir -p "$pkg_dir/node_modules/.bin"
-            ln -sf "$CLI_JS" "$pkg_dir/node_modules/.bin/lufa-ds-cli"
-            echo "✔ linked lufa-ds-cli for $pkg_dir"
-          fi
-        done
-        # Also ensure the workspace-root bin is present
-        ln -sf "$CLI_JS" node_modules/.bin/lufa-ds-cli
-        echo "✔ linked lufa-ds-cli in root node_modules/.bin"
-
     - name: 🏗️ Build design themes
       if: steps.cache-build.outputs.cache-hit != 'true'
       shell: bash

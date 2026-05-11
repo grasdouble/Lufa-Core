@@ -6,9 +6,10 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "lufa-ds-cli": "./dist/cli.js"
+    "lufa-ds-cli": "./bin/lufa-ds-cli"
   },
   "files": [
+    "bin",
     "dist",
     "README.md"
   ],
