@@ -9,6 +9,10 @@
     "import-map",
     "injector"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grasdouble/lufa.git"
+  },
   "license": "MIT",
   "type": "module",
   "main": "index.mjs",

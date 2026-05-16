@@ -26,7 +26,7 @@ runs:
       run: echo "//npm.pkg.github.com/:_authToken=${{ inputs.PAT_DEPENDENCY_CHECK_UPDATE }}" > ~/.npmrc
 
     - name: Install pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
 
     - name: Setup Node.js
       uses: actions/setup-node@v6

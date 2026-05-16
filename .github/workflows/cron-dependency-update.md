@@ -184,7 +184,7 @@ Missing or insufficient `LUFA_CI_SECRET_READ` permissions cause authentication f
 
 - **Dependencies**:
   - `actions/checkout@v6` – Repository checkout
-  - `pnpm/action-setup@v4` – pnpm installation
+  - `pnpm/action-setup@v6` – pnpm installation
   - `actions/setup-node@v6` – Node.js setup with pnpm cache
   - `.github/actions/dependency-update` – Composite action encapsulating pnpm update and reporting
 - **Update Strategy**: Bump action versions periodically, and adjust the cron schedule or runner image if project requirements change.

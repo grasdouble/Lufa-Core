@@ -3,6 +3,10 @@
   "version": "0.1.4",
   "private": false,
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grasdouble/lufa.git"
+  },
   "license": "MIT",
   "exports": {
     ".": {

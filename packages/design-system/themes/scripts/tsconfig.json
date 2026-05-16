@@ -1,8 +1,0 @@
-{
-  "extends": "@grasdouble/lufa_config_tsconfig/node.json",
-  "compilerOptions": {
-    "types": ["node"],
-    "noEmit": true
-  },
-  "include": ["*.ts"]
-}

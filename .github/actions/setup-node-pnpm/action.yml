@@ -5,11 +5,19 @@ inputs:
     description: 'File containing Node.js version (e.g., .tool-versions)'
     required: false
     default: '.tool-versions'
+  github-token:
+    description: 'GitHub token for authentication (used for registry access)'
+    required: true
 runs:
   using: 'composite'
   steps:
     - name: Install pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
+
+    - name: Configure npm for GitHub Registry
+      shell: bash
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.github-token }}" > ~/.npmrc
 
     - name: Set up Node.js
       uses: actions/setup-node@v6
