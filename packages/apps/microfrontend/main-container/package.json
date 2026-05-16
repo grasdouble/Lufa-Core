@@ -2,6 +2,10 @@
   "name": "@grasdouble/lufa_microfrontend_main-container",
   "version": "0.6.17",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grasdouble/lufa.git"
+  },
   "license": "MIT",
   "type": "module",
   "files": [

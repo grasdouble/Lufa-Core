@@ -1,6 +1,10 @@
 {
   "name": "@grasdouble/lufa",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grasdouble/lufa.git"
+  },
   "scripts": {
     "all:-----------------------------------------------": "",
     "all:build": "pnpm --filter @grasdouble/* run build",
@@ -14,15 +18,15 @@
     "app:mf:dev": "concurrently \"pnpm --filter @grasdouble/lufa_microfrontend_main-container run dev\" \"pnpm --filter @grasdouble/lufa_microfrontend_home run dev\"",
     "app:mf:preview": "pnpm --filter @grasdouble/lufa_microfrontend_main-container run preview & pnpm --filter @grasdouble/lufa_microfrontend_home run preview",
     "clean": "pnpm clean:node_module && pnpm clean:lib && pnpm clean:cache",
+    "clean:----------------------------": "",
     "clean:cache": "pnpm store prune",
     "clean:cache:ts": "pnpm -r exec npx rimraf node_modules/.cache",
     "clean:lib": "pnpm -r exec npx rimraf dist",
     "clean:node_module": "pnpm -r exec npx rimraf node_modules && npx rimraf node_modules",
-    "clean----------------------------": "",
+    "deps:-----------------------------": "",
     "deps:audit": "pnpm -r audit --fix",
     "deps:outdated": "pnpm outdated -r",
     "deps:upgrade": "pnpm update -r && pnpm dedupe",
-    "deps-----------------------------": "",
     "lint-staged": "lint-staged",
     "plugin:vite:---------------------------------------": "",
     "plugin:vite:lint": "pnpm --filter @grasdouble/lufa_plugin_vite_* run lint",
