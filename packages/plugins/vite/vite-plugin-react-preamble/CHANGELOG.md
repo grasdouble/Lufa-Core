@@ -1,5 +1,11 @@
 # @grasdouble/lufa_plugin_vite_vite-plugin-react-preamble
 
+## 0.0.9
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.0.8
 
 ### Patch Changes

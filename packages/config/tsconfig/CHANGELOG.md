@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_tsconfig
 
+## 0.1.4
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.1.3
 
 ### Patch Changes

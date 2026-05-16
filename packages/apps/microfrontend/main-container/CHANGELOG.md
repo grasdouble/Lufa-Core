@@ -1,5 +1,12 @@
 # @grasdouble/lufa_microfrontend_main-container
 
+## 0.6.18
+
+### Patch Changes
+
+- a864f44: Fix: use correct version of design-system since it has been moved to Lufa-Design-System repository
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.6.17
 
 ### Patch Changes
