@@ -1,5 +1,14 @@
 # @grasdouble/lufa_design-system-playwright
 
+## 1.2.3
+
+### Patch Changes
+
+- 7c889d3: Upgrade deps
+- 5192d9e: fix: upgrade deps
+- 50d07a6: fix: upgrade deps
+- e9b1f1f: Update deps
+
 ## 1.2.2
 
 ### Patch Changes

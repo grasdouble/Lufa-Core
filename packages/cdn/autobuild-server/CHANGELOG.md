@@ -1,5 +1,14 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.8
+
+### Patch Changes
+
+- 7c889d3: Upgrade deps
+- 5192d9e: fix: upgrade deps
+- 50d07a6: fix: upgrade deps
+- e9b1f1f: Update deps
+
 ## 0.3.7
 
 ### Patch Changes
