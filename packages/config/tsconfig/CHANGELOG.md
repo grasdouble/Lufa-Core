@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_tsconfig
 
+## 0.1.3
+
+### Patch Changes
+
+- 5192d9e: fix: upgrade deps
+
 ## 0.1.2
 
 ### Patch Changes

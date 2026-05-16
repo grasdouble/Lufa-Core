@@ -1,5 +1,19 @@
 # @grasdouble/lufa_microfrontend_main-container
 
+## 0.6.17
+
+### Patch Changes
+
+- 7c889d3: Upgrade deps
+- 5192d9e: fix: upgrade deps
+- 50d07a6: fix: upgrade deps
+- e9b1f1f: Update deps
+- Updated dependencies [7c889d3]
+- Updated dependencies [5192d9e]
+- Updated dependencies [50d07a6]
+- Updated dependencies [e9b1f1f]
+  - @grasdouble/lufa_design-system@2.1.3
+
 ## 0.6.16
 
 ### Patch Changes

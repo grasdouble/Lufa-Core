@@ -1,5 +1,13 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.7
+
+### Patch Changes
+
+- 7c889d3: Upgrade deps
+- 50d07a6: fix: upgrade deps
+- e9b1f1f: Update deps
+
 ## 0.1.6
 
 ### Patch Changes

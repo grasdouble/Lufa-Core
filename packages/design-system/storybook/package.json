@@ -1,6 +1,6 @@
 {
   "name": "@grasdouble/lufa_design-system-storybook",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "private": true,
   "license": "MIT",
   "type": "module",

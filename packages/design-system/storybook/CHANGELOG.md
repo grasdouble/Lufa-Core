@@ -1,5 +1,21 @@
 # @grasdouble/lufa_design-system-storybook
 
+## 1.2.3
+
+### Patch Changes
+
+- 7c889d3: Upgrade deps
+- 5192d9e: fix: upgrade deps
+- 50d07a6: fix: upgrade deps
+- e9b1f1f: Update deps
+- Updated dependencies [7c889d3]
+- Updated dependencies [5192d9e]
+- Updated dependencies [50d07a6]
+- Updated dependencies [e9b1f1f]
+  - @grasdouble/lufa_design-system-themes@1.1.3
+  - @grasdouble/lufa_design-system-tokens@1.2.3
+  - @grasdouble/lufa_design-system@2.1.3
+
 ## 1.2.2
 
 ### Patch Changes
