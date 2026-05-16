@@ -1,0 +1,5 @@
+{
+  "extends": ["@grasdouble/lufa_config_tsconfig/node.json"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
