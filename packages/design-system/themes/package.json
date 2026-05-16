@@ -67,11 +67,11 @@
     "@grasdouble/lufa_config_tsconfig": "workspace:^",
     "@grasdouble/lufa_design-system-cli": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@types/node": "^25.6.2",
-    "eslint": "^10.3.0",
+    "@types/node": "^25.8.0",
+    "eslint": "^10.4.0",
     "prettier": "^3.8.3",
     "sort-package-json": "^3.6.1",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.0",
     "typescript": "^6.0.3"
   },
   "publishConfig": {
