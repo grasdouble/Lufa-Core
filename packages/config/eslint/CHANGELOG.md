@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.8
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.1.7
 
 ### Patch Changes

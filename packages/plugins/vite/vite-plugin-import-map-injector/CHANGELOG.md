@@ -1,5 +1,11 @@
 # @grasdouble/lufa_plugin_vite_vite-plugin-import-map-injector
 
+## 0.2.8
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.2.7
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_prettier
 
+## 0.1.5
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.1.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.9
+
+### Patch Changes
+
+- a864f44: fix: add missing field repository in package.json
+
 ## 0.3.8
 
 ### Patch Changes
