@@ -9,8 +9,8 @@ function App() {
   return (
     <Box id="lufa-home" className={styles['lufa-home']}>
       <Stack direction="vertical" spacing="default" align="center" justify="center">
-        <img src={getImageUrl('Lufa_Logo')} alt="Centered Logo" className={styles['centered-image']} />
-        <Text as="h1" variant="h3" weight="bold" align="center" color="inverse">
+        <img src={getImageUrl('Lufa_Logo_no_background')} alt="Centered Logo" className={styles['centered-image']} />
+        <Text as="h1" variant="h3" weight="bold" align="center" color="primary">
           Lufa Workspace (WIP) <br /> by Sebastien LE MOUILLOUR
         </Text>
         <Stack direction="horizontal" spacing="compact" wrap justify="center">
