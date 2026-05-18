@@ -1,13 +1,9 @@
 declare const styles: {
   readonly ['lufa-home']: string;
-  readonly content: string;
-  readonly ['centered-image']: string;
-  readonly ['centered-message']: string;
-  readonly links: string;
-  readonly link: string;
-  readonly storybook: string;
-  readonly design: string;
-  readonly github: string;
-  readonly linkedin: string;
+  readonly ['section-hero']: string;
+  readonly ['hero-logo']: string;
+  readonly section: string;
+  readonly ['projects-grid']: string;
+  readonly footer: string;
 };
 export default styles;
