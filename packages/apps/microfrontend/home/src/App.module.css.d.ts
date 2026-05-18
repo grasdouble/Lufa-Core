@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly ['lang-switcher']: string;
   readonly ['lufa-home']: string;
   readonly ['section-hero']: string;
   readonly ['hero-logo']: string;

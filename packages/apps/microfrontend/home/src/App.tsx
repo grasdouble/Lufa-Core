@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Badge, Box, Button, Card, Cluster, Container, Stack, Text } from '@grasdouble/lufa_design-system';
+
+import './i18n';
 
 import styles from './App.module.css';
 import { getImageUrl } from './getImageUrl';
@@ -37,8 +40,7 @@ const PROJECTS = [
   // ── Actifs — du plus récent au plus ancien ──
   {
     title: 'Lufa Design System',
-    description:
-      'Un design system React avec tokens sémantiques, compatible dark/light mode. Inclut une documentation Storybook interactive.',
+    key: 'lufa-design-system',
     links: [
       {
         href: 'https://lufa-design.sebastien-lemouillour.fr',
@@ -63,13 +65,13 @@ const PROJECTS = [
   },
   {
     title: 'Lufa Lab',
-    description: "Terrain d'expérimentation pour les nouvelles idées du workspace Lufa.",
+    key: 'lufa-lab',
     links: [{ href: 'https://github.com/grasdouble/Lufa-Lab', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: false,
   },
   {
     title: 'bmad-manager',
-    description: "Gestionnaire d'agents BMad pour automatiser les workflows de développement.",
+    key: 'bmad-manager',
     links: [
       { href: 'https://github.com/grasdouble/bmad-manager', label: 'GitHub', type: 'outline', variant: 'neutral' },
     ],
@@ -77,27 +79,26 @@ const PROJECTS = [
   },
   {
     title: 'Lufa',
-    description:
-      'Le monorepo open-source qui héberge le workspace Lufa : microfrontends, design system, plugins Vite et configs partagées.',
+    key: 'lufa',
     links: [{ href: 'https://github.com/grasdouble/Lufa', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: false,
   },
   {
     title: 'Dotfiles',
-    description: 'Configuration personnelle : terminal, aliases et environnement de développement.',
+    key: 'dotfiles',
     links: [{ href: 'https://github.com/grasdouble/Dotfiles', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: false,
   },
   {
     title: 'Leetcode',
-    description: 'Mes solutions aux exercices LeetCode — pratique algorithmique en JavaScript.',
+    key: 'leetcode',
     links: [{ href: 'https://github.com/grasdouble/Leetcode', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: false,
   },
   // ── Archivés — du plus récent au plus ancien ──
   {
     title: 'github-package-visualizer',
-    description: 'Visualisateur de dépendances entre packages GitHub.',
+    key: 'github-package-visualizer',
     links: [
       {
         href: 'https://github.com/grasdouble/github-package-visualizer',
@@ -110,7 +111,7 @@ const PROJECTS = [
   },
   {
     title: 'git-dashboard',
-    description: 'Dashboard de visualisation des dépôts et activités Git.',
+    key: 'git-dashboard',
     links: [
       { href: 'https://github.com/grasdouble/git-dashboard', label: 'GitHub', type: 'outline', variant: 'neutral' },
     ],
@@ -118,7 +119,7 @@ const PROJECTS = [
   },
   {
     title: 'spark-ai-app-generator',
-    description: "Générateur d'applications IA — expérimentation Spark en TypeScript.",
+    key: 'spark-ai-app-generator',
     links: [
       {
         href: 'https://github.com/grasdouble/spark-ai-app-generator',
@@ -131,7 +132,7 @@ const PROJECTS = [
   },
   {
     title: 'spark-token-dependency-vis',
-    description: 'Visualisateur de dépendances de design tokens — expérimentation Spark en TypeScript.',
+    key: 'spark-token-dependency-vis',
     links: [
       {
         href: 'https://github.com/grasdouble/spark-token-dependency-vis',
@@ -144,7 +145,7 @@ const PROJECTS = [
   },
   {
     title: 'spark-pixel-art-converter',
-    description: 'Convertisseur de pixel art — expérimentation Spark en TypeScript.',
+    key: 'spark-pixel-art-converter',
     links: [
       {
         href: 'https://github.com/grasdouble/spark-pixel-art-converter',
@@ -157,13 +158,13 @@ const PROJECTS = [
   },
   {
     title: 'POC Phaser',
-    description: 'Proof of concept jeu en Vue.js avec le moteur Phaser.',
+    key: 'poc-phaser',
     links: [{ href: 'https://github.com/grasdouble/POC_Phaser', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: true,
   },
   {
     title: 'POC Bot Discord',
-    description: 'Bot Discord expérimental (Grabot) — proof of concept JavaScript.',
+    key: 'poc-bot-discord',
     links: [
       {
         href: 'https://github.com/grasdouble/POC_Bot_Discord-Grabot',
@@ -176,13 +177,13 @@ const PROJECTS = [
   },
   {
     title: 'Dashboard',
-    description: "Dashboard pour gérer GitHub, Jira et d'autres outils depuis une interface unique.",
+    key: 'dashboard',
     links: [{ href: 'https://github.com/grasdouble/Dashboard', label: 'GitHub', type: 'outline', variant: 'neutral' }],
     archived: true,
   },
   {
     title: 'AnnuaireMusees',
-    description: "Annuaire de musées (backend PHP + frontend JavaScript) — l'un de mes premiers projets web.",
+    key: 'annuaire-musees',
     links: [
       {
         href: 'https://github.com/grasdouble/AnnuaireMusees_Front',
@@ -195,7 +196,7 @@ const PROJECTS = [
   },
   {
     title: 'Model PassportJS Init',
-    description: "Template SailJS avec PassportJS pour l'authentification — référence d'architecture MVC.",
+    key: 'model-passportjs-init',
     links: [
       {
         href: 'https://github.com/grasdouble/Model_PassportJS-Init',
@@ -209,8 +210,31 @@ const PROJECTS = [
 ] as const;
 
 function App() {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language.startsWith('fr') ? 'fr' : 'en';
+
   return (
     <Box id="lufa-home" className={styles['lufa-home']}>
+      {/* ── Language switcher ── */}
+      <Box className={styles['lang-switcher']}>
+        <Button
+          type={currentLang === 'fr' ? 'solid' : 'ghost'}
+          variant="neutral"
+          size="sm"
+          onClick={() => void i18n.changeLanguage('fr')}
+        >
+          🇫🇷
+        </Button>
+        <Button
+          type={currentLang === 'en' ? 'solid' : 'ghost'}
+          variant="neutral"
+          size="sm"
+          onClick={() => void i18n.changeLanguage('en')}
+        >
+          🇬🇧
+        </Button>
+      </Box>
+
       {/* ── Hero ── */}
       <Box as="section" className={styles['section-hero']}>
         <Stack direction="vertical" spacing="default" align="center">
@@ -220,12 +244,11 @@ function App() {
               Sébastien LE MOUILLOUR
             </Text>
             <Text as="p" variant="h4" weight="medium" align="center" color="secondary">
-              Développeur Frontend
+              {t('hero.subtitle')}
             </Text>
           </Stack>
           <Text as="p" variant="body-large" align="center" color="tertiary">
-            Développeur frontend basé à Nantes — JavaScript, TypeScript, React. Passionné par les design systems, les
-            architectures microfrontend et le code propre, bien testé, qui dure.
+            {t('hero.tagline')}
           </Text>
           <Stack direction="horizontal" spacing="compact" wrap justify="center">
             <Button
@@ -260,30 +283,28 @@ function App() {
       <Container as="section" size="lg" className={styles.section}>
         <Stack direction="vertical" spacing="comfortable" align="center">
           <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-            À propos
+            {t('about.title')}
           </Text>
           <Text as="p" variant="body-large" align="center" color="secondary">
-            Développeur frontend passionné, avec un fort focus sur JavaScript, TypeScript et React. Je prends soin de
-            construire des logiciels propres, efficaces et bien testés, qui délivrent de la vraie valeur.
+            {t('about.p1')}
           </Text>
           <Text as="p" variant="body-large" align="center" color="secondary">
-            En dehors du code, j&apos;aime passer du temps de qualité avec ma famille, nager, jouer au squash, lire des
-            mangas et m&apos;immerger dans les jeux vidéo.
+            {t('about.p2')}
           </Text>
           <Text as="p" variant="body-large" align="center" color="secondary">
-            Mon travail est réparti entre deux comptes GitHub :{' '}
+            {t('about.p3_prefix')}{' '}
             <strong>
               <a href="https://github.com/noofreuuuh" target="_blank" rel="noopener noreferrer">
                 noofreuuuh
               </a>
             </strong>{' '}
-            pour mes projets personnels et{' '}
+            {t('about.p3_middle')}{' '}
             <strong>
               <a href="https://github.com/smouillour" target="_blank" rel="noopener noreferrer">
                 smouillour
               </a>
             </strong>{' '}
-            pour mes contributions professionnelles chez <strong>Talend</strong>.
+            {t('about.p3_suffix')} <strong>Talend</strong>.
           </Text>
         </Stack>
       </Container>
@@ -292,7 +313,7 @@ function App() {
       <Container as="section" size="lg" className={styles.section}>
         <Stack direction="vertical" spacing="comfortable" align="center">
           <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-            Compétences
+            {t('skills.title')}
           </Text>
           <Cluster spacing="compact" align="center">
             {SKILLS.map(({ label, variant }) => (
@@ -308,10 +329,10 @@ function App() {
       <Container as="section" size="lg" className={styles.section}>
         <Stack direction="vertical" spacing="comfortable" align="center">
           <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-            Projets
+            {t('projects.title')}
           </Text>
           <Box className={styles['projects-grid']}>
-            {PROJECTS.map(({ title, description, links, archived }) => (
+            {PROJECTS.map(({ title, key, links, archived }) => (
               <Card key={title}>
                 <Stack direction="vertical" spacing="default">
                   <Stack direction="horizontal" spacing="compact" align="center" justify="space-between">
@@ -320,12 +341,12 @@ function App() {
                     </Text>
                     {archived && (
                       <Badge variant="default" size="sm">
-                        Archivé
+                        {t('projects.archived')}
                       </Badge>
                     )}
                   </Stack>
                   <Text as="p" variant="body" color="secondary">
-                    {description}
+                    {t(`projects.${key}`)}
                   </Text>
                   <Cluster spacing="compact">
                     {links.map(({ href, label, type, variant }) => (
@@ -355,10 +376,10 @@ function App() {
       <Container as="section" size="lg" className={styles.section}>
         <Stack direction="vertical" spacing="comfortable" align="center">
           <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-            Contact
+            {t('contact.title')}
           </Text>
           <Text as="p" variant="body-large" align="center" color="secondary">
-            Une opportunité, une collaboration, ou juste envie d&apos;échanger ?
+            {t('contact.tagline')}
           </Text>
           <Stack direction="horizontal" spacing="compact" wrap justify="center">
             <Button
@@ -371,7 +392,7 @@ function App() {
               size="md"
               iconLeft="external-link"
             >
-              Mon site
+              {t('contact.site')}
             </Button>
             <Button
               as="a"
@@ -383,7 +404,7 @@ function App() {
               size="md"
               iconLeft="user"
             >
-              Me contacter sur LinkedIn
+              {t('contact.linkedin')}
             </Button>
             <Button
               as="a"
@@ -395,7 +416,7 @@ function App() {
               size="md"
               iconLeft="external-link"
             >
-              GitHub perso
+              {t('contact.githubPersonal')}
             </Button>
             <Button
               as="a"
@@ -407,7 +428,7 @@ function App() {
               size="md"
               iconLeft="external-link"
             >
-              GitHub pro
+              {t('contact.githubPro')}
             </Button>
           </Stack>
         </Stack>
@@ -417,10 +438,10 @@ function App() {
       <Box as="footer" className={styles.footer}>
         <Stack direction="vertical" spacing="none" align="center">
           <Text as="p" variant="caption" color="tertiary" align="center">
-            © {new Date().getFullYear()} Sébastien LE MOUILLOUR — Lufa Workspace
+            &copy; {new Date().getFullYear()} Sébastien LE MOUILLOUR — Lufa Workspace
           </Text>
           <Text as="p" variant="caption" color="tertiary" align="center">
-            Construit avec React, TypeScript &amp; Lufa Design System
+            {t('footer.built')}
           </Text>
         </Stack>
       </Box>

@@ -1,5 +1,14 @@
 /* Lufa Microfrontend Home — Landing page using Lufa Design Tokens */
 
+.lang-switcher {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 100;
+  display: flex;
+  gap: 0.25rem;
+}
+
 .lufa-home {
   min-height: 100vh;
   background-color: var(--lufa-semantic-ui-background-page);
