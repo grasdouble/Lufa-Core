@@ -1,7 +1,6 @@
 {
   "hero": {
     "subtitle": "Développeur Frontend",
-    "tagline": "Développeur frontend basé à Nantes — JavaScript, TypeScript, React. Passionné par les design systems, les architectures microfrontend et le code propre, bien testé, qui dure.",
     "nav": "Accueil"
   },
   "about": {

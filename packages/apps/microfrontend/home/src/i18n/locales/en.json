@@ -1,7 +1,6 @@
 {
   "hero": {
     "subtitle": "Frontend Developer",
-    "tagline": "Frontend developer based in Nantes — JavaScript, TypeScript, React. Passionate about design systems, microfrontend architectures, and clean, well-tested code that lasts.",
     "nav": "Home"
   },
   "about": {

@@ -1,4 +1,3 @@
-export { AboutSection } from './AboutSection/AboutSection';
 export { ContactSection } from './ContactSection/ContactSection';
 export { FooterSection } from './FooterSection/FooterSection';
 export { HeroSection } from './HeroSection/HeroSection';

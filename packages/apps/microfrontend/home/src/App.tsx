@@ -8,7 +8,6 @@ import './i18n';
 import styles from './App.module.css';
 import { LangSwitcher, SideNav } from './components';
 import {
-  AboutSection,
   ContactSection,
   FooterSection,
   HeroSection,
@@ -29,8 +28,6 @@ function App() {
       <LangSwitcher />
 
       <HeroSection />
-      <SectionDivider />
-      <AboutSection />
       <SectionDivider />
       <SkillsSection />
       <SectionDivider />
