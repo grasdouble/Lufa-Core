@@ -36,13 +36,23 @@ export function HeroSection() {
             <Text as="p" variant="body-large" align="center" color="secondary">
               {t('about.p3_prefix')}{' '}
               <strong>
-                <a href="https://github.com/noofreuuuh" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://github.com/noofreuuuh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles['hero-link']}
+                >
                   noofreuuuh
                 </a>
               </strong>{' '}
               {t('about.p3_middle')}{' '}
               <strong>
-                <a href="https://github.com/smouillour" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://github.com/smouillour"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles['hero-link']}
+                >
                   smouillour
                 </a>
               </strong>{' '}
