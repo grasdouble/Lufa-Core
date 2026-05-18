@@ -18,3 +18,30 @@
   width: 10rem;
   height: 10rem;
 }
+
+/* < md / 768px — aligns with --lufa-primitive-breakpoint-md, see DS issue #10 */
+@media (max-width: 767px) {
+  .section-hero {
+    padding: 3rem 1.25rem;
+    justify-content: flex-start;
+    padding-top: 5rem;
+  }
+
+  .hero-logo {
+    width: 7rem;
+    height: 7rem;
+  }
+}
+
+/* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */
+@media (max-width: 639px) {
+  .section-hero {
+    padding: 4.5rem 1rem 2.5rem;
+    justify-content: flex-start;
+  }
+
+  .hero-logo {
+    width: 6rem;
+    height: 6rem;
+  }
+}

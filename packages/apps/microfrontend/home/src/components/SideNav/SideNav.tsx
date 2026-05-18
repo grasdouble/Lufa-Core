@@ -79,7 +79,10 @@ export function SideNav({ sections }: SideNavProps) {
   return (
     <nav className={styles['side-nav']} aria-label="Page sections">
       {sections.map(({ id, label }) => (
-        <div key={id} className={styles['side-nav-item']}>
+        <div
+          key={id}
+          className={`${styles['side-nav-item']}${activeId === id ? ` ${styles['side-nav-item--active']}` : ''}`}
+        >
           <span className={styles['side-nav-label']}>{label}</span>
           <button
             className={`${styles['side-nav-dot']}${activeId === id ? ` ${styles['side-nav-dot--active']}` : ''}`}

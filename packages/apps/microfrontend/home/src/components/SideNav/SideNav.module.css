@@ -11,6 +11,14 @@
   gap: 0.875rem;
 }
 
+/* Hide on mobile — not enough space */
+/* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */
+@media (max-width: 639px) {
+  .side-nav {
+    display: none;
+  }
+}
+
 .side-nav-item {
   display: flex;
   align-items: center;
@@ -39,6 +47,7 @@
   letter-spacing: 0.02em;
 }
 
+.side-nav-item--active .side-nav-label,
 .side-nav-item:hover .side-nav-label {
   opacity: 1;
   transform: translateX(0);

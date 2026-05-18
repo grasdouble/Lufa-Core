@@ -6,3 +6,11 @@
   display: flex;
   gap: 0.25rem;
 }
+
+/* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */
+@media (max-width: 639px) {
+  .lang-switcher {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
