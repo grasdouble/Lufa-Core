@@ -6,7 +6,7 @@ import { Box } from '@grasdouble/lufa_design-system';
 import './i18n';
 
 import styles from './App.module.css';
-import { LangSwitcher, SideNav } from './components';
+import { LangSwitcher, SideNav, ThemeSelector } from './components';
 import {
   ContactSection,
   FooterSection,
@@ -26,6 +26,7 @@ function App() {
     <Box id="lufa-home" className={styles['lufa-home']}>
       <SideNav sections={navSections} />
       <LangSwitcher />
+      <ThemeSelector />
 
       <HeroSection />
       <SectionDivider />

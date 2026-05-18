@@ -4,7 +4,7 @@
   right: 1.5rem;
   z-index: 100;
   display: flex;
-  gap: 0.25rem;
+  gap: var(--lufa-semantic-ui-spacing-compact);
 }
 
 /* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */

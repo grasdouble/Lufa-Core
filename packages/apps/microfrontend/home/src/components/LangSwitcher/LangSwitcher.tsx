@@ -12,7 +12,7 @@ export function LangSwitcher() {
   return (
     <Box className={styles['lang-switcher']}>
       <Button
-        type={currentLang === 'fr' ? 'solid' : 'ghost'}
+        type={currentLang === 'fr' ? 'solid' : 'outline'}
         variant="neutral"
         size="sm"
         onClick={() => void i18n.changeLanguage('fr')}
@@ -20,7 +20,7 @@ export function LangSwitcher() {
         🇫🇷
       </Button>
       <Button
-        type={currentLang === 'en' ? 'solid' : 'ghost'}
+        type={currentLang === 'en' ? 'solid' : 'outline'}
         variant="neutral"
         size="sm"
         onClick={() => void i18n.changeLanguage('en')}
