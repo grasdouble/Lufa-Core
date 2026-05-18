@@ -1,9 +1,13 @@
 import type { CorsOptions } from 'cors';
 import type { NextFunction, Request, Response } from 'express';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 // List of allowed domains
-export const whitelist: string[] = ['https://sebastien-lemouillour.fr', 'https://www.sebastien-lemouillour.fr'];
+export const whitelist: string[] = [
+  'https://sebastien-lemouillour.fr',
+  'https://www.sebastien-lemouillour.fr',
+  'http://localhost:5173',
+];
 
 // Define a custom error for stricter typing
 export class CorsError extends Error {
@@ -16,10 +20,13 @@ export class CorsError extends Error {
 // CORS configuration options
 export const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void => {
+    const isLocalhostOrigin = /^http:\/\/localhost(?::\d+)?$/.test(origin ?? '');
+
     if (!origin) {
-      // Deny requests without an origin
-      callback(new CorsError('Access denied: Missing Origin header'));
-    } else if (whitelist.includes(origin)) {
+      // Some asset fetches (depending on browser/request mode) may not include Origin.
+      // Allowing them keeps public CDN asset loading functional.
+      callback(null, true);
+    } else if (whitelist.includes(origin) || isLocalhostOrigin) {
       // Allow access if the origin is in the whitelist
       callback(null, true);
     } else {
@@ -48,7 +55,7 @@ export const getRateLimiter = (blockedIPs: Set<string>) =>
   rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 1000, // Allow 1000 requests per 10 minutes
-    keyGenerator: (req: Request) => req.ip ?? req.socket.remoteAddress ?? 'unknown',
+    keyGenerator: (req: Request) => ipKeyGenerator(req.ip ?? req.socket.remoteAddress ?? 'unknown'),
     handler: (req: Request, res: Response) => {
       const clientIP = req.ip ?? req.socket.remoteAddress;
 

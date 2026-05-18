@@ -1,6 +1,6 @@
 {
   "imports": {
     "@grasdouble/lufa_microfrontend_home": "https://cdn.sebastien-lemouillour.fr/gh/@grasdouble/lufa_microfrontend_home@0.1.2",
-    "@grasdouble/lufa_design-system": "http://cdn.sebastien-lemouillour.fr/@grasdouble/lufa_design-system@0.1.0"
+    "@grasdouble/lufa_design-system": "https://cdn.sebastien-lemouillour.fr/@grasdouble/lufa_design-system@2.1.5"
   }
 }

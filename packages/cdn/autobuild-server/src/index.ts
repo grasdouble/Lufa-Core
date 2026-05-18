@@ -1,16 +1,21 @@
 import os from 'os';
 import path from 'path';
 import type { NextFunction, Request, Response } from 'express';
+import { config as dotenvxConfig } from '@dotenvx/dotenvx';
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs-extra';
-
-import '@dotenvx/dotenvx/config';
 
 import type { ExtractedParams, LoadLibraryResult, PackageJson } from './types.js';
 import type { ExtractParamsProps } from './utils.js';
 import { CorsError, corsOptions, getRateLimiter, ipBlockMiddleware, unblockIPsAfterTimeout } from './security.js';
 import { extractParams, loadLibrary, sendEntry } from './utils.js';
+
+// Load env files: .env.development takes priority over .env
+// override: true ensures file values always win over shell env vars
+const envFiles: string[] = ['.env'];
+if (fs.existsSync('.env.development')) envFiles.push('.env.development');
+dotenvxConfig({ path: envFiles, override: true });
 
 const app: express.Application = express();
 // Enable trust proxy to get proper IPs behind proxies
@@ -74,6 +79,7 @@ app.get(['{/:urlScope}/:urlName@:urlVersion{/:urlExportPath}'], async (req: Requ
   // This is a security measure to prevent path traversal attacks
   // and to ensure that the package is being extracted in the correct directory
   if (path.relative(CDN_DIR, cdnPkgPath).startsWith('..') || path.isAbsolute(path.relative(CDN_DIR, cdnPkgPath))) {
+    console.error(`❌ [route] path traversal detected: ${cdnPkgPath}`);
     res.status(403).send('Forbidden');
     return;
   }
@@ -136,7 +142,8 @@ app.get(['{/:urlScope}/:urlName@:urlVersion{/:urlExportPath}'], async (req: Requ
     fullName,
   });
   if (result.status !== 200) {
-    res.status(result.status).send(result.message);
+    console.error(`❌ sendEntry failed for ${fullName} exportPath=${exportPath}: ${result.message}`);
+    res.status(result.status).json({ error: result.message, package: fullName, exportPath });
     return;
   }
 

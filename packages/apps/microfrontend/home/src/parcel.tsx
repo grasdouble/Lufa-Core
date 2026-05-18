@@ -1,10 +1,10 @@
 import React from 'react';
+import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
 
-// Import Lufa design tokens
-import '@grasdouble/lufa_design-system/style.css';
-
 import App from './App';
+
+let root: Root | null = null;
 
 export const bootstrap = () => {
   return Promise.resolve();
@@ -14,7 +14,7 @@ export const mount = () => {
   return new Promise((resolve, reject) => {
     const container = document.getElementById('lufa-container');
     if (container) {
-      const root = createRoot(container);
+      root ??= createRoot(container);
       root.render(<App />);
       resolve(void 0);
     } else {
@@ -25,12 +25,11 @@ export const mount = () => {
 
 export const unmount = () => {
   return new Promise((resolve) => {
-    const container = document.getElementById('lufa-container');
-    if (container) {
-      const root = createRoot(container);
+    if (root) {
       root.unmount();
+      root = null;
     } else {
-      console.error('Container element not found for unmounting');
+      console.error('React root not initialized for unmounting');
     }
     resolve(void 0);
   });

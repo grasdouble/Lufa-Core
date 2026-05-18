@@ -2,7 +2,6 @@ import type { LifeCycles } from 'single-spa';
 import { registerApplication, start } from 'single-spa';
 
 import 'import-map-overrides';
-import '@grasdouble/lufa_design-system/style.css';
 
 const loadApp =
   (url: string): (() => Promise<LifeCycles>) =>

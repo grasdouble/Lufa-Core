@@ -1,55 +1,66 @@
 import React from 'react';
-import clsx from 'clsx';
 
-import { Stack } from '@grasdouble/lufa_design-system';
+import { Box, Button, Stack, Text } from '@grasdouble/lufa_design-system';
 
 import styles from './App.module.css';
 import { getImageUrl } from './getImageUrl';
 
 function App() {
   return (
-    <div className={clsx(styles['lufa-home'])} id="lufa-home">
-      <Stack direction="vertical" spacing="default" align="center">
-        <img src={getImageUrl('Lufa_Logo')} alt="Centered Logo" className={clsx(styles['centered-image'])} />
-        <h1 className={clsx(styles['centered-message'])}>
+    <Box id="lufa-home" className={styles['lufa-home']}>
+      <Stack direction="vertical" spacing="default" align="center" justify="center">
+        <img src={getImageUrl('Lufa_Logo')} alt="Centered Logo" className={styles['centered-image']} />
+        <Text as="h1" variant="h3" weight="bold" align="center" color="inverse">
           Lufa Workspace (WIP) <br /> by Sebastien LE MOUILLOUR
-        </h1>
-        <Stack direction="horizontal">
-          <a
+        </Text>
+        <Stack direction="horizontal" spacing="compact" wrap justify="center">
+          <Button
+            as="a"
             href="https://lufa-design.sebastien-lemouillour.fr"
             target="_blank"
             rel="noopener noreferrer"
-            className={clsx(styles.link, styles.design)}
+            type="solid"
+            variant="success"
+            size="md"
           >
             Lufa Design System (WIP)
-          </a>
-          <a
+          </Button>
+          <Button
+            as="a"
             href="https://lufa-storybook.sebastien-lemouillour.fr"
             target="_blank"
             rel="noopener noreferrer"
-            className={clsx(styles.link, styles.storybook)}
+            type="solid"
+            variant="danger"
+            size="md"
           >
             Lufa Storybook (WIP)
-          </a>
-          <a
+          </Button>
+          <Button
+            as="a"
             href="https://github.com/grasdouble/Lufa"
             target="_blank"
             rel="noopener noreferrer"
-            className={clsx(styles.link, styles.github)}
+            type="outline"
+            variant="neutral"
+            size="md"
           >
             Github
-          </a>
-          <a
+          </Button>
+          <Button
+            as="a"
             href="https://www.linkedin.com/in/sebastienlemouillour/"
             target="_blank"
             rel="noopener noreferrer"
-            className={clsx(styles.link, styles.linkedin)}
+            type="outline"
+            variant="info"
+            size="md"
           >
             LinkedIn
-          </a>
+          </Button>
         </Stack>
       </Stack>
-    </div>
+    </Box>
   );
 }
 

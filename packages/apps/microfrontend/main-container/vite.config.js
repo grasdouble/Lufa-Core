@@ -9,6 +9,7 @@ export default defineConfig({
     importMapInjectorPlugin({
       extImportMap: 'src/importMapExternal.json',
       devImportMap: 'src/importMap.dev.json',
+      previewImportMap: 'src/importMap.preview.json',
       prodImportMap: 'src/importMap.json',
     }),
     externalizeDeps({

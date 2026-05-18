@@ -27,7 +27,7 @@ export default defineConfig({
       assetsDir: 'assets',
       formats: ['es'],
       entry: {
-        index: 'src/parcel.jsx',
+        index: 'src/parcel.tsx',
       },
       fileName: () => 'home.mjs',
       preserveEntrySignatures: 'strict',

@@ -20,7 +20,7 @@
     "lint": "eslint ./src",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
-    "preview": "vite preview",
+    "preview": "vite build --mode preview && vite preview --mode preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "lint-staged": {
