@@ -1,7 +1,8 @@
 {
   "hero": {
     "subtitle": "Frontend Developer",
-    "tagline": "Frontend developer based in Nantes — JavaScript, TypeScript, React. Passionate about design systems, microfrontend architectures, and clean, well-tested code that lasts."
+    "tagline": "Frontend developer based in Nantes — JavaScript, TypeScript, React. Passionate about design systems, microfrontend architectures, and clean, well-tested code that lasts.",
+    "nav": "Home"
   },
   "about": {
     "title": "About",
@@ -20,7 +21,7 @@
     "lufa-design-system": "A React design system with semantic tokens, supporting dark/light mode. Includes interactive Storybook documentation.",
     "lufa-lab": "Experimental playground for new ideas in the Lufa workspace.",
     "bmad-manager": "BMad agent manager to automate development workflows.",
-    "lufa": "The open-source monorepo hosting the Lufa workspace: microfrontends, design system, Vite plugins and shared configs.",
+    "lufa": "The open-source monorepo hosting the Lufa workspace: microfrontends, Vite plugins and shared configs.",
     "dotfiles": "Personal configuration: terminal, aliases and development environment.",
     "leetcode": "My LeetCode solutions — algorithmic practice in JavaScript.",
     "github-package-visualizer": "GitHub package dependency visualizer.",
@@ -37,7 +38,6 @@
   "contact": {
     "title": "Contact",
     "tagline": "An opportunity, a collaboration, or just want to chat?",
-    "site": "My website",
     "linkedin": "Contact me on LinkedIn",
     "githubPersonal": "Personal GitHub",
     "githubPro": "Professional GitHub"

@@ -1,0 +1,5 @@
+.footer {
+  border-top: var(--lufa-semantic-ui-border-width-thin) solid var(--lufa-semantic-ui-border-default);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}

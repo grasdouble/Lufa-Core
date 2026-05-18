@@ -1,7 +1,8 @@
 {
   "hero": {
     "subtitle": "Développeur Frontend",
-    "tagline": "Développeur frontend basé à Nantes — JavaScript, TypeScript, React. Passionné par les design systems, les architectures microfrontend et le code propre, bien testé, qui dure."
+    "tagline": "Développeur frontend basé à Nantes — JavaScript, TypeScript, React. Passionné par les design systems, les architectures microfrontend et le code propre, bien testé, qui dure.",
+    "nav": "Accueil"
   },
   "about": {
     "title": "À propos",
@@ -20,7 +21,7 @@
     "lufa-design-system": "Un design system React avec tokens sémantiques, compatible dark/light mode. Inclut une documentation Storybook interactive.",
     "lufa-lab": "Terrain d'expérimentation pour les nouvelles idées du workspace Lufa.",
     "bmad-manager": "Gestionnaire d'agents BMad pour automatiser les workflows de développement.",
-    "lufa": "Le monorepo open-source qui héberge le workspace Lufa : microfrontends, design system, plugins Vite et configs partagées.",
+    "lufa": "Le monorepo open-source qui héberge le workspace Lufa : microfrontends, plugins Vite et configs partagées.",
     "dotfiles": "Configuration personnelle : terminal, aliases et environnement de développement.",
     "leetcode": "Mes solutions aux exercices LeetCode — pratique algorithmique en JavaScript.",
     "github-package-visualizer": "Visualisateur de dépendances entre packages GitHub.",
@@ -37,7 +38,6 @@
   "contact": {
     "title": "Contact",
     "tagline": "Une opportunité, une collaboration, ou juste envie d'échanger ?",
-    "site": "Mon site",
     "linkedin": "Me contacter sur LinkedIn",
     "githubPersonal": "GitHub perso",
     "githubPro": "GitHub pro"

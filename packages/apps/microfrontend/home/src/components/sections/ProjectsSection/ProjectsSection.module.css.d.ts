@@ -1,4 +1,4 @@
 declare const styles: {
-  readonly ['lufa-home']: string;
+  readonly ['projects-grid']: string;
 };
 export default styles;

@@ -1,0 +1,14 @@
+/* Gradient fade separator between sections */
+.section-divider {
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--lufa-semantic-ui-border-default) 25%,
+    var(--lufa-semantic-ui-border-default) 75%,
+    transparent 100%
+  );
+}

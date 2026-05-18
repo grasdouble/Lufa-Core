@@ -1,0 +1,20 @@
+/* Hero section — full-screen with gradient background */
+.section-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background: radial-gradient(
+    ellipse 100% 60% at 50% -5%,
+    var(--lufa-semantic-ui-background-subtle) 0%,
+    var(--lufa-semantic-ui-background-page) 100%
+  );
+}
+
+.hero-logo {
+  width: 10rem;
+  height: 10rem;
+}

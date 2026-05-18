@@ -1,0 +1,7 @@
+/* auto-fit responsive grid — not supported by the DS Grid component */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}

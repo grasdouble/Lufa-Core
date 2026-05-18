@@ -1,0 +1,71 @@
+/* ── Side navigation dots ── */
+
+.side-nav {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.side-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.side-nav-label {
+  font-size: var(--lufa-semantic-ui-typography-caption);
+  font-weight: 500;
+  color: var(--lufa-semantic-ui-text-primary);
+  background: var(--lufa-semantic-ui-background-page);
+  border: var(--lufa-semantic-ui-border-width-thin) solid var(--lufa-semantic-ui-border-default);
+  border-radius: var(--lufa-semantic-ui-border-radius-small);
+  padding: 0.25rem 0.625rem;
+  box-shadow: var(--lufa-semantic-ui-shadow-medium);
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity var(--lufa-semantic-ui-transition-duration-fast) var(--lufa-semantic-ui-transition-timing-function-default),
+    transform var(--lufa-semantic-ui-transition-duration-fast)
+      var(--lufa-semantic-ui-transition-timing-function-default);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.side-nav-item:hover .side-nav-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.side-nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--lufa-semantic-ui-border-radius-full);
+  background-color: var(--lufa-semantic-ui-border-default);
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    transform var(--lufa-semantic-ui-transition-duration-fast)
+      var(--lufa-semantic-ui-transition-timing-function-default),
+    background-color var(--lufa-semantic-ui-transition-duration-fast)
+      var(--lufa-semantic-ui-transition-timing-function-default);
+}
+
+.side-nav-item:hover .side-nav-dot {
+  transform: scale(1.5);
+  background-color: var(--lufa-semantic-ui-text-secondary);
+}
+
+.side-nav-dot--active {
+  background-color: var(--lufa-semantic-ui-text-primary);
+  transform: scale(1.75);
+}

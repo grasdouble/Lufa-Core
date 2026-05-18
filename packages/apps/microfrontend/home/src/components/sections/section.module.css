@@ -1,0 +1,12 @@
+/* Shared styles for content sections */
+
+.section {
+  padding: 6rem 0;
+}
+
+.section-title-accent {
+  width: 3rem;
+  height: 3px;
+  background-color: var(--lufa-semantic-ui-border-default);
+  border-radius: var(--lufa-semantic-ui-border-radius-full);
+}

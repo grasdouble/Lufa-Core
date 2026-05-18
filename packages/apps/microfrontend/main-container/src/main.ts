@@ -2,6 +2,7 @@ import type { LifeCycles } from 'single-spa';
 import { registerApplication, start } from 'single-spa';
 
 import 'import-map-overrides';
+import './reset.css';
 
 const loadApp =
   (url: string): (() => Promise<LifeCycles>) =>

@@ -1,4 +1,4 @@
 declare const styles: {
-  readonly ['lufa-home']: string;
+  readonly ['lang-switcher']: string;
 };
 export default styles;
