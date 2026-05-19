@@ -45,8 +45,8 @@ importers:
   packages/apps/microfrontend/home:
     dependencies:
       '@grasdouble/lufa_design-system':
-        specifier: ^2.1.3
-        version: 2.1.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^3.0.0
+        version: 3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -86,7 +86,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
         specifier: ^6.0.2
-        version: 6.0.2(vite@8.0.13)
+        version: 6.0.2(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0))
       eslint:
         specifier: ^10.4.0
         version: 10.4.0
@@ -116,19 +116,19 @@ importers:
         version: 8.59.3(eslint@10.4.0)(typescript@6.0.3)
       vite:
         specifier: ^8.0.13
-        version: 8.0.13
+        version: 8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)
       vite-plugin-css-injected-by-js:
         specifier: ^5.0.1
-        version: 5.0.1(vite@8.0.13)
+        version: 5.0.1(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0))
       vite-plugin-externalize-deps:
         specifier: ^0.10.0
-        version: 0.10.0(vite@8.0.13)
+        version: 0.10.0(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0))
 
   packages/apps/microfrontend/main-container:
     dependencies:
       '@grasdouble/lufa_design-system':
-        specifier: ^2.1.3
-        version: 2.1.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^3.0.0
+        version: 3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@grasdouble/lufa_design-system-themes':
         specifier: ^1.1.5
         version: 1.1.5
@@ -758,14 +758,11 @@ packages:
   '@grasdouble/lufa_design-system-themes@1.1.5':
     resolution: {integrity: sha512-ye8QvTWOebrR3VA3O/yvaYgP5usLmZZGcmIVVmy5yCbUNLBpc7sU34PeVvncjJeOn+SONFZRm0bbsCaJyQIH3A==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system-themes/1.1.5/243714db0698bfd2db9a6c1f5370b6fa4b9e0645}
 
-  '@grasdouble/lufa_design-system-tokens@1.2.3':
-    resolution: {integrity: sha512-CLP9QB9balOvqPkJ2g+uUp38LMgpTREWNbqMbUdxkPlaExh+Mn+xvofDhwNKvg695GLPzTj6X/eIdHZ6j7/eYw==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system-tokens/1.2.3/b69631afeb3ac18adf9b52c6f2d8bd22daaf5250}
-
   '@grasdouble/lufa_design-system-tokens@1.2.5':
     resolution: {integrity: sha512-RYGYLfgF/9wJi5pchQ+vQGnFRRlFLtArE3M5c9+RzBiSXntq2mWBWVi7EaAGf8hSe1MaGh/Sv6HyXAN2pAcKAA==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system-tokens/1.2.5/d55aa2df228a7c29765bdcc10586362c29b916bc}
 
-  '@grasdouble/lufa_design-system@2.1.3':
-    resolution: {integrity: sha512-BteDpjInvO0SJmxYDXAUbDf/yPN+i+WLDWQIrHgx4anuSof/i7U3mkve0DkwTPapWq6XWLNpcQIEfHXdpYFQ8A==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system/2.1.3/6f7eaf812d321188292ae4fee8f792c151458939}
+  '@grasdouble/lufa_design-system@3.0.0':
+    resolution: {integrity: sha512-v4yUiDGNL82g9cyO9YVMq96/fwjvLpS8WPivloR3n4tBGmm0/j2YK7FxJmB4lxYVFl0W76SdToJmQGUK+8lvYw==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system/3.0.0/ce9d236c60bf5d42dda27c8d9056929a561e4e1c}
     peerDependencies:
       react: ^19.1.0
       react-dom: ^19.1.0
@@ -3377,7 +3374,7 @@ snapshots:
       '@babel/types': 7.29.0
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -3449,7 +3446,7 @@ snapshots:
       '@babel/parser': 7.29.3
       '@babel/template': 7.28.6
       '@babel/types': 7.29.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -3722,7 +3719,7 @@ snapshots:
   '@eslint/config-array@0.23.5':
     dependencies:
       '@eslint/object-schema': 3.0.5
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       minimatch: 10.2.5
     transitivePeerDependencies:
       - supports-color
@@ -3777,13 +3774,11 @@ snapshots:
     dependencies:
       '@grasdouble/lufa_design-system-tokens': 1.2.5
 
-  '@grasdouble/lufa_design-system-tokens@1.2.3': {}
-
   '@grasdouble/lufa_design-system-tokens@1.2.5': {}
 
-  '@grasdouble/lufa_design-system@2.1.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@grasdouble/lufa_design-system@3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
-      '@grasdouble/lufa_design-system-tokens': 1.2.3
+      '@grasdouble/lufa_design-system-tokens': 1.2.5
       '@headlessui/react': 2.2.10(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@heroicons/react': 2.2.0(react@19.2.6)
       clsx: 2.1.1
@@ -4225,7 +4220,7 @@ snapshots:
       '@typescript-eslint/types': 8.59.3
       '@typescript-eslint/typescript-estree': 8.59.3(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.59.3
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       eslint: 10.4.0
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -4235,7 +4230,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.59.3(typescript@6.0.3)
       '@typescript-eslint/types': 8.59.3
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
@@ -4254,7 +4249,7 @@ snapshots:
       '@typescript-eslint/types': 8.59.3
       '@typescript-eslint/typescript-estree': 8.59.3(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.3(eslint@10.4.0)(typescript@6.0.3)
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       eslint: 10.4.0
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -4269,7 +4264,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.59.3(typescript@6.0.3)
       '@typescript-eslint/types': 8.59.3
       '@typescript-eslint/visitor-keys': 8.59.3
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       minimatch: 10.2.5
       semver: 7.8.0
       tinyglobby: 0.2.16
@@ -4294,10 +4289,10 @@ snapshots:
       '@typescript-eslint/types': 8.59.3
       eslint-visitor-keys: 5.0.1
 
-  '@vitejs/plugin-react@6.0.2(vite@8.0.13)':
+  '@vitejs/plugin-react@6.0.2(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.0.13
+      vite: 8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)
 
   abbrev@4.0.0: {}
 
@@ -4606,10 +4601,6 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
-  debug@4.4.3:
-    dependencies:
-      ms: 2.1.3
-
   debug@4.4.3(supports-color@5.5.0):
     dependencies:
       ms: 2.1.3
@@ -4886,7 +4877,7 @@ snapshots:
       '@types/estree': 1.0.9
       ajv: 6.15.0
       cross-spawn: 7.0.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 9.1.2
       eslint-visitor-keys: 5.0.1
@@ -6534,27 +6525,13 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-plugin-css-injected-by-js@5.0.1(vite@8.0.13):
+  vite-plugin-css-injected-by-js@5.0.1(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)):
     dependencies:
-      vite: 8.0.13
+      vite: 8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)
 
   vite-plugin-externalize-deps@0.10.0(vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)):
     dependencies:
       vite: 8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0)
-
-  vite-plugin-externalize-deps@0.10.0(vite@8.0.13):
-    dependencies:
-      vite: 8.0.13
-
-  vite@8.0.13:
-    dependencies:
-      lightningcss: 1.32.0
-      picomatch: 4.0.4
-      postcss: 8.5.14
-      rolldown: 1.0.1
-      tinyglobby: 0.2.16
-    optionalDependencies:
-      fsevents: 2.3.3
 
   vite@8.0.13(@types/node@25.8.0)(esbuild@0.28.0)(tsx@4.22.0)(yaml@2.9.0):
     dependencies:

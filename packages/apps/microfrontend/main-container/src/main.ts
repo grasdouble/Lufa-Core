@@ -3,6 +3,7 @@ import { registerApplication, start } from 'single-spa';
 
 import 'import-map-overrides';
 import './reset.css';
+import './dot-nav-overrides.css';
 import '@grasdouble/lufa_design-system-themes/ocean.css';
 import '@grasdouble/lufa_design-system-themes/forest.css';
 import '@grasdouble/lufa_design-system-themes/matrix.css';

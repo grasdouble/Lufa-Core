@@ -1,4 +1,4 @@
-export type SkillVariant = 'info' | 'error' | 'success' | 'warning' | 'default';
+export type SkillVariant = 'info' | 'danger' | 'success' | 'warning' | 'default';
 
 export type Skill = {
   label: string;
@@ -12,9 +12,9 @@ export const SKILLS: readonly Skill[] = [
   { label: 'React Router', variant: 'info' },
   { label: 'Redux', variant: 'info' },
   { label: 'React Hook Form', variant: 'info' },
-  // Styling → error (red)
-  { label: 'CSS Modules', variant: 'error' },
-  { label: 'SASS', variant: 'error' },
+  // Styling → danger (red)
+  { label: 'CSS Modules', variant: 'danger' },
+  { label: 'SASS', variant: 'danger' },
   // Build & Runtime → success (green)
   { label: 'Vite', variant: 'success' },
   { label: 'Node.js', variant: 'success' },

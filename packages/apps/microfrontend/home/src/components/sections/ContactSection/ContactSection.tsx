@@ -9,58 +9,56 @@ export function ContactSection() {
   const { t } = useTranslation();
 
   return (
-    <Box id="contact" as="section" className={sectionStyles.section}>
-      <Container size="lg">
-        <Stack direction="vertical" spacing="comfortable" align="center">
-          <Stack direction="vertical" spacing="compact" align="center">
-            <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-              {t('contact.title')}
-            </Text>
-            <Box className={sectionStyles['section-title-accent']} />
-          </Stack>
-          <Text as="p" variant="body-large" align="center" color="secondary">
-            {t('contact.tagline')}
+    <Container id="contact" as="section" size="lg" paddingBlock="spacious">
+      <Stack direction="vertical" spacing="comfortable" align="center">
+        <Stack direction="vertical" spacing="compact" align="center">
+          <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
+            {t('contact.title')}
           </Text>
-          <Stack direction="horizontal" spacing="compact" wrap justify="center">
-            <Button
-              as="a"
-              href="https://www.linkedin.com/in/sebastienlemouillour/"
-              target="_blank"
-              rel="noopener noreferrer"
-              type="solid"
-              variant="info"
-              size="md"
-              iconLeft="user"
-            >
-              {t('contact.linkedin')}
-            </Button>
-            <Button
-              as="a"
-              href="https://github.com/noofreuuuh"
-              target="_blank"
-              rel="noopener noreferrer"
-              type="outline"
-              variant="neutral"
-              size="md"
-              iconLeft="external-link"
-            >
-              {t('contact.githubPersonal')}
-            </Button>
-            <Button
-              as="a"
-              href="https://github.com/smouillour"
-              target="_blank"
-              rel="noopener noreferrer"
-              type="outline"
-              variant="neutral"
-              size="md"
-              iconLeft="external-link"
-            >
-              {t('contact.githubPro')}
-            </Button>
-          </Stack>
+          <Box className={sectionStyles['section-title-accent']} />
         </Stack>
-      </Container>
-    </Box>
+        <Text as="p" variant="body-large" align="center" color="secondary">
+          {t('contact.tagline')}
+        </Text>
+        <Stack direction="horizontal" spacing="compact" wrap justify="center">
+          <Button
+            as="a"
+            href="https://www.linkedin.com/in/sebastienlemouillour/"
+            target="_blank"
+            rel="noopener noreferrer"
+            type="solid"
+            variant="info"
+            size="md"
+            iconLeft="user"
+          >
+            {t('contact.linkedin')}
+          </Button>
+          <Button
+            as="a"
+            href="https://github.com/noofreuuuh"
+            target="_blank"
+            rel="noopener noreferrer"
+            type="outline"
+            variant="neutral"
+            size="md"
+            iconLeft="external-link"
+          >
+            {t('contact.githubPersonal')}
+          </Button>
+          <Button
+            as="a"
+            href="https://github.com/smouillour"
+            target="_blank"
+            rel="noopener noreferrer"
+            type="outline"
+            variant="neutral"
+            size="md"
+            iconLeft="external-link"
+          >
+            {t('contact.githubPro')}
+          </Button>
+        </Stack>
+      </Stack>
+    </Container>
   );
 }

@@ -10,24 +10,22 @@ export function SkillsSection() {
   const { t } = useTranslation();
 
   return (
-    <Box id="skills" as="section" className={sectionStyles.section}>
-      <Container size="lg">
-        <Stack direction="vertical" spacing="comfortable" align="center">
-          <Stack direction="vertical" spacing="compact" align="center">
-            <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
-              {t('skills.title')}
-            </Text>
-            <Box className={sectionStyles['section-title-accent']} />
-          </Stack>
-          <Cluster spacing="compact" align="center">
-            {SKILLS.map(({ label, variant }) => (
-              <Badge key={label} variant={variant} size="lg">
-                {label}
-              </Badge>
-            ))}
-          </Cluster>
+    <Container id="skills" as="section" size="lg" paddingBlock="spacious">
+      <Stack direction="vertical" spacing="comfortable" align="center">
+        <Stack direction="vertical" spacing="compact" align="center">
+          <Text as="h2" variant="h2" weight="bold" align="center" color="primary">
+            {t('skills.title')}
+          </Text>
+          <Box className={sectionStyles['section-title-accent']} />
         </Stack>
-      </Container>
-    </Box>
+        <Cluster spacing="compact" align="center">
+          {SKILLS.map(({ label, variant }) => (
+            <Badge key={label} variant={variant} size="lg">
+              {label}
+            </Badge>
+          ))}
+        </Cluster>
+      </Stack>
+    </Container>
   );
 }
