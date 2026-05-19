@@ -100,7 +100,7 @@ export const loadLibrary = async ({
   }
 
   try {
-    if (scope === '@grasdouble' || scope === 'grasdouble') {
+    if (scope === '@grasdouble') {
       console.log(`Loading package ${fullName} from GitHub...`);
       // For @grasdouble packages, we use the GitHub registry
       await pacote.extract(fullName, cdnPkgPath, {
