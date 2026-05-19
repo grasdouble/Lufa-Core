@@ -42,7 +42,9 @@ export const corsOptions: CorsOptions = {
 export const ipBlockMiddleware =
   (blockedIPs: Set<string>) =>
   (req: Request, res: Response, next: NextFunction): void => {
-    const clientIP = req.headers['x-forwarded-for']?.toString() ?? req.ip ?? 'unknown';
+    // Use req.ip which is already resolved from x-forwarded-for when trust proxy is enabled,
+    // ensuring the same key as the rate limiter's keyGenerator.
+    const clientIP = req.ip ?? 'unknown';
     if (blockedIPs.has(getClientKey(clientIP))) {
       res.status(403).json({ error: `Your IP ${clientIP} is blocked due to excessive requests.` });
       return;

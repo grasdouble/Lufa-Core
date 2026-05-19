@@ -17,13 +17,13 @@ Before writing any UI code that uses DS components, run the following script fro
 python3 .agents/skills/lufa-design-system/scripts/list_components.py
 ```
 
-**Always use the script output as the source of truth for prop values.** Never guess variant names, sizes, or other union props from memory — the script shows exact valid values (e.g. `Badge variant: default | success | error | warning | info`).
+**Always use the script output as the source of truth for prop values.** Never guess variant names, sizes, or other union props from memory — the script shows exact valid values (e.g. `Badge variant: default | success | danger | warning | info`).
 
 ## Common substitutions
 
 | Instead of custom CSS…                               | Use DS component                           |
 | ---------------------------------------------------- | ------------------------------------------ |
-| `max-width` + `margin: auto`                         | `<Container size="sm \| md \| lg \| xl">`  |
+| `max-width` + `margin: auto`                         | `<Container size="sm / md / lg / xl">`     |
 | `display: flex; flex-wrap: wrap; gap: …`             | `<Cluster spacing="…">`                    |
 | `display: flex; flex-direction: column; gap: …`      | `<Stack direction="vertical" spacing="…">` |
 | `display: grid; grid-template-columns: repeat(N, …)` | `<Grid columns={N} gap="…">`               |
