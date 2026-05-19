@@ -43,7 +43,7 @@ export const ipBlockMiddleware =
   (blockedIPs: Set<string>) =>
   (req: Request, res: Response, next: NextFunction): void => {
     const clientIP = req.headers['x-forwarded-for']?.toString() ?? req.ip ?? 'unknown';
-    if (blockedIPs.has(clientIP)) {
+    if (blockedIPs.has(getClientKey(clientIP))) {
       res.status(403).json({ error: `Your IP ${clientIP} is blocked due to excessive requests.` });
       return;
     }
@@ -51,6 +51,10 @@ export const ipBlockMiddleware =
   };
 
 // Rate limiter configuration
+
+// Shared key generator so the unblock handler uses the same key as the limiter
+export const getClientKey = (ip: string) => ipKeyGenerator(ip);
+
 export const getRateLimiter = (blockedIPs: Set<string>) =>
   rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
@@ -60,7 +64,7 @@ export const getRateLimiter = (blockedIPs: Set<string>) =>
       const clientIP = req.ip ?? req.socket.remoteAddress;
 
       if (clientIP) {
-        blockedIPs.add(clientIP); // Block the IP after exceeding the rate limit
+        blockedIPs.add(getClientKey(clientIP)); // Block using the normalized key
       }
 
       res.status(429).json({ error: `Too many requests. Your IP ${clientIP} has been temporarily blocked.` });

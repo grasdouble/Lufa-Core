@@ -54,10 +54,23 @@ export function ThemeSelector() {
   return (
     <div ref={containerRef} className={styles['theme-selector']}>
       <Box className={styles['trigger-row']}>
-        <Button type={open ? 'solid' : 'outline'} variant="neutral" size="sm" onClick={() => setOpen((v) => !v)}>
+        <Button
+          type={open ? 'solid' : 'outline'}
+          variant="neutral"
+          size="sm"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Open theme selector"
+          aria-expanded={open}
+        >
           🎨
         </Button>
-        <Button type="outline" variant="neutral" size="sm" onClick={cycleMode}>
+        <Button
+          type="outline"
+          variant="neutral"
+          size="sm"
+          onClick={cycleMode}
+          aria-label={`Switch color mode (current: ${mode})`}
+        >
           {MODE_EMOJI[mode]}
         </Button>
       </Box>
@@ -73,6 +86,8 @@ export function ThemeSelector() {
                 setTheme(id as ThemeName);
                 setOpen(false);
               }}
+              aria-label={`Select ${label} theme`}
+              aria-pressed={theme === id}
             >
               {emoji} {label}
             </Button>

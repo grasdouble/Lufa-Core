@@ -88,6 +88,7 @@ export function SideNav({ sections }: SideNavProps) {
             className={`${styles['side-nav-dot']}${activeId === id ? ` ${styles['side-nav-dot--active']}` : ''}`}
             onClick={() => scrollTo(id)}
             aria-label={label}
+            aria-current={activeId === id ? 'true' : undefined}
           />
         </div>
       ))}

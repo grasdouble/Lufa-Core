@@ -21,8 +21,8 @@ import sys
 # ── Config ──────────────────────────────────────────────────────────────────
 
 SOURCES = [
-    ("orgs/grasdouble/repos", "grasdouble"),
-    ("users/noofreuuuh/repos", "noofreuuuh"),
+    ("orgs/grasdouble/repos", "grasdouble", "org"),
+    ("users/noofreuuuh/repos", "noofreuuuh", "user"),
 ]
 
 # Repos to skip (not meaningful for the landing page)
@@ -69,12 +69,21 @@ def to_key(display_name: str) -> str:
 
 # ── Fetch ────────────────────────────────────────────────────────────────────
 
-def fetch_repos(endpoint: str) -> list[dict]:
+def fetch_repos(endpoint: str, endpoint_type: str) -> list[dict]:
+    """Fetch all repos using gh CLI pagination."""
+    # The org endpoint accepts type=public; the user endpoint does not support type filtering
+    query_params = "per_page=100&type=public" if endpoint_type == "org" else "per_page=100"
     result = subprocess.run(
-        ["gh", "api", f"{endpoint}?per_page=100&type=public"],
+        ["gh", "api", "--paginate", f"{endpoint}?{query_params}"],
         capture_output=True, text=True, check=True,
     )
-    return json.loads(result.stdout)
+    # --paginate returns one JSON array per page concatenated; parse each separately
+    repos: list[dict] = []
+    for line in result.stdout.splitlines():
+        line = line.strip()
+        if line.startswith('['):
+            repos.extend(json.loads(line))
+    return repos
 
 
 def fetch_archived_years(owner: str, repo_names: list[str]) -> dict[str, int]:
@@ -179,9 +188,9 @@ def main():
     seen: set[str] = set()
     archived_by_owner: dict[str, list[str]] = {}
 
-    for endpoint, owner in SOURCES:
+    for endpoint, owner, endpoint_type in SOURCES:
         try:
-            repos = fetch_repos(endpoint)
+            repos = fetch_repos(endpoint, endpoint_type)
         except subprocess.CalledProcessError as e:
             print(f"Error fetching {endpoint}: {e.stderr}", file=sys.stderr)
             sys.exit(1)

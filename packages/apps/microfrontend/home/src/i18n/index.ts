@@ -5,6 +5,10 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import fr from './locales/fr.json';
 
+const syncDocumentLang = (lng: string) => {
+  document.documentElement.lang = lng.split('-')[0];
+};
+
 void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -16,6 +20,11 @@ void i18n
     fallbackLng: 'fr',
     supportedLngs: ['fr', 'en'],
     interpolation: { escapeValue: false },
+  })
+  .then(() => {
+    syncDocumentLang(i18n.language);
   });
+
+i18n.on('languageChanged', syncDocumentLang);
 
 export default i18n;

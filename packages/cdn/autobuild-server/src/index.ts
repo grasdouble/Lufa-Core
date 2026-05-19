@@ -8,14 +8,21 @@ import fs from 'fs-extra';
 
 import type { ExtractedParams, LoadLibraryResult, PackageJson } from './types.js';
 import type { ExtractParamsProps } from './utils.js';
-import { CorsError, corsOptions, getRateLimiter, ipBlockMiddleware, unblockIPsAfterTimeout } from './security.js';
+import {
+  CorsError,
+  corsOptions,
+  getClientKey,
+  getRateLimiter,
+  ipBlockMiddleware,
+  unblockIPsAfterTimeout,
+} from './security.js';
 import { extractParams, loadLibrary, sendEntry } from './utils.js';
 
-// Load env files: .env.development takes priority over .env
-// override: true ensures file values always win over shell env vars
+// Load env files: .env is the base; .env.development overrides it when present.
+// override: false ensures existing shell/CI env vars always take precedence over file values.
 const envFiles: string[] = ['.env'];
 if (fs.existsSync('.env.development')) envFiles.push('.env.development');
-dotenvxConfig({ path: envFiles, override: true });
+dotenvxConfig({ path: envFiles, override: false });
 
 const app: express.Application = express();
 // Enable trust proxy to get proper IPs behind proxies
@@ -37,13 +44,14 @@ const limiter = getRateLimiter(blockedIPs);
 // Route to unblock the IP of the user making the request
 app.get('/unblock-ip', (req: Request, res: Response): void => {
   const clientIP = req.ip ?? req.socket.remoteAddress;
+  const clientKey = clientIP ? getClientKey(clientIP) : undefined;
 
-  if (clientIP && blockedIPs.has(clientIP)) {
-    // Delete the IP from the blocked IP list
-    blockedIPs.delete(clientIP);
+  if (clientKey && blockedIPs.has(clientKey)) {
+    // Delete the key from the blocked IP list
+    blockedIPs.delete(clientKey);
 
-    // Reset the Limit races counter for this IP
-    limiter.resetKey(clientIP);
+    // Reset the rate limit counter for this key
+    limiter.resetKey(clientKey);
 
     res.status(200).json({ message: `Your IP (${clientIP}) has been unblocked and rate limits have been reset.` });
     return;

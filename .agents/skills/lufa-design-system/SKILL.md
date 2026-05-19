@@ -22,8 +22,8 @@ python3 .agents/skills/lufa-design-system/scripts/list_components.py
 ## Common substitutions
 
 | Instead of custom CSS…                               | Use DS component                           |
-| ---------------------------------------------------- | ------------------------------------------ | --- | --- | ----- |
-| `max-width` + `margin: auto`                         | `<Container size="sm                       | md  | lg  | xl">` |
+| ---------------------------------------------------- | ------------------------------------------ |
+| `max-width` + `margin: auto`                         | `<Container size="sm \| md \| lg \| xl">`  |
 | `display: flex; flex-wrap: wrap; gap: …`             | `<Cluster spacing="…">`                    |
 | `display: flex; flex-direction: column; gap: …`      | `<Stack direction="vertical" spacing="…">` |
 | `display: grid; grid-template-columns: repeat(N, …)` | `<Grid columns={N} gap="…">`               |

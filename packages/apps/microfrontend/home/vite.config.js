@@ -12,7 +12,7 @@ export default defineConfig({
       devDeps: false,
       optionalDeps: false,
       peerDeps: false,
-      except: ['clsx'],
+      except: ['clsx', 'i18next', 'react-i18next', 'i18next-browser-languagedetector'],
       nodeBuiltins: true,
     }),
   ],

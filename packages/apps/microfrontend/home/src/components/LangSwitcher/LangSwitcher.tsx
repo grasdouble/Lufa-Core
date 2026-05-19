@@ -16,6 +16,7 @@ export function LangSwitcher() {
         variant="neutral"
         size="sm"
         onClick={() => void i18n.changeLanguage('fr')}
+        aria-label="Switch language to French"
       >
         🇫🇷
       </Button>
@@ -24,6 +25,7 @@ export function LangSwitcher() {
         variant="neutral"
         size="sm"
         onClick={() => void i18n.changeLanguage('en')}
+        aria-label="Switch language to English"
       >
         🇬🇧
       </Button>

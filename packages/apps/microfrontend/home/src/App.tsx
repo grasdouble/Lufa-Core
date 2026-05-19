@@ -28,13 +28,15 @@ function App() {
       <LangSwitcher />
       <ThemeSelector />
 
-      <HeroSection />
-      <SectionDivider />
-      <SkillsSection />
-      <SectionDivider />
-      <ProjectsSection />
-      <SectionDivider />
-      <ContactSection />
+      <main>
+        <HeroSection />
+        <SectionDivider />
+        <SkillsSection />
+        <SectionDivider />
+        <ProjectsSection />
+        <SectionDivider />
+        <ContactSection />
+      </main>
       <FooterSection />
     </Box>
   );

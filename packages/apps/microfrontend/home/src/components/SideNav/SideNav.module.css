@@ -54,12 +54,16 @@
 }
 
 .side-nav-dot {
+  /* Visual dot is 8×8 px, but the hit target is enlarged via padding */
   width: 8px;
   height: 8px;
   border-radius: var(--lufa-semantic-ui-border-radius-full);
   background-color: var(--lufa-semantic-ui-border-default);
   border: none;
-  padding: 0;
+  padding: 8px;
+  /* Offset the padding so the visual position stays the same */
+  box-sizing: content-box;
+  margin: -8px;
   flex-shrink: 0;
   cursor: pointer;
   transition:

@@ -34,6 +34,12 @@ const sanitizeExportPath = (value: string) =>
     .filter(Boolean)
     .join('/');
 
+// Normalize bare "grasdouble" scope to "@grasdouble" so the GitHub registry spec is always valid
+const normalizeScope = (scope: string): string => {
+  if (scope === 'grasdouble') return '@grasdouble';
+  return scope;
+};
+
 export const extractParams = ({
   urlScope,
   urlName,
@@ -43,7 +49,8 @@ export const extractParams = ({
   CDN_DIR,
 }: ExtractParamsProps) => {
   // Sanitize the inputs
-  const scope = typeof urlScope === 'string' ? sanitizeScope(urlScope) : undefined;
+  const rawScope = typeof urlScope === 'string' ? sanitizeScope(urlScope) : undefined;
+  const scope = rawScope !== undefined ? normalizeScope(rawScope) : undefined;
   const name = typeof urlName === 'string' ? sanitizeName(urlName) : '';
   const version = typeof urlVersion === 'string' ? sanitizeVersion(urlVersion) : '';
   const cleanExportPath = typeof urlExportPath === 'string' ? sanitizeExportPath(urlExportPath) : '';
@@ -139,7 +146,7 @@ export const sendEntry = async ({ exportPath, cdnPkgPath, fullName }: SendEntryP
     console.error(`❌ [sendEntry] package.json not found at: ${pkgJsonPath}`);
     return {
       status: 500,
-      message: `package.json not found for ${escapeHtml(fullName)} at ${escapeHtml(pkgJsonPath)}`,
+      message: `package.json not found for ${escapeHtml(fullName)}`,
     };
   }
 
@@ -162,6 +169,15 @@ export const sendEntry = async ({ exportPath, cdnPkgPath, fullName }: SendEntryP
   }
 
   const outputFile = path.resolve(cdnPkgPath, entry);
+
+  // Reject entries whose resolved path escapes the package directory
+  if (!outputFile.startsWith(cdnPkgPath + path.sep) && outputFile !== cdnPkgPath) {
+    console.error(`❌ [sendEntry] path traversal detected in entry "${entry}" for ${fullName}`);
+    return {
+      status: 403,
+      message: `Forbidden: invalid entry point for ${escapeHtml(fullName)}`,
+    };
+  }
 
   if (!fs.existsSync(outputFile)) {
     console.error(`❌ [sendEntry] resolved file does not exist on disk: ${outputFile}`);
