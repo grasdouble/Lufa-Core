@@ -39,7 +39,7 @@
     ]
   },
   "dependencies": {
-    "@grasdouble/lufa_design-system": "^3.0.0",
+    "@grasdouble/lufa_design-system": "^3.0.1",
     "@grasdouble/lufa_design-system-themes": "^1.1.5",
     "import-map-overrides": "^6.1.0",
     "single-spa": "^6.0.3"

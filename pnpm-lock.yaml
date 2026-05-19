@@ -45,8 +45,8 @@ importers:
   packages/apps/microfrontend/home:
     dependencies:
       '@grasdouble/lufa_design-system':
-        specifier: ^3.0.0
-        version: 3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^3.0.1
+        version: 3.0.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -127,8 +127,8 @@ importers:
   packages/apps/microfrontend/main-container:
     dependencies:
       '@grasdouble/lufa_design-system':
-        specifier: ^3.0.0
-        version: 3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^3.0.1
+        version: 3.0.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@grasdouble/lufa_design-system-themes':
         specifier: ^1.1.5
         version: 1.1.5
@@ -761,8 +761,8 @@ packages:
   '@grasdouble/lufa_design-system-tokens@1.2.5':
     resolution: {integrity: sha512-RYGYLfgF/9wJi5pchQ+vQGnFRRlFLtArE3M5c9+RzBiSXntq2mWBWVi7EaAGf8hSe1MaGh/Sv6HyXAN2pAcKAA==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system-tokens/1.2.5/d55aa2df228a7c29765bdcc10586362c29b916bc}
 
-  '@grasdouble/lufa_design-system@3.0.0':
-    resolution: {integrity: sha512-v4yUiDGNL82g9cyO9YVMq96/fwjvLpS8WPivloR3n4tBGmm0/j2YK7FxJmB4lxYVFl0W76SdToJmQGUK+8lvYw==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system/3.0.0/ce9d236c60bf5d42dda27c8d9056929a561e4e1c}
+  '@grasdouble/lufa_design-system@3.0.1':
+    resolution: {integrity: sha512-knQSOSYhkQjK9B9jI5gBenETJoMPH48Mmzi0/fmzTqvT6ndP5R973PrD1vsvrHwiG6Z0J0yqlFxX9B/yotHeLw==, tarball: https://npm.pkg.github.com/download/@grasdouble/lufa_design-system/3.0.1/9c58e4bad0d30bdaa9b092143e83781cf20d9322}
     peerDependencies:
       react: ^19.1.0
       react-dom: ^19.1.0
@@ -3776,7 +3776,7 @@ snapshots:
 
   '@grasdouble/lufa_design-system-tokens@1.2.5': {}
 
-  '@grasdouble/lufa_design-system@3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@grasdouble/lufa_design-system@3.0.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@grasdouble/lufa_design-system-tokens': 1.2.5
       '@headlessui/react': 2.2.10(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
