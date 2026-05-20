@@ -1,0 +1,59 @@
+/* Hero section — full-screen with gradient background */
+.section-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background: radial-gradient(
+    ellipse 100% 60% at 50% -5%,
+    var(--lufa-semantic-ui-background-subtle) 0%,
+    var(--lufa-semantic-ui-background-page) 100%
+  );
+}
+
+.hero-logo {
+  width: 10rem;
+  height: 10rem;
+}
+
+.hero-link {
+  color: var(--lufa-semantic-ui-text-primary);
+  text-decoration: none;
+  border-bottom: var(--lufa-semantic-ui-border-width-thin) solid var(--lufa-semantic-ui-border-default);
+  transition: border-color var(--lufa-semantic-ui-transition-duration-fast)
+    var(--lufa-semantic-ui-transition-timing-function-default);
+}
+
+.hero-link:hover {
+  border-color: var(--lufa-semantic-ui-text-primary);
+}
+
+/* < md / 768px — aligns with --lufa-primitive-breakpoint-md, see DS issue #10 */
+@media (max-width: 767px) {
+  .section-hero {
+    padding: 3rem 1.25rem;
+    justify-content: flex-start;
+    padding-top: 5rem;
+  }
+
+  .hero-logo {
+    width: 7rem;
+    height: 7rem;
+  }
+}
+
+/* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */
+@media (max-width: 639px) {
+  .section-hero {
+    padding: 4.5rem 1rem 2.5rem;
+    justify-content: flex-start;
+  }
+
+  .hero-logo {
+    width: 6rem;
+    height: 6rem;
+  }
+}

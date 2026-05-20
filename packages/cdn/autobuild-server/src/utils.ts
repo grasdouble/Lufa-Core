@@ -2,7 +2,6 @@ import path from 'path';
 import escapeHtml from 'escape-html';
 import fs from 'fs-extra';
 import pacote from 'pacote';
-import sanitize from 'sanitize-filename';
 
 import type { PackageJson } from './types.js';
 
@@ -24,6 +23,23 @@ export type ExtractParamsProps = {
   TMP_DIR: string;
   CDN_DIR: string;
 };
+
+const sanitizeScope = (value: string) => value.replace(/[^@a-zA-Z0-9._-]/g, '');
+const sanitizeName = (value: string) => value.replace(/[^a-zA-Z0-9._-]/g, '');
+const sanitizeVersion = (value: string) => value.replace(/[^a-zA-Z0-9._-]/g, '');
+const sanitizeExportPath = (value: string) =>
+  value
+    .split('/')
+    .map((segment) => segment.replace(/[^a-zA-Z0-9._-]/g, ''))
+    .filter(Boolean)
+    .join('/');
+
+// Normalize bare "grasdouble" scope to "@grasdouble" so the GitHub registry spec is always valid
+const normalizeScope = (scope: string): string => {
+  if (scope === 'grasdouble') return '@grasdouble';
+  return scope;
+};
+
 export const extractParams = ({
   urlScope,
   urlName,
@@ -33,10 +49,12 @@ export const extractParams = ({
   CDN_DIR,
 }: ExtractParamsProps) => {
   // Sanitize the inputs
-  const scope = typeof urlScope === 'string' ? sanitize(urlScope) : undefined;
-  const name = typeof urlName === 'string' ? sanitize(urlName) : '';
-  const version = typeof urlVersion === 'string' ? sanitize(urlVersion) : '';
-  const exportPath = typeof urlExportPath === 'string' ? `./${sanitize(urlExportPath)}` : '.';
+  const rawScope = typeof urlScope === 'string' ? sanitizeScope(urlScope) : undefined;
+  const scope = rawScope !== undefined ? normalizeScope(rawScope) : undefined;
+  const name = typeof urlName === 'string' ? sanitizeName(urlName) : '';
+  const version = typeof urlVersion === 'string' ? sanitizeVersion(urlVersion) : '';
+  const cleanExportPath = typeof urlExportPath === 'string' ? sanitizeExportPath(urlExportPath) : '';
+  const exportPath = cleanExportPath ? `./${cleanExportPath}` : '.';
 
   const fullName = `${getPackageName(scope, name)}@${version}`;
   const dirName = makePackageDirName(getPackageName(scope, name), version);
@@ -122,22 +140,52 @@ export type SendEntryProps = {
   fullName: string;
 };
 export const sendEntry = async ({ exportPath, cdnPkgPath, fullName }: SendEntryProps) => {
-  const pkgJson: PackageJson = await fs.readJson(path.join(cdnPkgPath, 'package.json'));
+  const pkgJsonPath = path.join(cdnPkgPath, 'package.json');
 
-  const entry =
-    (typeof pkgJson.exports?.[exportPath] === 'object' && pkgJson.exports?.[exportPath]?.import) ??
-    (typeof pkgJson.exports?.[exportPath] === 'object' && pkgJson.exports?.[exportPath]?.default) ??
-    pkgJson.exports?.[exportPath] ??
-    pkgJson.module ??
-    pkgJson.main;
-  if (typeof entry !== 'string') {
+  if (!fs.existsSync(pkgJsonPath)) {
+    console.error(`❌ [sendEntry] package.json not found at: ${pkgJsonPath}`);
     return {
       status: 500,
-      message: `The entry point for ${escapeHtml(fullName)} is not valid.`,
+      message: `package.json not found for ${escapeHtml(fullName)}`,
     };
   }
+
+  const pkgJson: PackageJson = await fs.readJson(pkgJsonPath);
+
+  const exportEntry = pkgJson.exports?.[exportPath];
+  const resolvedExportEntry =
+    typeof exportEntry === 'object' && exportEntry !== null ? (exportEntry.import ?? exportEntry.default) : exportEntry;
+
+  const entry = resolvedExportEntry ?? pkgJson.module ?? pkgJson.main;
+
+  if (typeof entry !== 'string') {
+    console.error(
+      `❌ [sendEntry] no valid entry for "${exportPath}" in ${fullName}. exports=${JSON.stringify(pkgJson.exports)}, module=${pkgJson.module}, main=${pkgJson.main}`
+    );
+    return {
+      status: 500,
+      message: `No valid entry point for export "${escapeHtml(exportPath)}" in ${escapeHtml(fullName)}. Check the package exports field.`,
+    };
+  }
+
   const outputFile = path.resolve(cdnPkgPath, entry);
-  console.log(`Entry point path found: ${outputFile}`);
+
+  // Reject entries whose resolved path escapes the package directory
+  if (!outputFile.startsWith(cdnPkgPath + path.sep) && outputFile !== cdnPkgPath) {
+    console.error(`❌ [sendEntry] path traversal detected in entry "${entry}" for ${fullName}`);
+    return {
+      status: 403,
+      message: `Forbidden: invalid entry point for ${escapeHtml(fullName)}`,
+    };
+  }
+
+  if (!fs.existsSync(outputFile)) {
+    console.error(`❌ [sendEntry] resolved file does not exist on disk: ${outputFile}`);
+    return {
+      status: 500,
+      message: `Entry file not found on disk for ${escapeHtml(fullName)}: ${escapeHtml(entry)}`,
+    };
+  }
 
   return { status: 200, outputFile };
 };

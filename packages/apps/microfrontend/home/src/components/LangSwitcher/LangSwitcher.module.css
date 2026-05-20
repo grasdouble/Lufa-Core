@@ -1,0 +1,16 @@
+.lang-switcher {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 100;
+  display: flex;
+  gap: var(--lufa-semantic-ui-spacing-compact);
+}
+
+/* < sm / 640px — aligns with --lufa-primitive-breakpoint-sm, see DS issue #10 */
+@media (max-width: 639px) {
+  .lang-switcher {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}

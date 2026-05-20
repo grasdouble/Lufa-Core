@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "subtitle": "Frontend Developer",
+    "nav": "Home"
+  },
+  "about": {
+    "title": "About",
+    "p1": "Passionate frontend developer with a strong focus on JavaScript, TypeScript and React. I care about building clean, efficient, well-tested software that delivers real value.",
+    "p2": "Outside of code, I enjoy spending quality time with my family, swimming, playing squash, reading manga and diving into video games.",
+    "p3_prefix": "My work is split between two GitHub accounts:",
+    "p3_middle": "for my personal projects and",
+    "p3_suffix": "for my professional contributions at"
+  },
+  "skills": {
+    "title": "Skills"
+  },
+  "projects": {
+    "title": "Projects",
+    "archived": "Archived",
+    "lufa-design-system": "A React design system with semantic tokens, supporting dark/light mode. Includes interactive Storybook documentation.",
+    "lufa-lab": "Experimental playground for new ideas in the Lufa workspace.",
+    "bmad-manager": "BMad agent manager to automate development workflows.",
+    "lufa": "The open-source monorepo hosting the Lufa workspace: microfrontends, Vite plugins and shared configs.",
+    "dotfiles": "Personal configuration: terminal, aliases and development environment.",
+    "leetcode": "My LeetCode solutions — algorithmic practice in JavaScript.",
+    "github-package-visualizer": "GitHub package dependency visualizer.",
+    "git-dashboard": "Dashboard for visualizing Git repositories and activity.",
+    "spark-ai-app-generator": "AI application generator — Spark experiment in TypeScript.",
+    "spark-token-dependency-vis": "Design token dependency visualizer — Spark experiment in TypeScript.",
+    "spark-pixel-art-converter": "Pixel art converter — Spark experiment in TypeScript.",
+    "poc-phaser": "Proof of concept game in Vue.js with the Phaser engine.",
+    "poc-bot-discord": "Experimental Discord bot (Grabot) — JavaScript proof of concept.",
+    "dashboard": "Dashboard for managing GitHub, Jira and other tools from a single interface.",
+    "annuaire-musees": "Museum directory (PHP backend + JavaScript frontend) — one of my first web projects.",
+    "model-passportjs-init": "SailJS template with PassportJS for authentication — MVC architecture reference."
+  },
+  "contact": {
+    "title": "Contact",
+    "tagline": "An opportunity, a collaboration, or just want to chat?",
+    "linkedin": "Contact me on LinkedIn",
+    "githubPersonal": "Personal GitHub",
+    "githubPro": "Professional GitHub"
+  },
+  "footer": {
+    "built": "Built with React, TypeScript & Lufa Design System"
+  }
+}

@@ -21,9 +21,9 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --outfile=dist/index.mjs --platform=node --format=esm --external:esbuild",
-    "build:cjs": "esbuild src/index.ts --bundle --outfile=dist/index.cjs --platform=node --external:esbuild",
-    "dev": "dotenvx run --env-file=.env.development --env-file=.env -- nodemon --exec tsx src/index.ts",
+    "build": "esbuild src/index.ts --bundle --outfile=dist/index.mjs --platform=node --format=esm --external:esbuild --external:node-gyp --external:node-gyp/*",
+    "build:cjs": "esbuild src/index.ts --bundle --outfile=dist/index.cjs --platform=node --external:esbuild --external:node-gyp --external:node-gyp/*",
+    "dev": "dotenvx run --env-file=.env --env-file=.env.development -- nodemon --exec tsx src/index.ts",
     "lint": "eslint",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
@@ -52,8 +52,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "fs-extra": "^11.3.5",
-    "pacote": "^21.5.0",
-    "sanitize-filename": "^1.6.4"
+    "pacote": "^21.5.0"
   },
   "devDependencies": {
     "@grasdouble/lufa_config_eslint": "workspace:^",

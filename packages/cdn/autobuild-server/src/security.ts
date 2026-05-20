@@ -1,9 +1,13 @@
 import type { CorsOptions } from 'cors';
 import type { NextFunction, Request, Response } from 'express';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 // List of allowed domains
-export const whitelist: string[] = ['https://sebastien-lemouillour.fr', 'https://www.sebastien-lemouillour.fr'];
+export const whitelist: string[] = [
+  'https://sebastien-lemouillour.fr',
+  'https://www.sebastien-lemouillour.fr',
+  'http://localhost:5173',
+];
 
 // Define a custom error for stricter typing
 export class CorsError extends Error {
@@ -16,10 +20,13 @@ export class CorsError extends Error {
 // CORS configuration options
 export const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void => {
+    const isLocalhostOrigin = /^http:\/\/localhost(?::\d+)?$/.test(origin ?? '');
+
     if (!origin) {
-      // Deny requests without an origin
-      callback(new CorsError('Access denied: Missing Origin header'));
-    } else if (whitelist.includes(origin)) {
+      // Some asset fetches (depending on browser/request mode) may not include Origin.
+      // Allowing them keeps public CDN asset loading functional.
+      callback(null, true);
+    } else if (whitelist.includes(origin) || isLocalhostOrigin) {
       // Allow access if the origin is in the whitelist
       callback(null, true);
     } else {
@@ -35,8 +42,10 @@ export const corsOptions: CorsOptions = {
 export const ipBlockMiddleware =
   (blockedIPs: Set<string>) =>
   (req: Request, res: Response, next: NextFunction): void => {
-    const clientIP = req.headers['x-forwarded-for']?.toString() ?? req.ip ?? 'unknown';
-    if (blockedIPs.has(clientIP)) {
+    // Use req.ip which is already resolved from x-forwarded-for when trust proxy is enabled,
+    // ensuring the same key as the rate limiter's keyGenerator.
+    const clientIP = req.ip ?? 'unknown';
+    if (blockedIPs.has(getClientKey(clientIP))) {
       res.status(403).json({ error: `Your IP ${clientIP} is blocked due to excessive requests.` });
       return;
     }
@@ -44,16 +53,20 @@ export const ipBlockMiddleware =
   };
 
 // Rate limiter configuration
+
+// Shared key generator so the unblock handler uses the same key as the limiter
+export const getClientKey = (ip: string) => ipKeyGenerator(ip);
+
 export const getRateLimiter = (blockedIPs: Set<string>) =>
   rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 1000, // Allow 1000 requests per 10 minutes
-    keyGenerator: (req: Request) => req.ip ?? req.socket.remoteAddress ?? 'unknown',
+    keyGenerator: (req: Request) => ipKeyGenerator(req.ip ?? req.socket.remoteAddress ?? 'unknown'),
     handler: (req: Request, res: Response) => {
       const clientIP = req.ip ?? req.socket.remoteAddress;
 
       if (clientIP) {
-        blockedIPs.add(clientIP); // Block the IP after exceeding the rate limit
+        blockedIPs.add(getClientKey(clientIP)); // Block using the normalized key
       }
 
       res.status(429).json({ error: `Too many requests. Your IP ${clientIP} has been temporarily blocked.` });

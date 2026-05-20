@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "subtitle": "Développeur Frontend",
+    "nav": "Accueil"
+  },
+  "about": {
+    "title": "À propos",
+    "p1": "Développeur frontend passionné, avec un fort focus sur JavaScript, TypeScript et React. Je prends soin de construire des logiciels propres, efficaces et bien testés, qui délivrent de la vraie valeur.",
+    "p2": "En dehors du code, j'aime passer du temps de qualité avec ma famille, nager, jouer au squash, lire des mangas et m'immerger dans les jeux vidéo.",
+    "p3_prefix": "Mon travail est réparti entre deux comptes GitHub :",
+    "p3_middle": "pour mes projets personnels et",
+    "p3_suffix": "pour mes contributions professionnelles chez"
+  },
+  "skills": {
+    "title": "Compétences"
+  },
+  "projects": {
+    "title": "Projets",
+    "archived": "Archivé",
+    "lufa-design-system": "Un design system React avec tokens sémantiques, compatible dark/light mode. Inclut une documentation Storybook interactive.",
+    "lufa-lab": "Terrain d'expérimentation pour les nouvelles idées du workspace Lufa.",
+    "bmad-manager": "Gestionnaire d'agents BMad pour automatiser les workflows de développement.",
+    "lufa": "Le monorepo open-source qui héberge le workspace Lufa : microfrontends, plugins Vite et configs partagées.",
+    "dotfiles": "Configuration personnelle : terminal, aliases et environnement de développement.",
+    "leetcode": "Mes solutions aux exercices LeetCode — pratique algorithmique en JavaScript.",
+    "github-package-visualizer": "Visualisateur de dépendances entre packages GitHub.",
+    "git-dashboard": "Dashboard de visualisation des dépôts et activités Git.",
+    "spark-ai-app-generator": "Générateur d'applications IA — expérimentation Spark en TypeScript.",
+    "spark-token-dependency-vis": "Visualisateur de dépendances de design tokens — expérimentation Spark en TypeScript.",
+    "spark-pixel-art-converter": "Convertisseur de pixel art — expérimentation Spark en TypeScript.",
+    "poc-phaser": "Proof of concept jeu en Vue.js avec le moteur Phaser.",
+    "poc-bot-discord": "Bot Discord expérimental (Grabot) — proof of concept JavaScript.",
+    "dashboard": "Dashboard pour gérer GitHub, Jira et d'autres outils depuis une interface unique.",
+    "annuaire-musees": "Annuaire de musées (backend PHP + frontend JavaScript) — l'un de mes premiers projets web.",
+    "model-passportjs-init": "Template SailJS avec PassportJS pour l'authentification — référence d'architecture MVC."
+  },
+  "contact": {
+    "title": "Contact",
+    "tagline": "Une opportunité, une collaboration, ou juste envie d'échanger ?",
+    "linkedin": "Me contacter sur LinkedIn",
+    "githubPersonal": "GitHub perso",
+    "githubPro": "GitHub pro"
+  },
+  "footer": {
+    "built": "Construit avec React, TypeScript & Lufa Design System"
+  }
+}

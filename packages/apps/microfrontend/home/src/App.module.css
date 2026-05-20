@@ -1,56 +1,7 @@
-/* Lufa Microfrontend Home - Using Lufa Design Tokens */
+/* Lufa Microfrontend Home — root wrapper */
 
 .lufa-home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #101010;
-  margin: 0;
-  color: var(--lufa-semantic-ui-background-on-primary);
-}
-
-.centered-image {
-  width: 18rem;
-  height: 18rem;
-  margin-bottom: var(--lufa-semantic-ui-spacing-comfortable);
-}
-
-.centered-message {
-  text-align: center;
-  font-size: var(--lufa-primitive-typography-font-size-2xl);
-  font-weight: var(--lufa-primitive-typography-font-weight-bold);
-  margin-bottom: var(--lufa-semantic-ui-spacing-comfortable);
-}
-
-.link {
-  text-decoration: none;
-  font-size: var(--lufa-primitive-typography-font-size-lg);
-  font-weight: var(--lufa-primitive-typography-font-weight-semibold);
-  padding: var(--lufa-primitive-spacing-12) var(--lufa-semantic-ui-spacing-comfortable);
-  border-radius: var(--lufa-primitive-radius-scale-md);
-  color: var(--lufa-semantic-ui-background-on-primary);
-  opacity: 0.8;
-  transition: var(--lufa-semantic-ui-transition-fast);
-}
-
-.storybook {
-  background-color: #db2777; /* pink-600 - could use semantic color token */
-}
-
-.design {
-  background-color: #16a34a; /* green-600 - could use semantic color token */
-}
-
-.github {
-  background-color: #9333ea; /* purple-600 - could use semantic color token */
-}
-
-.linkedin {
-  background-color: #3b82f6; /* blue-500 - could use semantic color token */
-}
-
-.link:hover {
-  transform: scale(1.05);
-  opacity: 1;
+  min-height: 100vh;
+  background-color: var(--lufa-semantic-ui-background-page);
+  color: var(--lufa-semantic-ui-text-primary);
 }

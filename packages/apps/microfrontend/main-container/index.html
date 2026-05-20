@@ -1,20 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="lufa" data-mode="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lufa Micro-Frontend</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.sebastien-lemouillour.fr/@grasdouble/lufa_design-system@%LUFA_DS_VERSION%/style.css"
+    />
   </head>
   <body>
     <import-map-overrides-full show-when-local-storage="devtools"></import-map-overrides-full>
     <div id="lufa-container"></div>
     <script type="module">
-      const isDevMode = localStorage.getItem('devtools') === 'true';
+      const isLocalMapMode = import.meta.env.DEV || import.meta.env.MODE === 'preview';
 
-      if (isDevMode) {
+      if (isLocalMapMode) {
+        localStorage.setItem('devtools', 'true');
         import('/src/main.js').catch((err) => {
-          console.error('Failed to load main.js in dev mode:', err);
+          console.error('Failed to load main.js in local import-map mode:', err);
         });
       } else {
         fetch('https://cdn.sebastien-lemouillour.fr/importMap.json')

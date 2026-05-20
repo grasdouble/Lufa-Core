@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@grasdouble/lufa_microfrontend_home": "http://localhost:4101/home.mjs"
+  }
+}
