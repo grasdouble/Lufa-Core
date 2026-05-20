@@ -1,5 +1,13 @@
 # @grasdouble/lufa_microfrontend_main-container
 
+## 0.7.0
+
+### Minor Changes
+
+- cdddab9: Load all DS theme CSS files at the container level.
+  - Import all 10 `@grasdouble/lufa_design-system-themes` theme CSS files (ocean, forest, matrix, cyberpunk, sunset, nordic, volcano, coffee, volt, steampunk) alongside the DS reset
+  - Add `@grasdouble/lufa_design-system-themes` as a dependency
+
 ## 0.6.18
 
 ### Patch Changes
