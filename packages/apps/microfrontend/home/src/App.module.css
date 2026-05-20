@@ -1,7 +1,0 @@
-/* Lufa Microfrontend Home — root wrapper */
-
-.lufa-home {
-  min-height: 100vh;
-  background-color: var(--lufa-semantic-ui-background-page);
-  color: var(--lufa-semantic-ui-text-primary);
-}
