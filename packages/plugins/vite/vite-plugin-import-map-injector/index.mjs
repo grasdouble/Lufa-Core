@@ -64,6 +64,9 @@ export default function importMapPlugin({
         imports: {
           ...(isProdBuild ? prodImportMapContent.imports || {} : {}),
           ...(isDev ? devImportMapContent.imports || {} : {}),
+          // Preview = prod entries as a base, overridden by preview-specific entries
+          // (e.g. point the home MFE to localhost while keeping CDN URLs for the DS)
+          ...(isPreviewBuild ? prodImportMapContent.imports || {} : {}),
           ...(isPreviewBuild ? previewImportMapContent.imports || {} : {}),
         },
       };
@@ -71,7 +74,7 @@ export default function importMapPlugin({
       // overridable-importmap is a custom attribute used by single-spa and import-map-overrides
       // to allow the import map to be overridden at runtime
       // see https://github.com/single-spa/import-map-overrides/blob/main/docs/configuration.md#client-side-single-map
-      // The choise has been made to use standard importmap for the external dependencies like that it will not be possible to override them
+      // The choice has been made to use standard importmap for the external dependencies like that it will not be possible to override them
       const importMapScripts = [`<script type="importmap">${JSON.stringify(extImportMapContent, null, 2)}</script>`];
 
       if (isDev || isPreviewBuild) {

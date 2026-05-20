@@ -52,8 +52,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "fs-extra": "^11.3.5",
-    "pacote": "^21.5.0",
-    "sanitize-filename": "^1.6.4"
+    "pacote": "^21.5.0"
   },
   "devDependencies": {
     "@grasdouble/lufa_config_eslint": "workspace:^",

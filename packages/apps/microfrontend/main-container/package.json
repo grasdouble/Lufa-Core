@@ -21,6 +21,7 @@
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "preview": "vite build --mode preview && vite preview --mode preview",
+    "sync:importmaps": "node scripts/sync-import-maps.mjs --write",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "lint-staged": {
