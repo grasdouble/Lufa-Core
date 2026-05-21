@@ -1,23 +1,31 @@
 # @grasdouble/cdn_autobuild-server
 
-Auto-build server for serving static assets and microfrontends from the Lufa CDN infrastructure.
+> Self-fed CDN — fetches npm packages on demand and serves their built assets directly.
 
 ## Overview
 
-This server automatically builds and serves microfrontend bundles on-demand, enabling:
+`cdn_autobuild-server` is an Express-based HTTP server that acts as a CDN proxy for npm packages. Given a package name and version in the URL, it:
 
-- Dynamic microfrontend loading
-- Version management and caching
-- Import map generation
-- Static asset serving with proper headers
+1. Downloads the package from the GitHub Package Registry via `pacote`
+2. Caches the result locally on disk
+3. Serves the requested export path directly to the client
+
+This enables micro-frontends and shared libraries to be loaded at runtime without a dedicated build pipeline.
 
 ## Features
 
-- **On-demand building** - Build microfrontends as they are requested
-- **Caching** - Intelligent caching to avoid redundant builds
-- **Import maps** - Generate and serve import maps for shared dependencies
-- **CORS handling** - Proper CORS headers for cross-origin requests
-- **Health checks** - Monitoring endpoints for deployment
+- **On-demand fetching** — packages are downloaded only when first requested
+- **Disk caching** — subsequent requests are served instantly from the local cache
+- **Scoped package support** — supports both `@scope/name` and plain `name` formats
+- **Input sanitization** — all URL parameters are sanitized before use
+- **CORS** — configurable allowlist for accepted origins
+- **Rate limiting** — built-in IP-based rate limiting with an unblock endpoint
+- **ESM + CJS** — ships both `dist/index.mjs` and `dist/index.cjs`
+
+## Requirements
+
+- Node.js >= 18
+- A valid `GITHUB_TOKEN` environment variable with read access to the GitHub Package Registry
 
 ## Installation
 
@@ -25,41 +33,77 @@ This server automatically builds and serves microfrontend bundles on-demand, ena
 pnpm add @grasdouble/cdn_autobuild-server
 ```
 
-## Usage
+## Scripts
+
+Run from the package directory:
 
 ```bash
-# Development mode
-pnpm cdn:autobuild-server:dev
+# Development (hot-reload via nodemon + tsx)
+pnpm dev
 
-# Build (ESM + CJS)
-pnpm cdn:autobuild-server:build
+# Build ESM bundle
+pnpm build
 
-# Production
-pnpm cdn:autobuild-server:preview
+# Build CJS bundle
+pnpm build:cjs
+
+# Production preview (uses .env.production)
+pnpm preview
+
+# Lint
+pnpm lint
+
+# Format (check / write)
+pnpm prettier:check
+pnpm prettier:write
+
+# Type check
+pnpm typecheck
 ```
 
 ## Configuration
 
-Configuration is managed via environment variables:
+All configuration is done via environment variables. Create a `.env` file at the package root:
 
-```bash
-PORT=3000
-BUILD_CACHE_DIR=/tmp/cdn-cache
-MAX_CACHE_AGE=3600
-```
+| Variable       | Required | Default                 | Description                                |
+| -------------- | -------- | ----------------------- | ------------------------------------------ |
+| `GITHUB_TOKEN` | ✅       | —                       | GitHub PAT with `read:packages` scope      |
+| `PORT`         | ❌       | `3000`                  | HTTP port the server listens on            |
+| `TMP_DIR`      | ❌       | `<os.tmpdir()>/tmp_cdn` | Directory used while downloading packages  |
+| `CDN_DIR`      | ❌       | `<os.tmpdir()>/cdn`     | Directory where cached packages are stored |
 
 ## API
 
-- `GET /health` - Health check endpoint
-- `GET /assets/:name/:version` - Serve built assets
-- `GET /import-maps` - Generate import maps
+### Serve a package export
 
-## Development
-
-```bash
-# Lint
-pnpm cdn:autobuild-server:lint
-
-# Format
-pnpm cdn:autobuild-server:prettier
 ```
+GET /{:scope}/:name@:version{/:exportPath}
+```
+
+| Segment       | Required | Example                         |
+| ------------- | -------- | ------------------------------- |
+| `:scope`      | ❌       | `grasdouble` or `@grasdouble`   |
+| `:name`       | ✅       | `lufa_config_eslint`            |
+| `:version`    | ✅       | `0.1.8`                         |
+| `:exportPath` | ❌       | `react` → resolves to `./react` |
+
+**Examples:**
+
+```
+GET /grasdouble/lufa_config_eslint@0.1.8
+GET /grasdouble/lufa_config_eslint@0.1.8/react
+```
+
+### Unblock your IP
+
+```
+GET /unblock-ip
+```
+
+Removes the caller's IP from the rate-limit blocklist and resets their counter.
+
+## Security
+
+- **CORS allowlist** — only origins declared in `security.ts` are allowed. Requests without an `Origin` header are permitted (asset fetches).
+- **Rate limiting** — excessive requests result in a temporary IP block.
+- **Input sanitization** — scope, name, version, and export path segments are sanitized with strict regex patterns before any file-system or registry operation.

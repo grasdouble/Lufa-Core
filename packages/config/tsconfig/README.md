@@ -1,15 +1,17 @@
 # @grasdouble/lufa_config_tsconfig
 
-Shared TypeScript configurations for Lufa monorepo packages. Provides consistent TypeScript settings across all projects.
+> Shared TypeScript configurations for the Lufa monorepo.
 
 ## Overview
 
-This package provides reusable TypeScript configurations for different project types:
+This package ships four `tsconfig` presets suited to different project types. All presets extend a strict `base.json` and can be further customized locally.
 
-- **base.json** - Base configuration for all projects
-- **node.json** - Node.js specific configuration
-- **react-library.json** - React library configuration
-- **react-app.json** - React application configuration
+| File                 | Target             | Module / Resolution              |
+| -------------------- | ------------------ | -------------------------------- |
+| `base.json`          | All projects       | ESNext / bundler                 |
+| `node.json`          | Node.js servers    | NodeNext / nodenext              |
+| `react-app.json`     | React applications | ESNext / bundler + JSX           |
+| `react-library.json` | React libraries    | ESNext / bundler + JSX + `.d.ts` |
 
 ## Installation
 
@@ -19,10 +21,9 @@ pnpm add -D @grasdouble/lufa_config_tsconfig
 
 ## Usage
 
-### Base Configuration
+### Base (generic TypeScript project)
 
 ```json
-// tsconfig.json
 {
   "extends": "@grasdouble/lufa_config_tsconfig/base.json",
   "compilerOptions": {
@@ -32,50 +33,66 @@ pnpm add -D @grasdouble/lufa_config_tsconfig
 }
 ```
 
-### Node.js Project
+### Node.js project
 
 ```json
-// tsconfig.json
 {
   "extends": "@grasdouble/lufa_config_tsconfig/node.json",
   "compilerOptions": {
     "outDir": "./dist"
-  }
+  },
+  "include": ["src"]
 }
 ```
 
-### React Library
+### React application
 
 ```json
-// tsconfig.json
+{
+  "extends": "@grasdouble/lufa_config_tsconfig/react-app.json",
+  "include": ["src"]
+}
+```
+
+### React library (with declaration files)
+
+```json
 {
   "extends": "@grasdouble/lufa_config_tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "./dist"
-  }
+  },
+  "include": ["src"]
 }
 ```
 
-### React Application
+## Base compiler options
 
-```json
-// tsconfig.json
-{
-  "extends": "@grasdouble/lufa_config_tsconfig/react-app.json"
-}
-```
+These options are set in `base.json` and inherited by all presets:
 
-## Features
+| Option                         | Value     |
+| ------------------------------ | --------- |
+| `strict`                       | `true`    |
+| `noImplicitAny`                | `true`    |
+| `strictNullChecks`             | `true`    |
+| `strictFunctionTypes`          | `true`    |
+| `strictPropertyInitialization` | `true`    |
+| `alwaysStrict`                 | `true`    |
+| `isolatedModules`              | `true`    |
+| `esModuleInterop`              | `true`    |
+| `resolveJsonModule`            | `true`    |
+| `skipLibCheck`                 | `true`    |
+| `declaration`                  | `true`    |
+| `declarationMap`               | `true`    |
+| `sourceMap`                    | `true`    |
+| `module`                       | `ESNext`  |
+| `moduleResolution`             | `bundler` |
 
-- **Strict mode enabled** - Catch more errors at compile time
-- **Path mapping support** - Simplified imports with `@/` prefix
-- **Modern target** - ES2022+ features
-- **JSX support** - React JSX transformation
-- **Declaration files** - Generate `.d.ts` files for libraries
+> ⚠️ Because `declaration: true` and `sourceMap: true` are set in the base, **never run bare `tsc`** in source folders — it will emit `.js`, `.d.ts`, and `.map` files next to your source files. Always use `--noEmit` or the `pnpm typecheck` script.
 
 ## Customization
 
-Override settings in your local `tsconfig.json`:
+Local overrides go in your project's `tsconfig.json`:
 
 ```json
 {
@@ -91,5 +108,5 @@ Override settings in your local `tsconfig.json`:
 
 ## Related
 
-- [@grasdouble/lufa_config_eslint](../eslint/) - ESLint configuration
-- [@grasdouble/lufa_config_prettier](../prettier/) - Prettier configuration
+- [`@grasdouble/lufa_config_eslint`](../eslint/) — ESLint configuration
+- [`@grasdouble/lufa_config_prettier`](../prettier/) — Prettier configuration
