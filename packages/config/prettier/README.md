@@ -1,10 +1,14 @@
 # @grasdouble/lufa_config_prettier
 
-Shared Prettier configuration for Lufa monorepo packages. Ensures consistent code formatting across all projects.
+> Shared Prettier configuration for the Lufa monorepo.
 
 ## Overview
 
-This package provides a standardized Prettier configuration used throughout the Lufa monorepo.
+This package provides a single, opinionated [Prettier](https://prettier.io/) configuration shared across all Lufa projects. It includes automatic import sorting via [`@ianvs/prettier-plugin-sort-imports`](https://github.com/IanVs/prettier-plugin-sort-imports).
+
+## Requirements
+
+- Prettier >= 3.7 (peer dependency)
 
 ## Installation
 
@@ -14,55 +18,64 @@ pnpm add -D @grasdouble/lufa_config_prettier
 
 ## Usage
 
-### Import in `prettier.config.mjs`
-
 ```js
+// prettier.config.mjs
 import prettierConfig from '@grasdouble/lufa_config_prettier';
 
 export default prettierConfig;
 ```
 
-### Or extend with custom options
+Extend with project-specific overrides:
 
 ```js
+// prettier.config.mjs
 import prettierConfig from '@grasdouble/lufa_config_prettier';
 
 export default {
   ...prettierConfig,
-  printWidth: 100, // Override default
+  printWidth: 100,
 };
 ```
 
-## Configuration
+## Default settings
 
-Default settings:
+| Option                       | Value       |
+| ---------------------------- | ----------- |
+| `printWidth`                 | `120`       |
+| `tabWidth`                   | `2`         |
+| `useTabs`                    | `false`     |
+| `semi`                       | `true`      |
+| `singleQuote`                | `true`      |
+| `quoteProps`                 | `as-needed` |
+| `trailingComma`              | `es5`       |
+| `bracketSpacing`             | `true`      |
+| `bracketSameLine`            | `false`     |
+| `arrowParens`                | `always`    |
+| `proseWrap`                  | `preserve`  |
+| `htmlWhitespaceSensitivity`  | `css`       |
+| `endOfLine`                  | `lf`        |
+| `embeddedLanguageFormatting` | `auto`      |
 
-- **printWidth**: 80
-- **tabWidth**: 2
-- **useTabs**: false
-- **semi**: true
-- **singleQuote**: true
-- **trailingComma**: 'es5'
-- **arrowParens**: 'always'
+## Import order
 
-## Scripts
+Imports are automatically sorted in the following order:
 
-Add to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  }
-}
-```
+1. React types → `react` / `react-dom`
+2. `react` and `react-dom`
+3. Other type imports
+4. Third-party modules
+5. _(empty line)_
+6. Internal monorepo types (`@grasdouble/*`)
+7. Internal monorepo packages (`@grasdouble/*`)
+8. _(empty line)_
+9. Relative type imports
+10. Relative imports
 
 ## IDE Integration
 
 ### VS Code
 
-Install the [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and enable format on save:
+Install the [Prettier – Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension and add to `.vscode/settings.json`:
 
 ```json
 {
@@ -73,5 +86,5 @@ Install the [Prettier extension](https://marketplace.visualstudio.com/items?item
 
 ## Related
 
-- [@grasdouble/lufa_config_eslint](../eslint/) - ESLint configuration
-- [@grasdouble/lufa_config_tsconfig](../tsconfig/) - TypeScript configuration
+- [`@grasdouble/lufa_config_eslint`](../eslint/) — ESLint configuration
+- [`@grasdouble/lufa_config_tsconfig`](../tsconfig/) — TypeScript configuration
