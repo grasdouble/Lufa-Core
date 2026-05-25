@@ -9,8 +9,9 @@
  *   <!-- END:AGENTS.shared -->
  *
  * Usage:
- *   pnpm sync:agents          (via "sync:agents": "lufa-agents-sync" in package.json)
+ *   pnpm sync:agents                          (via "sync:agents": "lufa-agents-sync" in package.json)
  *   pnpm dlx @grasdouble/lufa_config_agents
+ *   lufa-agents-sync --local ../Lufa-Core     (use a local clone instead of the published version)
  */
 
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs'
@@ -65,9 +66,33 @@ export function injectSharedBlock(agentsMd, sharedContent, version) {
   return { updated, changed: updated !== agentsMd }
 }
 
+/**
+ * Parses `--local <path>` from argv.
+ * Returns the resolved absolute path if provided, or null.
+ * @returns {string|null}
+ */
+function parseLocalFlag() {
+  const args = process.argv.slice(2)
+  const idx = args.indexOf('--local')
+  if (idx === -1) return null
+  const value = args[idx + 1]
+  if (!value || value.startsWith('--')) {
+    console.error('❌ --local requires a path argument: --local <path-to-lufa-core>')
+    process.exit(1)
+  }
+  return resolve(process.cwd(), value)
+}
+
 function main() {
   const __dirname = dirname(fileURLToPath(import.meta.url))
-  const PACKAGE_DIR = resolve(__dirname, '..')
+  const localOverride = parseLocalFlag()
+
+  // When --local <path> is provided, read AGENTS.shared.md from the local clone.
+  // Otherwise fall back to the copy bundled with the installed/running package.
+  const PACKAGE_DIR = localOverride
+    ? resolve(localOverride, 'packages/config/agents')
+    : resolve(__dirname, '..')
+
   const SHARED_MD = resolve(PACKAGE_DIR, 'AGENTS.shared.md')
   const PACKAGE_JSON = resolve(PACKAGE_DIR, 'package.json')
   const AGENTS_MD = resolve(process.cwd(), 'AGENTS.md')
@@ -83,10 +108,14 @@ function main() {
 
   try {
     const raw = JSON.parse(readFileSync(PACKAGE_JSON, 'utf8')).version
-    // When running from the source repo itself, PACKAGE_DIR is not inside node_modules.
-    // Installed packages always live under node_modules/.pnpm/...
-    const isSourceRepo = !PACKAGE_DIR.includes('node_modules')
-    version = isSourceRepo ? 'local' : raw
+    if (localOverride) {
+      version = `local@${raw}`
+    } else {
+      // When running from the source repo itself, PACKAGE_DIR is not inside node_modules.
+      // Installed packages always live under node_modules/.pnpm/...
+      const isSourceRepo = !PACKAGE_DIR.includes('node_modules')
+      version = isSourceRepo ? 'local' : raw
+    }
   } catch {
     console.error(`❌ Cannot read package.json from ${PACKAGE_JSON}`)
     process.exit(1)
