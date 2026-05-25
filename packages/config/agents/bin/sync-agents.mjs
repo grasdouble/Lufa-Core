@@ -13,7 +13,7 @@
  *   pnpm dlx @grasdouble/lufa_config_agents
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, realpathSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -83,9 +83,9 @@ function main() {
 
   try {
     const raw = JSON.parse(readFileSync(PACKAGE_JSON, 'utf8')).version
-    // When running from the source repo itself, PACKAGE_DIR is inside process.cwd(),
-    // so the version number would always be stale (unreleased). Use "(local)" instead.
-    const isSourceRepo = PACKAGE_DIR.startsWith(process.cwd())
+    // When running from the source repo itself, PACKAGE_DIR is not inside node_modules.
+    // Installed packages always live under node_modules/.pnpm/...
+    const isSourceRepo = !PACKAGE_DIR.includes('node_modules')
     version = isSourceRepo ? 'local' : raw
   } catch {
     console.error(`❌ Cannot read package.json from ${PACKAGE_JSON}`)
@@ -121,7 +121,8 @@ function main() {
   console.log(`✅ AGENTS.md synced from @grasdouble/lufa_config_agents@${version}.`)
 }
 
-// Only run when invoked directly (not imported as a module)
-if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+// Only run when invoked directly (not imported as a module).
+// realpathSync is required to resolve pnpm symlinks before comparing paths.
+if (process.argv[1] && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))) {
   main()
 }

@@ -188,6 +188,19 @@ When creating a changeset file manually in `.changeset/`, always use a **descrip
 - **Always prefix the description** with a conventional commit type: `feat:`, `fix:`, `chore:`, `refactor:`, `perf:`, `docs:`, `style:`, `test:`
 - **Always verify** the changeset after creation: `rtk pnpm changeset status`
 
+**Consolidate before creating** — always check for existing changesets first:
+
+Before creating a new changeset, run:
+
+```bash
+rtk git status --short .changeset/   # untracked / staged files
+rtk git diff main --name-only -- .changeset/  # committed but not merged
+```
+
+- ✅ If an existing changeset targets the same package → **add your description to it** (same bump type or escalate)
+- ✅ Create a new file only when no existing changeset covers the package
+- ❌ Never create a second changeset for the same package in the same branch
+
 **One changeset per package** — never bundle unrelated packages in a single changeset:
 
 - ✅ One file per package when changes are independent
