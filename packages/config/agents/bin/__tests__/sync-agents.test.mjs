@@ -84,4 +84,11 @@ describe('injectSharedBlock', () => {
     const { updated } = injectSharedBlock(agentsMd, SHARED, '0.42.0')
     expect(updated).toContain('@grasdouble/lufa_config_agents@0.42.0')
   })
+
+  it('uses "local" as version label when run from the source repo', () => {
+    const agentsMd = agentsWith()
+    const { updated } = injectSharedBlock(agentsMd, SHARED, 'local')
+    expect(updated).toContain('@grasdouble/lufa_config_agents@local')
+    expect(updated).not.toMatch(/@\d+\.\d+\.\d+/)
+  })
 })

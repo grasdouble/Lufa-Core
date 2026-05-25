@@ -82,7 +82,11 @@ function main() {
   }
 
   try {
-    version = JSON.parse(readFileSync(PACKAGE_JSON, 'utf8')).version
+    const raw = JSON.parse(readFileSync(PACKAGE_JSON, 'utf8')).version
+    // When running from the source repo itself, PACKAGE_DIR is inside process.cwd(),
+    // so the version number would always be stale (unreleased). Use "(local)" instead.
+    const isSourceRepo = PACKAGE_DIR.startsWith(process.cwd())
+    version = isSourceRepo ? 'local' : raw
   } catch {
     console.error(`❌ Cannot read package.json from ${PACKAGE_JSON}`)
     process.exit(1)

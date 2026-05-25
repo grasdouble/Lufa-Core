@@ -5,7 +5,7 @@ These rules apply to every session, including after a compact or checkpoint.
 ---
 
 <!-- BEGIN:AGENTS.shared -->
-<!-- source: @grasdouble/lufa_config_agents@0.0.1 — DO NOT EDIT this block manually, run `pnpm sync:agents` -->
+<!-- source: @grasdouble/lufa_config_agents@local — DO NOT EDIT this block manually, run `pnpm sync:agents` -->
 
 # Shared Agent Rules — Grasdouble Ecosystem
 
