@@ -193,6 +193,7 @@ When creating a changeset file manually in `.changeset/`, always use a **descrip
 **Content rules:**
 
 - Always check `rtk git diff main --name-only` first to identify **all** changed packages before writing changesets (assumes `main` is the default branch — adjust if different)
+- **Every package with changed files must be covered** — do not skip secondary packages (tests, storybook, docs…); if their files changed, they need a changeset entry
 - Use `patch` for fixes/refactors, `minor` for new user-visible features, `major` for breaking changes
 - **Always prefix the description** with a conventional commit type: `feat:`, `fix:`, `chore:`, `refactor:`, `perf:`, `docs:`, `style:`, `test:`
 - **Always verify** the changeset after creation: `rtk pnpm changeset status`
@@ -210,11 +211,14 @@ rtk git diff main --name-only -- .changeset/  # committed but not merged
 - ✅ Create a new file only when no existing changeset covers the package
 - ❌ Never create a second changeset for the same package in the same branch
 
-**One changeset per package** — never bundle unrelated packages in a single changeset:
+**Atomic vs independent — choose the right grouping:**
 
-- ✅ One file per package when changes are independent
-- ✅ One shared file when a **single atomic change** touches multiple packages together
-- ❌ One file listing several packages with unrelated changes
+When multiple packages change together, decide before creating any file:
+
+- ✅ **One shared file** when all packages changed as part of the **same atomic feature or fix** (e.g. a new component + its tests + its stories)
+- ✅ **One file per package** when packages changed for **unrelated reasons** in the same branch
+- ❌ One file per package when the changes are atomic — this creates unnecessary noise and splits a single story across multiple entries
+- ❌ One shared file listing packages with unrelated changes — misleads readers about what changed and why
 
 Prefix guide:
 
