@@ -1,5 +1,5 @@
 ---
-"@grasdouble/lufa_config_agents": minor
+"@grasdouble/lufa_config_agents": major
 ---
 
 feat: add shared AI agent rules and `lufa-agents-sync` CLI for the Grasdouble ecosystem
