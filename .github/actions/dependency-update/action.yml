@@ -42,6 +42,10 @@ runs:
       shell: bash
       run: pnpm update -r
 
+    - name: Sync shared agent rules into AGENTS.md
+      shell: bash
+      run: pnpm sync:agents
+
     - name: Update outdated dependencies report
       shell: bash
       run: pnpm exec node ${{ github.action_path }}/generateOutdatedReport.js

@@ -1,12 +1,3 @@
-# ⚠️ Agent — Read this entire file before acting
-
-These rules apply to every session, including after a compact or checkpoint.
-
----
-
-<!-- BEGIN:AGENTS.shared -->
-<!-- source: @grasdouble/lufa_config_agents@local — DO NOT EDIT this block manually, run `pnpm sync:agents` -->
-
 # Shared Agent Rules — Grasdouble Ecosystem
 
 These rules apply to **every repo** in the Grasdouble ecosystem. They are maintained in `@grasdouble/lufa_config_agents` and referenced from each repo's `AGENTS.md`.
@@ -213,24 +204,3 @@ Prefix guide:
 - `docs:` — documentation only
 - `style:` — visual/CSS change with no logic change
 - `test:` — test additions or changes
-
-<!-- END:AGENTS.shared -->
-
----
-
-## Build & Validation
-
-Run these commands to validate your changes. **Always prefix with `rtk`** (e.g. `rtk pnpm all:lint`).
-
-| Scope                      | Command              | From           |
-| -------------------------- | -------------------- | -------------- |
-| All packages — lint        | `pnpm all:lint`      | root           |
-| All packages — build       | `pnpm all:build`     | root           |
-| All packages — typecheck   | `pnpm all:typecheck` | root           |
-| Single package — lint      | `pnpm lint`          | package folder |
-| Single package — build     | `pnpm build`         | package folder |
-| Single package — typecheck | `pnpm typecheck`     | package folder |
-
-**On failure:** Stop. Fix the error. Re-run. Do not stage with `git add` or report to the user until commands pass.
-
-> The repo is a monorepo. Explore `packages/` to discover available packages — never assume their paths.
