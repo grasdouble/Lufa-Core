@@ -25,6 +25,8 @@
     "deps:upgrade": "pnpm update -r && pnpm dedupe",
     "lint-staged": "lint-staged",
     "prepare": "husky",
+    "sync:-----------------------------": "",
+    "sync:agents": "node packages/config/agents/bin/sync-agents.mjs",
     "tools:---------------------------------------------": "",
     "tools:generate-outdated-report": "node .github/actions/dependency-update/generateOutdatedReport.js",
     "validate:------------------------------------------": "",
