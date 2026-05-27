@@ -24,7 +24,7 @@ export const baseConfig = defineConfig({
         'src/parcel.tsx',
       ],
       thresholds: {
-        autoUpdate: (newThreshold) => Math.floor(newThreshold - 1),
+        autoUpdate: (newThreshold: number) => Math.floor(newThreshold - 1),
       },
     },
   },
