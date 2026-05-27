@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.11
+
+### Patch Changes
+
+- 8fb61e9: chore: bump dependencies (@dotenvx/dotenvx, @types/node, tsx, typescript-eslint, lint-staged)
+
 ## 0.3.10
 
 ### Patch Changes

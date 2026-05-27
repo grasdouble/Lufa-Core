@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- 34bf3c2: docs: clarify git rule — never stage files (`git add`) either, not just commits. Staging is the user's responsibility.
+
 ## 1.1.0
 
 ### Minor Changes
