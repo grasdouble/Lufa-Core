@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_vitest
 
+## 1.0.1
+
+### Patch Changes
+
+- 1b48398: fix: declare `vitest` as `peerDependency` so consuming packages can resolve `vitest/config`; add explicit `number` type to `autoUpdate` callback to fix implicit `any` TS error.
+
 ## 1.0.0
 
 ### Major Changes
