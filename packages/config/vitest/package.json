@@ -1,0 +1,56 @@
+{
+  "name": "@grasdouble/lufa_config_vitest",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Shared Vitest configuration for Lufa projects",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grasdouble/lufa.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.ts": [
+      "bash -c 'pnpm typecheck'"
+    ],
+    "package.json": [
+      "sort-package-json"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@grasdouble/lufa_config_eslint": "workspace:^",
+    "@grasdouble/lufa_config_prettier": "workspace:^",
+    "@grasdouble/lufa_config_tsconfig": "workspace:^",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "eslint": "^10.4.0",
+    "prettier": "^3.8.3",
+    "sort-package-json": "^3.6.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  }
+}
