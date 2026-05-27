@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.9
+
+### Patch Changes
+
+- 8fb61e9: chore: bump dependencies (@dotenvx/dotenvx, @types/node, tsx, typescript-eslint, lint-staged)
+
 ## 0.1.8
 
 ### Patch Changes
