@@ -1,0 +1,10 @@
+{
+  "extends": ["@grasdouble/lufa_config_tsconfig/base.json"],
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["index.ts"],
+  "exclude": ["node_modules"]
+}
