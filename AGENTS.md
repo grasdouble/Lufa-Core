@@ -194,7 +194,10 @@ When creating a changeset file manually in `.changeset/`, always use a **descrip
 **Content rules:**
 
 - Always check `rtk git diff main --name-only` first to identify **all** changed packages before writing changesets (assumes `main` is the default branch — adjust if different)
-- **Every package with changed files must be covered** — do not skip secondary packages (tests, storybook, docs…); if their files changed, they need a changeset entry
+- **Every package with changed files must be covered** — no exception, including private packages (`"private": true`), tests, storybook, docs…
+  - ✅ All packages with file changes → changeset entry required
+  - ❌ Never skip a package, regardless of its `private` field or purpose
+- **Exception: the root `package.json` of a monorepo** — it is not a workspace package and does not need a changeset entry (changes to it, e.g. root devDependencies, are not tracked by changesets)
 - Use `patch` for fixes/refactors, `minor` for new user-visible features, `major` for breaking changes
 - **Always prefix the description** with a conventional commit type: `feat:`, `fix:`, `chore:`, `refactor:`, `perf:`, `docs:`, `style:`, `test:`
 - **Always verify** the changeset after creation: `rtk pnpm changeset status`
