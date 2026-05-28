@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 3e75a9b: docs: clarify changeset coverage rules — all packages with file changes require a changeset entry, with an explicit exception for the monorepo root `package.json`
+
 ## 1.1.1
 
 ### Patch Changes
