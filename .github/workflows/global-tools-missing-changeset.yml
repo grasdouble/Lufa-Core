@@ -68,10 +68,6 @@ jobs:
           base_sha: ${{ github.event.pull_request.base.sha }}
           sha: ${{ github.event.pull_request.head.sha }}
           files: ${{ steps.workspace-globs.outputs.files }}
-          files_ignore: |
-            **/*.md
-            !packages/config/agents/AGENTS.shared.md
-            **/*.adoc
 
       - name: Get changed changeset files
         id: changed-changesets
