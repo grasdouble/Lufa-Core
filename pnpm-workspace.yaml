@@ -9,7 +9,13 @@ packages:
   - packages/poc/*
 
 hoist: false
+hoistWorkspacePackages: false
+
 preferWorkspacePackages: true
+
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@grasdouble/*'
 
 publicHoistPattern:
   - '@storybook/react-vite'
