@@ -70,6 +70,7 @@ jobs:
           files: ${{ steps.workspace-globs.outputs.files }}
           files_ignore: |
             **/*.md
+            !packages/config/agents/AGENTS.shared.md
             **/*.adoc
 
       - name: Get changed changeset files
