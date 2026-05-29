@@ -174,6 +174,34 @@ When writing or reviewing code, if an accessibility issue is found, fix it in th
 
 ---
 
+## TDD — Test before code
+
+When modifying existing code or implementing new behavior, always follow the **Red → Green → Refactor** cycle:
+
+1. **Red** — Write or update the test first, run it, confirm it fails for the right reason
+2. **Green** — Write the minimal code to make the test pass
+3. **Refactor** — Clean up, then re-run tests to confirm they still pass
+
+**Rules:**
+
+- ✅ Write or update the failing test **before** changing the production code
+- ✅ When a code change makes an existing test fail, update the test **before** running the code change — or update both together and confirm the test fails for the right reason first
+- ✅ Run the affected test suite after every step (`pnpm test` in the package folder)
+- ❌ Never write code first and tests after — the test must define expected behavior, not describe existing code
+- ❌ Never leave tests broken and move on — all tests must pass before the task is considered done
+- ❌ Never delete a test to make a suite pass — update it to match the new expected behavior, or justify removal explicitly
+
+**What counts as "a change":**
+
+- Modifying a component's rendered output (elements, attributes, text)
+- Changing a function's signature or return value
+- Adding, removing, or renaming props
+- Changing accessibility attributes (aria, role, alt…)
+
+**Exception:** When adding a brand-new feature with no existing test, write the test file first (even if it just has a skeleton), then implement.
+
+---
+
 ## Changesets — Naming and content
 
 When creating a changeset file manually in `.changeset/`, always use a **descriptive kebab-case name** — never a random hex ID.
