@@ -211,7 +211,8 @@ rtk git status --short .changeset/   # untracked / staged files
 rtk git diff main --name-only -- .changeset/  # committed but not merged
 ```
 
-- ✅ If an existing changeset targets the same package → **add your description to it** (same bump type or escalate)
+- ✅ If an existing changeset targets the **exact same set of packages** you modified → **add your description to it** (same bump type or escalate)
+- ✅ If an existing changeset covers some of your packages but also covers **packages you did not modify** → **create a new file** covering only the packages you changed
 - ✅ Create a new file only when no existing changeset covers the package
 - ❌ Never create a second changeset for the same package in the same branch
 
