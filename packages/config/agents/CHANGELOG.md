@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.3
+
+### Patch Changes
+
+- 813286e: fix: Improve AGENTS
+
 ## 1.1.2
 
 ### Patch Changes

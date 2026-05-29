@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_vitest
 
+## 1.0.2
+
+### Patch Changes
+
+- 813286e: fix: export js
+
 ## 1.0.1
 
 ### Patch Changes
