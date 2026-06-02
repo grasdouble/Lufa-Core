@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.10
+
+### Patch Changes
+
+- 345562e: fix: reduce list of ignored files
+
 ## 0.1.9
 
 ### Patch Changes
