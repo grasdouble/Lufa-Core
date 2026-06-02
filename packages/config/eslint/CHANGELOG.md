@@ -1,5 +1,12 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.11
+
+### Patch Changes
+
+- e4fa15a: fix: Prevent TypeScript parser from being applied to .mjs config files
+- 2f0c59f: fix: reduce list of ignored files (basic)
+
 ## 0.1.10
 
 ### Patch Changes

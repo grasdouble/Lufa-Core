@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.12
+
+### Patch Changes
+
+- e4fa15a: fix: Prevent TypeScript parser from being applied to .mjs config files
+
 ## 0.3.11
 
 ### Patch Changes

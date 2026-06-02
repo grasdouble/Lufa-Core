@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_vitest
 
+## 1.0.3
+
+### Patch Changes
+
+- e4fa15a: fix: Prevent TypeScript parser from being applied to .mjs config files
+
 ## 1.0.2
 
 ### Patch Changes
