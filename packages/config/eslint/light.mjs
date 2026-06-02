@@ -4,7 +4,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 export default [
   js.configs.recommended,
   {
-    ignores: ['dist', 'build', 'node_modules', 'coverage', '*.config.js', '*.config.mjs', '.docusaurus'],
+    ignores: ['dist', 'build', 'node_modules'],
   },
   eslintConfigPrettier,
 ];
