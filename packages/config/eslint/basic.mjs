@@ -8,7 +8,7 @@ export default [
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
-    ignores: ['dist', 'build', 'node_modules', 'coverage', '*.config.js', '*.config.mjs', '.docusaurus'],
+    ignores: ['dist', 'build', 'node_modules'],
   },
   {
     files: ['**/*.{ts,tsx}'],
