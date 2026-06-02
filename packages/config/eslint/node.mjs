@@ -13,6 +13,9 @@ export default [
         ...globals.node,
         ...globals.es2021,
       },
+      parserOptions: {
+        project: null,
+      },
     },
     rules: {
       // Node.js best practices

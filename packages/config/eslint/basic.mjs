@@ -11,6 +11,10 @@ export default [
     ignores: ['dist', 'build', 'node_modules'],
   },
   {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2022,

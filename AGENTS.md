@@ -256,3 +256,33 @@ Run these commands to validate your changes. **Always prefix with `rtk`** (e.g. 
 **On failure:** Stop. Fix the error. Re-run. Do not stage with `git add` or report to the user until commands pass.
 
 > The repo is a monorepo. Explore `packages/` to discover available packages — never assume their paths.
+
+---
+
+## ESLint — TypeScript project configuration
+
+When setting `parserOptions.project` in a package's `eslint.config.mjs`, always scope it to TypeScript files only using the `files` property. This prevents the TypeScript parser from being incorrectly applied to JavaScript/MJS config files.
+
+- ✅ Scope TypeScript parser to `.ts` and `.tsx` files:
+  ```js
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  }
+  ```
+- ❌ Apply TypeScript parser globally without file restriction:
+  ```js
+  {
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',  // Applied to ALL files including .mjs configs
+      },
+    },
+  }
+  ```
+  This causes lint errors like: `"parserOptions.project" has been provided for @typescript-eslint/parser. The file was not found in any of the provided project(s): eslint.config.mjs`
