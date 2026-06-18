@@ -44,11 +44,11 @@
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@grasdouble/lufa_config_tsconfig": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "eslint": "^10.4.0",
-    "prettier": "^3.8.3",
+    "eslint": "^10.5.0",
+    "prettier": "^3.8.4",
     "sort-package-json": "^3.6.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.9"
   },
   "peerDependencies": {
     "vitest": "^4.0.0"
