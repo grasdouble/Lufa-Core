@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 0.3.13
+
+### Patch Changes
+
+- b16564f: feat: add X-Robots-Tag noindex header to prevent search engine indexing
+
 ## 0.3.12
 
 ### Patch Changes
