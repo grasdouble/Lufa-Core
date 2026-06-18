@@ -75,6 +75,12 @@ export const getRateLimiter = (blockedIPs: Set<string>) =>
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   });
 
+// Middleware to prevent search engine indexing
+export const noIndexMiddleware = (_req: Request, res: Response, next: NextFunction): void => {
+  res.setHeader('X-Robots-Tag', 'noindex');
+  next();
+};
+
 // Middleware to unblock IPs periodically (optional, for automatic cleanup)
 export const unblockIPsAfterTimeout = (blockedIPs: Set<string>) => {
   const unblockTimeout = 15 * 60 * 1000; // 15 minutes block duration

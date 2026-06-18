@@ -14,6 +14,7 @@ import {
   getClientKey,
   getRateLimiter,
   ipBlockMiddleware,
+  noIndexMiddleware,
   unblockIPsAfterTimeout,
 } from './security.js';
 import { extractParams, loadLibrary, sendEntry } from './utils.js';
@@ -64,6 +65,7 @@ unblockIPsAfterTimeout(blockedIPs);
 
 app.use(ipBlockMiddleware(blockedIPs)); // Apply IP blocking middleware
 app.use(limiter); // Apply rate limiting middleware
+app.use(noIndexMiddleware); // Prevent search engine indexing
 app.use(cors(corsOptions)); // Apply CORS middleware
 
 // Middleware to handle CORS errors
