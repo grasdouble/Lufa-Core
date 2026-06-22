@@ -16,7 +16,7 @@
     ]
   },
   "devDependencies": {
-    "sort-package-json": "^3.6.1"
+    "sort-package-json": "^3.7.1"
   },
   "publishConfig": {
     "access": "public",

@@ -1,3 +1,23 @@
 # Outdated Dependencies Report
 
-No outdated dependency
+┌─────────────────────────┬─────────┬────────┬────────────────────────────────┐
+│ Package                 │ Current │ Latest │ Dependents                     │
+├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
+│ @types/node (dev)       │ 25.9.4  │ 26.0.0 │ @grasdouble/cdn_autobuild-     │
+│                         │         │        │ server                         │
+├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
+│ concurrently (dev)      │ 9.2.3   │ 10.0.3 │ @grasdouble/lufa               │
+├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
+│ pacote                  │ 21.5.1  │ 22.0.0 │ @grasdouble/cdn_autobuild-     │
+│                         │         │        │ server                         │
+├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
+│ sort-package-json (dev) │ 3.7.1   │ 4.0.0  │ @grasdouble/cdn_autobuild-     │
+│                         │         │        │ server, @grasdouble/lufa,      │
+│                         │         │        │ @grasdouble/lufa_config_       │
+│                         │         │        │ eslint,                        │
+│                         │         │        │ @grasdouble/lufa_config_       │
+│                         │         │        │ prettier,                      │
+│                         │         │        │ @grasdouble/lufa_config_       │
+│                         │         │        │ tsconfig,                      │
+│                         │         │        │ @grasdouble/lufa_config_vitest │
+└─────────────────────────┴─────────┴────────┴────────────────────────────────┘
