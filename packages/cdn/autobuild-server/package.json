@@ -63,16 +63,16 @@
     "@types/escape-html": "^1.0.4",
     "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^25.9.4",
+    "@types/node": "^25.9.5",
     "@types/pacote": "^11.1.8",
     "esbuild": "^0.28.1",
-    "eslint": "^10.6.0",
+    "eslint": "^10.7.0",
     "nodemon": "^3.1.14",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "sort-package-json": "^3.7.1",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.63.0"
   },
   "engines": {
     "node": ">=18"
