@@ -39,8 +39,8 @@ importers:
         specifier: ^3.9.5
         version: 3.9.5
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/cdn/autobuild-server:
     dependencies:
@@ -109,8 +109,8 @@ importers:
         specifier: ^3.9.5
         version: 3.9.5
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
       tsx:
         specifier: ^4.23.1
         version: 4.23.1
@@ -155,8 +155,8 @@ importers:
         version: 8.64.0(eslint@10.7.0)(typescript@6.0.3)
     devDependencies:
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/config/prettier:
     dependencies:
@@ -168,14 +168,14 @@ importers:
         version: 3.9.5
     devDependencies:
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/config/tsconfig:
     devDependencies:
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/config/vitest:
     devDependencies:
@@ -198,8 +198,8 @@ importers:
         specifier: ^3.9.5
         version: 3.9.5
       sort-package-json:
-        specifier: ^3.7.1
-        version: 3.7.1
+        specifier: ^4.0.0
+        version: 4.0.0
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -2658,9 +2658,9 @@ packages:
   sort-object-keys@2.1.0:
     resolution: {integrity: sha512-SOiEnthkJKPv2L6ec6HMwhUcN0/lppkeYuN1x63PbyPRrgSPIuBJCiYxYyvWRTtjMlOi14vQUCGUJqS6PLVm8g==}
 
-  sort-package-json@3.7.1:
-    resolution: {integrity: sha512-ssk1HG7whF8N/T1IsNAQrtHG5Cbdi0rAgRJZXYBr9hF5xaHnBNzUx/W6LcthEW7FhOwvZssbESZuO+GxssqAyA==}
-    engines: {node: '>=20'}
+  sort-package-json@4.0.0:
+    resolution: {integrity: sha512-6aYOlYI9AWioZ+rzu+4zKLmoFqJP0/fHDxrd7X04yqEibikY+5YVF0EYlyGn4v6X2PJY7yAUWV7oeP+i5rOm/g==}
+    engines: {node: '>=22'}
     hasBin: true
 
   source-map-js@1.2.1:
@@ -5879,7 +5879,7 @@ snapshots:
 
   sort-object-keys@2.1.0: {}
 
-  sort-package-json@3.7.1:
+  sort-package-json@4.0.0:
     dependencies:
       detect-indent: 7.0.2
       detect-newline: 4.0.1
