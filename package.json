@@ -53,10 +53,10 @@
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "concurrently": "^9.2.4",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.1.0",
-    "prettier": "^3.9.5",
+    "lint-staged": "^17.2.0",
+    "prettier": "^3.9.6",
     "sort-package-json": "^3.7.1"
   },
   "packageManager": "pnpm@11.1.2"
