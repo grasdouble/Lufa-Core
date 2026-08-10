@@ -3,10 +3,10 @@
 ┌─────────────────────────┬─────────┬────────┬────────────────────────────────┐
 │ Package                 │ Current │ Latest │ Dependents                     │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
-│ @dotenvx/dotenvx        │ 1.75.1  │ 2.19.1 │ @grasdouble/cdn_autobuild-     │
+│ @dotenvx/dotenvx        │ 1.75.1  │ 2.20.1 │ @grasdouble/cdn_autobuild-     │
 │                         │         │        │ server                         │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
-│ @types/node (dev)       │ 25.9.5  │ 26.1.2 │ @grasdouble/cdn_autobuild-     │
+│ @types/node (dev)       │ 25.9.5  │ 26.2.0 │ @grasdouble/cdn_autobuild-     │
 │                         │         │        │ server                         │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
 │ concurrently (dev)      │ 9.2.4   │ 10.0.4 │ @grasdouble/lufa               │

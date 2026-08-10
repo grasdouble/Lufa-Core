@@ -53,7 +53,7 @@
     "@grasdouble/lufa_config_prettier": "workspace:^",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "concurrently": "^9.2.4",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
