@@ -46,7 +46,7 @@
     ]
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.75.1",
+    "@dotenvx/dotenvx": "^2.19.1",
     "cors": "^2.8.6",
     "escape-html": "^1.0.3",
     "express": "^5.2.1",
