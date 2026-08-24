@@ -21,7 +21,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.LUFA_CI_SECRET_READ }}
           persist-credentials: false
@@ -31,7 +31,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .tool-versions
           cache: 'pnpm'
@@ -52,7 +52,7 @@ jobs:
 
       # Publish the release or pre-release
       - name: Run Changesets Action
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           publish: 'pnpm changeset publish' # The command to run to publish the packages
           title: 'Release: New Version Updates' # The title for the changeset commit
