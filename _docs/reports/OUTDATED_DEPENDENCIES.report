@@ -5,10 +5,10 @@
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
 │ @changesets/cli (dev)   │ 2.31.1  │ 3.0.1  │ @grasdouble/lufa               │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
-│ @dotenvx/dotenvx        │ 1.75.1  │ 2.21.0 │ @grasdouble/cdn_autobuild-     │
+│ @dotenvx/dotenvx        │ 1.75.1  │ 2.22.0 │ @grasdouble/cdn_autobuild-     │
 │                         │         │        │ server                         │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
-│ @types/node (dev)       │ 25.9.5  │ 26.2.0 │ @grasdouble/cdn_autobuild-     │
+│ @types/node (dev)       │ 25.9.5  │ 26.4.0 │ @grasdouble/cdn_autobuild-     │
 │                         │         │        │ server                         │
 ├─────────────────────────┼─────────┼────────┼────────────────────────────────┤
 │ concurrently (dev)      │ 9.2.4   │ 10.0.5 │ @grasdouble/lufa               │
