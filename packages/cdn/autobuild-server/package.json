@@ -63,7 +63,7 @@
     "@types/escape-html": "^1.0.4",
     "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^25.9.5",
+    "@types/node": "^25.9.6",
     "@types/pacote": "^11.1.8",
     "esbuild": "^0.28.2",
     "eslint": "^10.10.0",
@@ -72,7 +72,7 @@
     "sort-package-json": "^3.7.1",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0"
+    "typescript-eslint": "^8.70.0"
   },
   "engines": {
     "node": ">=18"
