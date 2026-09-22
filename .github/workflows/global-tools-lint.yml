@@ -46,6 +46,12 @@ jobs:
         if: always()
         run: pnpm all:typecheck
 
+      - name: Run tests
+        run: pnpm all:test
+
+      - name: Validate Core documentation
+        run: pnpm validate:docs
+
       # Step 8: Check formatting
       - name: 🎨 Check formatting
         if: always()
@@ -54,4 +60,3 @@ jobs:
           echo "::group::Prettier Format Check"
           pnpm all:prettier:check
           echo "::endgroup::"
-        continue-on-error: true

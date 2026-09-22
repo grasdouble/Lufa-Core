@@ -3,7 +3,7 @@ import escapeHtml from 'escape-html';
 import fs from 'fs-extra';
 import pacote from 'pacote';
 
-import type { PackageJson } from './types.js';
+import type { ExportTarget, LoadLibraryResult, PackageJson } from './types.js';
 
 // Generates a clear file name, with @ and / preserved
 const makePackageDirName = (pkg: string, version: string) => `${pkg}@${version}`;
@@ -72,120 +72,167 @@ export const extractParams = ({
   };
 };
 
-type LoadLibraryProps = {
+export type LoadLibraryProps = {
   scope?: string;
   fullName: string;
-  tmpPkgPath: string;
   cdnPkgPath: string;
-  TMP_DIR: string;
   CDN_DIR: string;
   GITHUB_TOKEN: string;
 };
-export const loadLibrary = async ({
-  scope,
-  fullName,
-  tmpPkgPath,
-  cdnPkgPath,
-  TMP_DIR,
-  CDN_DIR,
-  GITHUB_TOKEN,
-}: LoadLibraryProps) => {
-  // Check if the path is outside the CDN_DIR
-  if (!tmpPkgPath.startsWith(TMP_DIR) || !cdnPkgPath.startsWith(CDN_DIR)) {
-    console.error('❌ Path is outside the CDN_DIR or TMP_DIR');
-    return {
-      status: 403,
-      message: 'Forbidden',
-    };
-  }
 
+const isWithin = (root: string, file: string) => {
+  const relative = path.relative(root, file);
+  return relative !== '' && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+};
+
+const complete = (directory: string) => fs.pathExists(path.join(directory, '.lufa-complete'));
+type Extract = (name: string, destination: string, options?: pacote.Options) => Promise<unknown>;
+
+export const createLibraryLoader = (
+  extract: Extract = (name, destination, options) => pacote.extract(name, destination, options)
+) => {
+  const pending = new Map<string, Promise<LoadLibraryResult>>();
+  const download = async ({
+    scope,
+    fullName,
+    cdnPkgPath,
+    CDN_DIR,
+    GITHUB_TOKEN,
+  }: LoadLibraryProps): Promise<LoadLibraryResult> => {
+    const root = path.resolve(CDN_DIR);
+    const destination = path.resolve(cdnPkgPath);
+    if (!isWithin(root, destination)) return { status: 403, message: 'Forbidden' };
+    let staging: string | undefined;
+    try {
+      await fs.ensureDir(root);
+      await fs.ensureDir(path.dirname(destination));
+      const realRoot = await fs.realpath(root);
+      const realParent = await fs.realpath(path.dirname(destination));
+      if (realParent !== realRoot && !isWithin(realRoot, realParent)) return { status: 403, message: 'Forbidden' };
+      if (await fs.pathExists(destination)) {
+        const stat = await fs.lstat(destination);
+        if (stat.isSymbolicLink()) return { status: 403, message: 'Forbidden' };
+        if (await complete(destination)) return { status: 200, message: 'Package cached' };
+        // Old/incomplete caches must not be treated as successful downloads.
+        return {
+          status: 503,
+          message: 'Incomplete legacy cache: administrator must remove this package cache and retry',
+        };
+      }
+      staging = await fs.mkdtemp(path.join(path.dirname(destination), '.lufa-download-'));
+      await extract(
+        fullName,
+        staging,
+        scope === '@grasdouble'
+          ? {
+              registry: 'https://npm.pkg.github.com',
+              scope: '@grasdouble',
+              headers: { authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+          : undefined
+      );
+      const metadata: PackageJson = await fs.readJson(path.join(staging, 'package.json'));
+      if (scope !== '@grasdouble' && metadata.type !== 'module')
+        return { status: 415, message: 'Only ESM packages are supported' };
+      await fs.writeFile(path.join(staging, '.lufa-complete'), '1');
+      try {
+        await fs.rename(staging, destination);
+      } catch (error) {
+        const code = (error as NodeJS.ErrnoException).code;
+        if ((code !== 'EEXIST' && code !== 'ENOTEMPTY') || !(await complete(destination))) throw error;
+      }
+      return { status: 200, message: 'Package ready' };
+    } catch {
+      return { status: 502, message: `Unable to load package ${escapeHtml(fullName)}` };
+    } finally {
+      if (staging) await fs.remove(staging);
+    }
+  };
+  return (options: LoadLibraryProps): Promise<LoadLibraryResult> => {
+    const key = path.resolve(options.cdnPkgPath);
+    const existing = pending.get(key);
+    if (existing) return existing;
+    const promise = download(options).finally(() => pending.delete(key));
+    pending.set(key, promise);
+    return promise;
+  };
+};
+
+export const loadLibrary = createLibraryLoader();
+
+// Per the package "exports" spec, a target/subpath must start with "./" and no segment
+// after it may be "." or ".." — otherwise it could reach outside the package or around
+// an explicitly blocked sibling export (e.g. a wildcard capture like "x/../private").
+const isValidSubpathValue = (value: string): boolean =>
+  value.startsWith('./') && !value.split('/').some((segment, index) => index > 0 && ['.', '..', ''].includes(segment));
+
+const resolveTarget = (target: ExportTarget | undefined): string | null | undefined => {
+  if (typeof target === 'string') return isValidSubpathValue(target) ? target : undefined;
+  if (target === null) return null;
+  if (target === undefined) return undefined;
+  if (Array.isArray(target)) {
+    for (const item of target) {
+      const resolved = resolveTarget(item);
+      if (typeof resolved === 'string') return resolved;
+    }
+    return undefined;
+  }
+  for (const [condition, value] of Object.entries(target)) {
+    if (['browser', 'import', 'default'].includes(condition)) {
+      const resolved = resolveTarget(value);
+      if (resolved !== undefined) return resolved;
+    }
+  }
+  return undefined;
+};
+
+const exportTarget = (exports: ExportTarget, requested: string): ExportTarget | undefined => {
+  if (requested !== '.' && !isValidSubpathValue(requested)) return undefined;
+  if (exports === null || typeof exports === 'string' || Array.isArray(exports))
+    return requested === '.' ? exports : undefined;
+  if (!Object.keys(exports).some((key) => key.startsWith('.'))) return requested === '.' ? exports : undefined;
+  if (Object.hasOwn(exports, requested)) return exports[requested];
+  // Exact subpaths take precedence over the most specific pattern.
+  const patterns = Object.keys(exports)
+    .filter((key) => key.includes('*'))
+    .sort((a, b) => b.indexOf('*') - a.indexOf('*') || b.length - a.length);
+  for (const pattern of patterns) {
+    const [prefix, suffix] = pattern.split('*');
+    if (
+      requested.startsWith(prefix) &&
+      requested.endsWith(suffix) &&
+      requested.length >= prefix.length + suffix.length
+    ) {
+      const target = resolveTarget(exports[pattern]);
+      return target?.replaceAll('*', requested.slice(prefix.length, suffix ? -suffix.length : undefined));
+    }
+  }
+  return undefined;
+};
+
+export type SendEntryProps = { exportPath: string; cdnPkgPath: string; fullName: string };
+export const sendEntry = async ({ exportPath, cdnPkgPath }: SendEntryProps) => {
   try {
-    if (scope === '@grasdouble') {
-      console.log(`Loading package ${fullName} from GitHub...`);
-      // For @grasdouble packages, we use the GitHub registry
-      await pacote.extract(fullName, cdnPkgPath, {
-        registry: 'https://npm.pkg.github.com',
-        scope: '@grasdouble',
-        headers: {
-          authorization: `Bearer ${GITHUB_TOKEN}`,
-        },
-      });
-    } else {
-      console.log(`Loading package ${fullName} from npm...`);
-      await pacote.extract(fullName, tmpPkgPath);
-    }
-    console.log(`Package ${fullName} loaded successfully.`);
+    const pkgJson: PackageJson = await fs.readJson(path.join(cdnPkgPath, 'package.json'));
+    const entry =
+      pkgJson.exports !== undefined
+        ? resolveTarget(exportTarget(pkgJson.exports, exportPath))
+        : exportPath === '.'
+          ? (pkgJson.module ?? pkgJson.main)
+          : undefined;
+    if (typeof entry !== 'string') return { status: 404, message: 'Export not found' };
+    const root = path.resolve(cdnPkgPath);
+    const outputFile = path.resolve(root, entry);
+    if (!isWithin(root, outputFile)) return { status: 403, message: 'Forbidden entry point' };
+    const realRoot = await fs.realpath(root);
+    const realFile = await fs.realpath(outputFile);
+    if (!isWithin(realRoot, realFile)) return { status: 403, message: 'Forbidden entry point' };
+    if (!(await fs.stat(realFile)).isFile()) return { status: 404, message: 'Entry file not found' };
+    return { status: 200, outputFile: realFile };
+  } catch (error) {
     return {
-      status: 200,
-      message: 'Package loaded successfully from npm or github',
-    };
-  } catch (err) {
-    console.error(`❌ Error with ${fullName}:`, err);
-    if (tmpPkgPath) {
-      await fs.remove(tmpPkgPath);
-    }
-    if (cdnPkgPath) {
-      await fs.remove(cdnPkgPath);
-    }
-    return {
-      status: 500,
-      message: `Error with the package ${escapeHtml(fullName)}`,
+      status: (error as NodeJS.ErrnoException).code === 'ENOENT' ? 404 : 500,
+      message: 'Unable to read package entry',
     };
   }
-};
-
-export type SendEntryProps = {
-  exportPath: string;
-  cdnPkgPath: string;
-  fullName: string;
-};
-export const sendEntry = async ({ exportPath, cdnPkgPath, fullName }: SendEntryProps) => {
-  const pkgJsonPath = path.join(cdnPkgPath, 'package.json');
-
-  if (!fs.existsSync(pkgJsonPath)) {
-    console.error(`❌ [sendEntry] package.json not found at: ${pkgJsonPath}`);
-    return {
-      status: 500,
-      message: `package.json not found for ${escapeHtml(fullName)}`,
-    };
-  }
-
-  const pkgJson: PackageJson = await fs.readJson(pkgJsonPath);
-
-  const exportEntry = pkgJson.exports?.[exportPath];
-  const resolvedExportEntry =
-    typeof exportEntry === 'object' && exportEntry !== null ? (exportEntry.import ?? exportEntry.default) : exportEntry;
-
-  const entry = resolvedExportEntry ?? pkgJson.module ?? pkgJson.main;
-
-  if (typeof entry !== 'string') {
-    console.error(
-      `❌ [sendEntry] no valid entry for "${exportPath}" in ${fullName}. exports=${JSON.stringify(pkgJson.exports)}, module=${pkgJson.module}, main=${pkgJson.main}`
-    );
-    return {
-      status: 500,
-      message: `No valid entry point for export "${escapeHtml(exportPath)}" in ${escapeHtml(fullName)}. Check the package exports field.`,
-    };
-  }
-
-  const outputFile = path.resolve(cdnPkgPath, entry);
-
-  // Reject entries whose resolved path escapes the package directory
-  if (!outputFile.startsWith(cdnPkgPath + path.sep) && outputFile !== cdnPkgPath) {
-    console.error(`❌ [sendEntry] path traversal detected in entry "${entry}" for ${fullName}`);
-    return {
-      status: 403,
-      message: `Forbidden: invalid entry point for ${escapeHtml(fullName)}`,
-    };
-  }
-
-  if (!fs.existsSync(outputFile)) {
-    console.error(`❌ [sendEntry] resolved file does not exist on disk: ${outputFile}`);
-    return {
-      status: 500,
-      message: `Entry file not found on disk for ${escapeHtml(fullName)}: ${escapeHtml(entry)}`,
-    };
-  }
-
-  return { status: 200, outputFile };
 };

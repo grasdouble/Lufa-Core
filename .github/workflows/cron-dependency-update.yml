@@ -12,10 +12,14 @@ permissions:
   deployments: none
   issues: none
   packages: read
-  pull-requests: none
+  pull-requests: write
   repository-projects: none
   security-events: none
   statuses: none
+
+concurrency:
+  group: dependency-update
+  cancel-in-progress: false
 
 jobs:
   update-dependencies:
@@ -27,5 +31,5 @@ jobs:
       - name: Update dependencies
         uses: ./.github/actions/dependency-update
         with:
-          PAT_DEPENDENCY_CHECK_UPDATE: ${{ secrets.LUFA_CI_SECRET_READ }}
+          PAT_DEPENDENCY_CHECK_UPDATE: ${{ secrets.LUFA_CI_SECRET_WRITE }}
           SETUP_VERSION_FILE: '.tool-versions'
