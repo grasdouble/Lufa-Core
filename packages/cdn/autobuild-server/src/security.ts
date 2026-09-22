@@ -38,53 +38,21 @@ export const corsOptions: CorsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 };
 
-// Middleware to block requests from blocked IPs
-export const ipBlockMiddleware =
-  (blockedIPs: Set<string>) =>
-  (req: Request, res: Response, next: NextFunction): void => {
-    // Use req.ip which is already resolved from x-forwarded-for when trust proxy is enabled,
-    // ensuring the same key as the rate limiter's keyGenerator.
-    const clientIP = req.ip ?? 'unknown';
-    if (blockedIPs.has(getClientKey(clientIP))) {
-      res.status(403).json({ error: `Your IP ${clientIP} is blocked due to excessive requests.` });
-      return;
-    }
-    next();
-  };
-
-// Rate limiter configuration
-
-// Shared key generator so the unblock handler uses the same key as the limiter
-export const getClientKey = (ip: string) => ipKeyGenerator(ip);
-
-export const getRateLimiter = (blockedIPs: Set<string>) =>
+// The limiter owns expiration; no public reset endpoint or second blocklist.
+export const getRateLimiter = (options: { limit?: number; windowMs?: number } = {}) =>
   rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 1000, // Allow 1000 requests per 10 minutes
+    windowMs: options.windowMs ?? 10 * 60 * 1000,
+    limit: options.limit ?? 1000,
     keyGenerator: (req: Request) => ipKeyGenerator(req.ip ?? req.socket.remoteAddress ?? 'unknown'),
-    handler: (req: Request, res: Response) => {
-      const clientIP = req.ip ?? req.socket.remoteAddress;
-
-      if (clientIP) {
-        blockedIPs.add(getClientKey(clientIP)); // Block using the normalized key
-      }
-
-      res.status(429).json({ error: `Too many requests. Your IP ${clientIP} has been temporarily blocked.` });
+    handler: (_req: Request, res: Response) => {
+      res.status(429).json({ error: 'Too many requests. Retry after the rate limit window expires.' });
     },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    standardHeaders: true,
+    legacyHeaders: false,
   });
 
 // Middleware to prevent search engine indexing
 export const noIndexMiddleware = (_req: Request, res: Response, next: NextFunction): void => {
   res.setHeader('X-Robots-Tag', 'noindex');
   next();
-};
-
-// Middleware to unblock IPs periodically (optional, for automatic cleanup)
-export const unblockIPsAfterTimeout = (blockedIPs: Set<string>) => {
-  const unblockTimeout = 15 * 60 * 1000; // 15 minutes block duration
-  setInterval(() => {
-    blockedIPs.clear();
-  }, unblockTimeout);
 };

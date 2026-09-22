@@ -19,7 +19,7 @@ This enables micro-frontends and shared libraries to be loaded at runtime withou
 - **Scoped package support** — supports both `@scope/name` and plain `name` formats
 - **Input sanitization** — all URL parameters are sanitized before use
 - **CORS** — configurable allowlist for accepted origins
-- **Rate limiting** — built-in IP-based rate limiting with an unblock endpoint
+- **Rate limiting** — built-in IP-based rate limiting with automatic expiration
 - **ESM + CJS** — ships both `dist/index.mjs` and `dist/index.cjs`
 
 ## Requirements
@@ -41,8 +41,11 @@ Run from the package directory:
 # Development (hot-reload via nodemon + tsx)
 pnpm dev
 
-# Build ESM bundle
+# Build both ESM and CommonJS entry points
 pnpm build
+
+# Build ESM only
+pnpm build:esm
 
 # Build CJS bundle
 pnpm build:cjs
@@ -59,18 +62,21 @@ pnpm prettier:write
 
 # Type check
 pnpm typecheck
+
+# Build and run regression + HTTP startup tests
+pnpm test
 ```
 
 ## Configuration
 
 All configuration is done via environment variables. Create a `.env` file at the package root:
 
-| Variable       | Required | Default                 | Description                                |
-| -------------- | -------- | ----------------------- | ------------------------------------------ |
-| `GITHUB_TOKEN` | ✅       | —                       | GitHub PAT with `read:packages` scope      |
-| `PORT`         | ❌       | `3000`                  | HTTP port the server listens on            |
-| `TMP_DIR`      | ❌       | `<os.tmpdir()>/tmp_cdn` | Directory used while downloading packages  |
-| `CDN_DIR`      | ❌       | `<os.tmpdir()>/cdn`     | Directory where cached packages are stored |
+| Variable          | Required | Default                | Description                                                                        |
+| ----------------- | -------- | ---------------------- | ---------------------------------------------------------------------------------- |
+| `GITHUB_TOKEN`    | ✅       | —                      | GitHub PAT with `read:packages` scope                                              |
+| `PORT`            | ❌       | `3000`                 | HTTP port the server listens on                                                    |
+| `TRUSTED_PROXIES` | ❌       | unset                  | Comma-separated trusted proxy IPs/CIDRs; forwarding headers are ignored by default |
+| `CDN_DIR`         | ❌       | `<os.tmpdir()>/cdn-v2` | Directory where cached packages are stored                                         |
 
 ## API
 
@@ -94,13 +100,19 @@ GET /grasdouble/lufa_config_eslint@0.1.8
 GET /grasdouble/lufa_config_eslint@0.1.8/react
 ```
 
-### Unblock your IP
+### Cache and migration
 
-```
-GET /unblock-ip
-```
+Downloads use unique staging directories on the same filesystem as the cache. Concurrent requests in one process share a download; completed packages are published with an atomic rename and a completion marker. A failed request only cleans up its own staging directory. Separate server processes may download the same package, but do not remove another process's completed cache.
 
-Removes the caller's IP from the rate-limit blocklist and resets their counter.
+The default cache directory is now `<os.tmpdir()>/cdn-v2`. If you set `CDN_DIR`, use a fresh directory during migration: pre-existing package caches without a completion marker return 503 and must be removed by an administrator before retrying. `TMP_DIR` is no longer used, so staging and publication remain on the same filesystem. Cache storage must be writable only by the server administrator/service account.
+
+The public `/unblock-ip` endpoint has been removed. Rate limits expire automatically after ten minutes. Configure `TRUSTED_PROXIES` only with the actual upstream proxy IPs or CIDRs; those proxies must overwrite forwarding headers from clients. Do not use a catch-all network.
+
+The server supports root string exports, nested browser/import/default conditions, arrays and wildcard subpaths. Unknown or blocked exports return 404 rather than falling back to the root entry. Entries resolving outside the package, including symlinks, are forbidden. Packages from npm must declare `type: module`; built packages from the configured GitHub scope retain their existing behavior.
+
+Runtime dependencies are external to the bundles and must be installed along with the package. The ordinary build generates both manifest entry points; tests launch both on temporary local ports without fetching registry packages.
+
+The build scripts use esbuild's JavaScript API through `build.mjs` to avoid CLI launcher issues with native executables in CI. `pnpm build:esm` and `pnpm build:cjs` remain available for individual formats.
 
 ## Security
 

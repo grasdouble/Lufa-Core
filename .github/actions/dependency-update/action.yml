@@ -3,7 +3,7 @@ description: Update dependencies to their latest minor and patch versions and up
 
 inputs:
   PAT_DEPENDENCY_CHECK_UPDATE:
-    description: 'Personal Access Token with permissions to read and write packages.'
+    description: 'PAT with package read access and repository contents/pull-request write access; enables PR checks.'
     required: true
     default: ''
   SETUP_VERSION_FILE:
@@ -20,6 +20,8 @@ runs:
       uses: actions/checkout@v6
       with:
         token: ${{ inputs.PAT_DEPENDENCY_CHECK_UPDATE }}
+        ref: ${{ github.event.repository.default_branch }}
+        persist-credentials: false
 
     - name: Update .npmrc with authentication token
       shell: bash
@@ -50,25 +52,39 @@ runs:
       shell: bash
       run: pnpm exec node ${{ github.action_path }}/generateOutdatedReport.js
 
-    - name: Check for changes
-      id: check_changes
+    - name: Add changeset coverage
       shell: bash
-      run: |
-        if [ -n "$(git status --porcelain)" ]; then
-          echo "changes=true" >> $GITHUB_ENV
-        else
-          echo "changes=false" >> $GITHUB_ENV
-        fi
+      run: node scripts/dependency-changeset.mjs
 
-    - name: Commit and push updates
-      if: ${{ env.changes == 'true' }}
+    - name: Validate updates
       shell: bash
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add .
-        git commit -m 'chore: update dependencies'
-        git push
+        pnpm all:build
+        pnpm all:lint
+        pnpm all:typecheck
+        pnpm all:test
+        pnpm all:prettier:check
+        pnpm validate:docs
+        pnpm changeset status
+
+    - name: Create or update dependency PR
+      uses: peter-evans/create-pull-request@v8
+      with:
+        token: ${{ inputs.PAT_DEPENDENCY_CHECK_UPDATE }}
+        branch: codex/automated-dependency-updates
+        base: ${{ github.event.repository.default_branch }}
+        title: 'chore: update dependencies'
+        commit-message: 'chore: update dependencies'
+        body: |
+          Update dependencies and synchronize shared agent rules.
+          Build, lint, type checking, tests, formatting and documentation checks passed before PR creation.
+        add-paths: |
+          package.json
+          pnpm-lock.yaml
+          packages/
+          AGENTS.md
+          .changeset/
+          _docs/reports/OUTDATED_DEPENDENCIES.report
 
     - name: Generate summary
       shell: bash

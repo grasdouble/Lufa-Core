@@ -314,3 +314,18 @@ When setting `parserOptions.project` in a package's `eslint.config.mjs`, always 
   }
   ```
   This causes lint errors like: `"parserOptions.project" has been provided for @typescript-eslint/parser. The file was not found in any of the provided project(s): eslint.config.mjs`
+
+## CDN — Validate package and manifest paths before reading
+
+CDN entry resolution must validate paths against the configured cache itself; validation in the download loader does not replace checks at the read boundary.
+
+- ✅ Pass `CDN_DIR` to `sendEntry`, check the normalized and real package paths against it, and check the real `package.json` path stays inside the package before reading metadata. Include directory separators in prefix checks.
+- ✅ Test that escaping package, scope and manifest symlinks are rejected before any metadata read, including through the HTTP route.
+- ❌ Treat caller-provided `cdnPkgPath` as a trusted root or read `package.json` before validating its real path, even if `loadLibrary` was called first.
+
+## CDN — Build through the esbuild JavaScript API
+
+The esbuild CLI launcher has failed in Linux CI by passing its native executable to Node as JavaScript.
+
+- ✅ Keep `build:esm` and `build:cjs` routed through `node build.mjs`, using esbuild's `build()` API, and run the build regression test with an unusable CLI launcher.
+- ❌ Replace these scripts with direct `esbuild ...` CLI calls or `node node_modules/esbuild/bin/esbuild ...`; the installed entry can be a native executable.

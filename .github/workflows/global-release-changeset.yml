@@ -50,6 +50,14 @@ jobs:
       - name: Build All packages
         run: pnpm all:build
 
+      - name: Validate packages before publishing
+        run: |
+          pnpm all:lint
+          pnpm all:typecheck
+          pnpm all:test
+          pnpm all:prettier:check
+          pnpm validate:docs
+
       # Publish the release or pre-release
       - name: Run Changesets Action
         uses: changesets/action@v1

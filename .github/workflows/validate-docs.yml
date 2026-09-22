@@ -4,20 +4,24 @@ on:
   pull_request:
     paths:
       - 'AGENTS.md'
-      - 'CLAUDE.md'
-      - '.github/copilot-instructions.md'
-      - '.github/instructions/**/*.instructions.md'
-      - 'config.toml'
+      - 'README.md'
+      - 'package.json'
+      - '.tool-versions'
+      - 'packages/config/agents/AGENTS.shared.md'
+      - 'scripts/validate-ai-docs.mjs'
+      - 'scripts/validate-ai-docs.test.mjs'
       - 'scripts/validate-ai-docs.sh'
   push:
     branches:
       - main
     paths:
       - 'AGENTS.md'
-      - 'CLAUDE.md'
-      - '.github/copilot-instructions.md'
-      - '.github/instructions/**/*.instructions.md'
-      - 'config.toml'
+      - 'README.md'
+      - 'package.json'
+      - '.tool-versions'
+      - 'packages/config/agents/AGENTS.shared.md'
+      - 'scripts/validate-ai-docs.mjs'
+      - 'scripts/validate-ai-docs.test.mjs'
       - 'scripts/validate-ai-docs.sh'
   workflow_dispatch: # Allow manual triggering
 
@@ -32,6 +36,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
 
       - name: Run validation script
         run: bash scripts/validate-ai-docs.sh

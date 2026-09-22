@@ -21,13 +21,15 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --outfile=dist/index.mjs --platform=node --format=esm --external:esbuild --external:node-gyp --external:node-gyp/*",
-    "build:cjs": "esbuild src/index.ts --bundle --outfile=dist/index.cjs --platform=node --external:esbuild --external:node-gyp --external:node-gyp/*",
+    "build": "pnpm build:esm && pnpm build:cjs",
+    "build:cjs": "node build.mjs cjs",
+    "build:esm": "node build.mjs esm",
     "dev": "dotenvx run --env-file=.env --env-file=.env.development -- nodemon --exec tsx src/index.ts",
     "lint": "eslint",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "preview": "dotenvx run --env-file=.env.production --env-file=.env -- node dist/index.cjs",
+    "test": "pnpm build && node --import tsx --test test/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "lint-staged": {

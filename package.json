@@ -8,10 +8,10 @@
   "scripts": {
     "all:-----------------------------------------------": "",
     "all:build": "pnpm --filter @grasdouble/* run build",
-    "all:lint": "pnpm --filter @grasdouble/* run lint",
+    "all:lint": "pnpm lint:tools && pnpm --filter @grasdouble/* run lint",
     "all:prettier:check": "pnpm --filter @grasdouble/* run prettier:check",
     "all:prettier:write": "pnpm --filter @grasdouble/* run prettier:write",
-    "all:test": "pnpm --filter @grasdouble/* run test",
+    "all:test": "pnpm test:tools && pnpm --filter @grasdouble/* run test",
     "all:typecheck": "pnpm --filter @grasdouble/* run typecheck",
     "clean": "pnpm clean:node_module && pnpm clean:lib && pnpm clean:cache",
     "clean:----------------------------": "",
@@ -23,10 +23,12 @@
     "deps:audit": "pnpm -r audit --fix",
     "deps:outdated": "pnpm outdated -r",
     "deps:upgrade": "pnpm update -r && pnpm dedupe",
+    "lint:tools": "eslint scripts/*.mjs",
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "sync:-----------------------------": "",
     "sync:agents": "node packages/config/agents/bin/sync-agents.mjs",
+    "test:tools": "node --test scripts/*.test.mjs",
     "tools:---------------------------------------------": "",
     "tools:generate-outdated-report": "node .github/actions/dependency-update/generateOutdatedReport.js",
     "validate:------------------------------------------": "",
@@ -59,5 +61,5 @@
     "prettier": "^3.9.8",
     "sort-package-json": "^3.7.1"
   },
-  "packageManager": "pnpm@11.1.2"
+  "packageManager": "pnpm@12.5.1"
 }
