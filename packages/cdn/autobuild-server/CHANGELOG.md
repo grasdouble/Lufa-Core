@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 1.0.1
+
+### Patch Changes
+
+- bea8333: fix: bundle CDN runtime dependencies so Passenger can start from a single deployed entry file without node_modules, and verify both bundle formats in isolation.
+
 ## 1.0.0
 
 ### Major Changes
