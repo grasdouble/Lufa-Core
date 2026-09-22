@@ -1,5 +1,21 @@
 # @grasdouble/cdn_autobuild-server
 
+## 1.0.0
+
+### Major Changes
+
+- c03b506: fix: harden CDN rate limiting, export resolution and atomic cache publication; build and test both runtime entry points. Remove public IP unblocking, disable implicit proxy trust, and require fresh or migrated caches with completion markers. Runtime dependencies are installed alongside the package instead of bundled.
+
+  fix: validate package directories against the configured cache in the entry resolver and check resolved manifest paths before reading metadata. Add regression coverage for escaping package, scope and manifest symlinks, including HTTP requests.
+
+  fix: build both runtime formats through the esbuild JavaScript API to avoid the CLI launcher failure in Linux CI. Verify bundle generation and execution with an unusable CLI launcher.
+
+### Patch Changes
+
+- 621f077: chore: update dependencies and synchronize shared agent rules.
+
+  chore: upgrade dotenvx and Node type definitions for the CDN, and sort-package-json for the CDN and shared ESLint configuration.
+
 ## 0.3.13
 
 ### Patch Changes

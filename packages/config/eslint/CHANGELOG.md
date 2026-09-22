@@ -1,5 +1,13 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.12
+
+### Patch Changes
+
+- 621f077: chore: update dependencies and synchronize shared agent rules.
+
+  chore: upgrade dotenvx and Node type definitions for the CDN, and sort-package-json for the CDN and shared ESLint configuration.
+
 ## 0.1.11
 
 ### Patch Changes

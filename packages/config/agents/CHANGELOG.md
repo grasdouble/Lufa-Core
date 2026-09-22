@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.4
+
+### Patch Changes
+
+- 8d52f07: chore: upgrade Vitest in agent tooling and sort-package-json in shared configuration packages.
+
 ## 1.1.3
 
 ### Patch Changes
