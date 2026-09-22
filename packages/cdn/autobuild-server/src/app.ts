@@ -62,7 +62,7 @@ export const createApp = ({
       res.status(result.status).json({ error: result.message });
       return;
     }
-    const entry = await send(params);
+    const entry = await send({ ...params, CDN_DIR: path.resolve(cdnDir) });
     if (entry.status !== 200 || !entry.outputFile) {
       res.status(entry.status).json({ error: entry.message });
       return;

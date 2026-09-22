@@ -210,10 +210,25 @@ const exportTarget = (exports: ExportTarget, requested: string): ExportTarget | 
   return undefined;
 };
 
-export type SendEntryProps = { exportPath: string; cdnPkgPath: string; fullName: string };
-export const sendEntry = async ({ exportPath, cdnPkgPath }: SendEntryProps) => {
+export type SendEntryProps = { exportPath: string; cdnPkgPath: string; fullName: string; CDN_DIR: string };
+export const sendEntry = async ({ exportPath, cdnPkgPath, CDN_DIR }: SendEntryProps) => {
   try {
-    const pkgJson: PackageJson = await fs.readJson(path.join(cdnPkgPath, 'package.json'));
+    // Validate against the configured cache before accessing a caller-supplied package path.
+    const cacheRoot = path.resolve(CDN_DIR);
+    const root = path.resolve(cdnPkgPath);
+    if (root === cacheRoot || !root.startsWith(path.join(cacheRoot, path.sep)))
+      return { status: 403, message: 'Forbidden package path' };
+
+    const realCacheRoot = await fs.realpath(cacheRoot);
+    const realRoot = await fs.realpath(root);
+    if (realRoot === realCacheRoot || !realRoot.startsWith(path.join(realCacheRoot, path.sep)))
+      return { status: 403, message: 'Forbidden package path' };
+
+    // The manifest must stay inside the package too, including when it is a symlink.
+    const manifest = await fs.realpath(path.join(realRoot, 'package.json'));
+    if (!manifest.startsWith(path.join(realRoot, path.sep)))
+      return { status: 403, message: 'Forbidden package manifest' };
+    const pkgJson: PackageJson = await fs.readJson(manifest);
     const entry =
       pkgJson.exports !== undefined
         ? resolveTarget(exportTarget(pkgJson.exports, exportPath))
@@ -221,12 +236,10 @@ export const sendEntry = async ({ exportPath, cdnPkgPath }: SendEntryProps) => {
           ? (pkgJson.module ?? pkgJson.main)
           : undefined;
     if (typeof entry !== 'string') return { status: 404, message: 'Export not found' };
-    const root = path.resolve(cdnPkgPath);
-    const outputFile = path.resolve(root, entry);
-    if (!isWithin(root, outputFile)) return { status: 403, message: 'Forbidden entry point' };
-    const realRoot = await fs.realpath(root);
+    const outputFile = path.resolve(realRoot, entry);
+    if (!outputFile.startsWith(path.join(realRoot, path.sep))) return { status: 403, message: 'Forbidden entry point' };
     const realFile = await fs.realpath(outputFile);
-    if (!isWithin(realRoot, realFile)) return { status: 403, message: 'Forbidden entry point' };
+    if (!realFile.startsWith(path.join(realRoot, path.sep))) return { status: 403, message: 'Forbidden entry point' };
     if (!(await fs.stat(realFile)).isFile()) return { status: 404, message: 'Entry file not found' };
     return { status: 200, outputFile: realFile };
   } catch (error) {
