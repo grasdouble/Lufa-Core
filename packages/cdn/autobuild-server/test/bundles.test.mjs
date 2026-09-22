@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { copyFile, mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -9,7 +9,9 @@ import { fileURLToPath } from 'node:url';
 for (const format of ['mjs', 'cjs']) {
   test(`built ${format} entry starts and serves HTTP`, { timeout: 15000 }, async (t) => {
     const cwd = await mkdtemp(path.join(os.tmpdir(), 'cdn-smoke-'));
-    const child = spawn(process.execPath, [fileURLToPath(new URL(`../dist/index.${format}`, import.meta.url))], {
+    const entry = path.join(cwd, `index.${format}`);
+    await copyFile(fileURLToPath(new URL(`../dist/index.${format}`, import.meta.url)), entry);
+    const child = spawn(process.execPath, [entry], {
       cwd,
       env: { PATH: process.env.PATH, GITHUB_TOKEN: 'local-smoke-test', PORT: '0', CDN_DIR: cwd },
       stdio: ['ignore', 'pipe', 'pipe'],
