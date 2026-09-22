@@ -1,6 +1,6 @@
 {
   "name": "@grasdouble/lufa_config_vitest",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "private": false,
   "description": "Shared Vitest configuration for Lufa projects",
   "repository": {

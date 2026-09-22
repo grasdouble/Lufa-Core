@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_tsconfig
 
+## 0.1.5
+
+### Patch Changes
+
+- 8d52f07: chore: upgrade Vitest in agent tooling and sort-package-json in shared configuration packages.
+
 ## 0.1.4
 
 ### Patch Changes
