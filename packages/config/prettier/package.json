@@ -37,7 +37,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1"
   },
   "devDependencies": {
-    "sort-package-json": "^3.7.1"
+    "sort-package-json": "^4.0.0"
   },
   "peerDependencies": {
     "prettier": "^3.7.3"
