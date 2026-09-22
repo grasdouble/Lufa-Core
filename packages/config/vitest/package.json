@@ -46,12 +46,12 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "eslint": "^10.11.0",
     "prettier": "^3.9.8",
-    "sort-package-json": "^3.7.1",
+    "sort-package-json": "^4.0.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   },
   "peerDependencies": {
-    "vitest": "^4.0.0"
+    "vitest": "^5.0.0"
   },
   "publishConfig": {
     "access": "public",
