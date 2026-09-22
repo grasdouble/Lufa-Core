@@ -110,7 +110,7 @@ The public `/unblock-ip` endpoint has been removed. Rate limits expire automatic
 
 The server supports root string exports, nested browser/import/default conditions, arrays and wildcard subpaths. Unknown or blocked exports return 404 rather than falling back to the root entry. Entries resolving outside the package, including symlinks, are forbidden. Packages from npm must declare `type: module`; built packages from the configured GitHub scope retain their existing behavior.
 
-Runtime dependencies are external to the bundles and must be installed along with the package. The ordinary build generates both manifest entry points; tests launch both on temporary local ports without fetching registry packages.
+The build bundles runtime dependencies into both entry points. For a deployment without `node_modules`, copy `dist/index.cjs` to the Passenger application root as `index.cjs` and configure the required environment variables there. Tests copy each bundle to an isolated directory and launch it on a temporary local port without fetching registry packages.
 
 The build scripts use esbuild's JavaScript API through `build.mjs` to avoid CLI launcher issues with native executables in CI. `pnpm build:esm` and `pnpm build:cjs` remain available for individual formats.
 
