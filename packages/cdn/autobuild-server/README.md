@@ -112,6 +112,8 @@ The server supports root string exports, nested browser/import/default condition
 
 Runtime dependencies are external to the bundles and must be installed along with the package. The ordinary build generates both manifest entry points; tests launch both on temporary local ports without fetching registry packages.
 
+The build scripts use esbuild's JavaScript API through `build.mjs` to avoid CLI launcher issues with native executables in CI. `pnpm build:esm` and `pnpm build:cjs` remain available for individual formats.
+
 ## Security
 
 - **CORS allowlist** — only origins declared in `security.ts` are allowed. Requests without an `Origin` header are permitted (asset fetches).

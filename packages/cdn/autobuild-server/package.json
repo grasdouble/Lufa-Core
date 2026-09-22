@@ -22,8 +22,8 @@
   ],
   "scripts": {
     "build": "pnpm build:esm && pnpm build:cjs",
-    "build:cjs": "esbuild src/index.ts --bundle --outfile=dist/index.cjs --platform=node --format=cjs --packages=external",
-    "build:esm": "esbuild src/index.ts --bundle --outfile=dist/index.mjs --platform=node --format=esm --packages=external",
+    "build:cjs": "node build.mjs cjs",
+    "build:esm": "node build.mjs esm",
     "dev": "dotenvx run --env-file=.env --env-file=.env.development -- nodemon --exec tsx src/index.ts",
     "lint": "eslint",
     "prettier:check": "prettier --check .",
