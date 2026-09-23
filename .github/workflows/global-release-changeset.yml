@@ -11,6 +11,7 @@ permissions: {}
 jobs:
   Changesets-release:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
       packages: write
@@ -19,45 +20,13 @@ jobs:
       checks: read
       statuses: read
     steps:
-      # Checkout the code
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ github.token }}
           persist-credentials: false
-
-      # Setup using composite action (partial - manual install due to npmrc config)
-      - name: Install pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - name: Version or publish packages
+        uses: grasdouble/Lufa-CICD/actions/changesets-release@changesets-release-v1
         with:
-          node-version-file: .tool-versions
-          cache: 'pnpm'
-
-      # Configure npm for GitHub Registry
-      - name: Configure npm for GitHub Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.LUFA_CI_SECRET_WRITE }}" > ~/.npmrc
-          echo "@grasdouble:registry=https://npm.pkg.github.com" >> ~/.npmrc
-
-      # Install dependencies
-      - name: Install updated dependencies
-        run: pnpm install --frozen-lockfile
-
-      # Build all packages
-      - name: Build All packages
-        run: pnpm all:build
-
-      # Publish the release or pre-release
-      - name: Run Changesets Action
-        # Action v2 is compatible with @changesets/cli v3; review future majors together.
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
-        with:
-          github-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}
-          publish-script: 'pnpm changeset publish' # The command to run to publish the packages
-          pr-title: 'Release: New Version Updates' # The title for the release pull request
-          commit-message: 'Release new versions' # The commit message for the changeset commit
-          version-script: pnpm changeset version # The command to run to bump the version
-          create-github-releases: true # Set this to true if you want to create a GitHub release
+          release-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}
+          registry-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}

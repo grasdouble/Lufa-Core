@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: 📦 Setup Node.js and pnpm
-        uses: ./.github/actions/setup-node-pnpm
+        uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
         with:
           node-version-file: '.tool-versions'
           github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
