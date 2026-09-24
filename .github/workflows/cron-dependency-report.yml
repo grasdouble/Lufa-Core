@@ -1,0 +1,42 @@
+name: Cron:Dependency-Report
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: none
+  checks: none
+  deployments: none
+  issues: none
+  pull-requests: none
+  repository-projects: none
+  security-events: none
+  statuses: none
+
+concurrency:
+  group: dependency-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 📦 Setup Node.js and pnpm
+        uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
+        with:
+          node-version-file: '.tool-versions'
+          github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 📊 Generate weekly dependency report
+        id: report
+        uses: grasdouble/Lufa-CICD/actions/dependency-report@dependency-report-v1

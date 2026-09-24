@@ -25,8 +25,20 @@ jobs:
         with:
           token: ${{ github.token }}
           persist-credentials: false
+
+      - name: Setup Node.js and pnpm
+        uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
+        with:
+          node-version-file: '.tool-versions'
+          github-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm all:build
+
       - name: Version or publish packages
-        uses: grasdouble/Lufa-CICD/actions/changesets-release@changesets-release-v1
+        uses: grasdouble/Lufa-CICD/actions/changesets-release@changesets-release-v2
         with:
           release-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}
-          registry-token: ${{ secrets.LUFA_CI_SECRET_WRITE }}
