@@ -29,20 +29,28 @@ jobs:
           node-version-file: '.tool-versions'
           github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
 
+      - name: 📦 Install dependencies
+        id: install-dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build packages
+        id: build
+        run: pnpm all:build
+
       - name: Run shared pnpm quality checks
         id: check-quality
-        uses: grasdouble/Lufa-CICD/actions/check-quality@check-quality-v1
+        if: always() && steps.install-dependencies.outcome == 'success'
+        uses: grasdouble/Lufa-CICD/actions/check-quality@check-quality-v2
         with:
-          install-command: pnpm install --frozen-lockfile
-          build-command: pnpm all:build
+          check-agent-rules: 'true'
           lint-command: pnpm all:lint
-          typecheck-command: pnpm all:typecheck
+          typecheck-command: ${{ steps.build.outcome == 'success' && 'pnpm all:typecheck' || '' }}
           format-command: pnpm all:prettier:check
 
       - name: Run tests
-        if: always() && steps.check-quality.outputs.build-succeeded == 'true'
+        if: always() && steps.build.outcome == 'success'
         run: pnpm all:test
 
       - name: Validate Core documentation
-        if: always() && steps.check-quality.outputs.install-succeeded == 'true'
+        if: always() && steps.install-dependencies.outcome == 'success'
         run: pnpm validate:docs

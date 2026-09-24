@@ -29,8 +29,6 @@
     "sync:-----------------------------": "",
     "sync:agents": "node packages/config/agents/bin/sync-agents.mjs",
     "test:tools": "node --test scripts/*.test.mjs",
-    "tools:---------------------------------------------": "",
-    "tools:generate-outdated-report": "node .github/actions/dependency-update/generateOutdatedReport.js",
     "validate:------------------------------------------": "",
     "validate:docs": "bash scripts/validate-ai-docs.sh"
   },

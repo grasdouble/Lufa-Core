@@ -29,6 +29,13 @@ jobs:
           node-version-file: '.tool-versions'
           github-token: ${{ github.token }}
 
+      - name: Synchronize shared agent rules on this Dependabot branch
+        uses: grasdouble/Lufa-CICD/actions/sync-agents@sync-agents-v1
+        with:
+          mode: sync
+          head-branch: ${{ github.head_ref }}
+          github-token: ${{ secrets.LUFA_CI_SECRET_DEPENDABOT }}
+
       - name: 📝 Generate, commit, and push Changeset
         uses: grasdouble/Lufa-CICD/actions/dependabot-changeset@dependabot-changeset-v1
         with:
