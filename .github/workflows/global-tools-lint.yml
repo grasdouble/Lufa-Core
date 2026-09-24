@@ -29,34 +29,20 @@ jobs:
           node-version-file: '.tool-versions'
           github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
 
-      - name: 📦 Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # Step 5: Build packages (needed for type checking)
-      - name: 🏗️ Build packages
-        run: pnpm all:build
-
-      # Step 6: Run lint
-      - name: 🧹 Run lint
-        if: always()
-        run: pnpm all:lint
-
-      # Step 7: Run type checking
-      - name: 🔍 Run type checking
-        if: always()
-        run: pnpm all:typecheck
+      - name: Run shared pnpm quality checks
+        id: check-quality
+        uses: grasdouble/Lufa-CICD/actions/check-quality@check-quality-v1
+        with:
+          install-command: pnpm install --frozen-lockfile
+          build-command: pnpm all:build
+          lint-command: pnpm all:lint
+          typecheck-command: pnpm all:typecheck
+          format-command: pnpm all:prettier:check
 
       - name: Run tests
+        if: always() && steps.check-quality.outputs.build-succeeded == 'true'
         run: pnpm all:test
 
       - name: Validate Core documentation
+        if: always() && steps.check-quality.outputs.install-succeeded == 'true'
         run: pnpm validate:docs
-
-      # Step 8: Check formatting
-      - name: 🎨 Check formatting
-        if: always()
-        id: prettier
-        run: |
-          echo "::group::Prettier Format Check"
-          pnpm all:prettier:check
-          echo "::endgroup::"
