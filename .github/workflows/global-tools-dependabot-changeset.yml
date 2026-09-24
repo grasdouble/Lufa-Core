@@ -11,99 +11,29 @@ permissions:
 jobs:
   add-changeset:
     if: github.actor == 'dependabot[bot]' && github.head_ref != 'changeset-release/main'
+    concurrency:
+      group: dependabot-changeset-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.LUFA_CI_SECRET_DEPENDABOT }}
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: 📦 Setup Node.js and pnpm
         uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
         with:
           node-version-file: '.tool-versions'
-          github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
+          github-token: ${{ github.token }}
 
-      - name: 📦 Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 🔍 Detect affected packages
-        id: detect
-        run: |
-          # Collect all packages from the monorepo (private or not, all are versioned by changesets)
-          declare -A PACKAGE_MAP
-          while IFS= read -r pkg_json; do
-            NAME=$(node -e "try{const p=require('./$pkg_json');if(p.name)console.log(p.name)}catch(e){}")
-            if [ -n "$NAME" ]; then
-              PACKAGE_MAP["$NAME"]=1
-            fi
-          done < <(find . -name "package.json" -not -path "*/node_modules/*" -not -path "./.changeset/*")
-
-          # Find package.json files modified in this PR vs main
-          CHANGED_PKG_JSONS=$(git diff --name-only origin/main...HEAD -- '**/package.json' | grep -v node_modules || true)
-
-          if [ -z "$CHANGED_PKG_JSONS" ]; then
-            echo "No package.json changes detected, skipping changeset creation."
-            echo "affected=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Changed package.json files:"
-          echo "$CHANGED_PKG_JSONS"
-
-          # Determine which monorepo packages are affected
-          AFFECTED_PACKAGES=()
-          while IFS= read -r pkg_json; do
-            DIR=$(dirname "$pkg_json")
-            if [ -f "$DIR/package.json" ]; then
-              NAME=$(node -e "try{const p=require('./$DIR/package.json');if(p.name)console.log(p.name)}catch(e){}")
-              if [ -n "$NAME" ] && [ "${PACKAGE_MAP[$NAME]+_}" ]; then
-                AFFECTED_PACKAGES+=("$NAME")
-              fi
-            fi
-          done <<< "$CHANGED_PKG_JSONS"
-
-          if [ ${#AFFECTED_PACKAGES[@]} -eq 0 ]; then
-            echo "No monorepo packages affected, skipping changeset creation."
-            echo "affected=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Affected packages: ${AFFECTED_PACKAGES[*]}"
-          # Join with comma for output
-          AFFECTED_CSV=$(IFS=','; echo "${AFFECTED_PACKAGES[*]}")
-          echo "affected=$AFFECTED_CSV" >> $GITHUB_OUTPUT
-
-      - name: 📝 Generate changeset file
-        if: steps.detect.outputs.affected != ''
-        run: |
-          IFS=',' read -ra AFFECTED_PACKAGES <<< "${{ steps.detect.outputs.affected }}"
-
-          CHANGESET_FILE=".changeset/dependabot-$(date +%s).md"
-          {
-            echo "---"
-            for PKG in "${AFFECTED_PACKAGES[@]}"; do
-              echo "'$PKG': patch"
-            done
-            echo "---"
-            echo ""
-            echo "Dependency updates"
-          } > "$CHANGESET_FILE"
-
-          echo "Created changeset: $CHANGESET_FILE"
-          cat "$CHANGESET_FILE"
-
-      - name: 💾 Commit and push changeset
-        if: steps.detect.outputs.affected != ''
-        run: |
-          if git status --porcelain | grep -q ".changeset/"; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add .changeset
-            git commit -m "chore: add changeset for dependabot update"
-            git push
-          else
-            echo "Nothing to commit."
-          fi
+      - name: 📝 Generate, commit, and push Changeset
+        uses: grasdouble/Lufa-CICD/actions/dependabot-changeset@dependabot-changeset-v1
+        with:
+          base-sha: ${{ github.event.pull_request.base.sha }}
+          head-sha: ${{ github.event.pull_request.head.sha }}
+          head-branch: ${{ github.head_ref }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.LUFA_CI_SECRET_DEPENDABOT }}
