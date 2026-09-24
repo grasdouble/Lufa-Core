@@ -22,7 +22,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: 📦 Setup Node.js and pnpm
-        uses: ./.github/actions/setup-node-pnpm
+        uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
         with:
           node-version-file: '.tool-versions'
           github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
@@ -211,7 +211,7 @@ jobs:
 
       - name: Comment when no packages modified
         if: steps.changed-files.outputs.any_changed == 'false' || steps.detect-packages.outputs.count == 0
-        uses: ./.github/actions/pr-comment
+        uses: grasdouble/Lufa-CICD/actions/pr-comment@pr-comment-v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-marker: '<!-- changeset-validation-comment -->'
@@ -299,7 +299,7 @@ jobs:
 
       - name: Post changeset validation comment
         if: steps.detect-packages.outputs.count > 0
-        uses: ./.github/actions/pr-comment
+        uses: grasdouble/Lufa-CICD/actions/pr-comment@pr-comment-v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-marker: '<!-- changeset-validation-comment -->'

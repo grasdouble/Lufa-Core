@@ -45,8 +45,12 @@ All GitHub Actions updates are grouped together to simplify review and merging. 
 - `actions/checkout`
 - `actions/setup-node`
 - `pnpm/action-setup`
-- `changesets/action`
+- Independently versioned `grasdouble/Lufa-CICD` actions
 - Custom actions used in workflows
+
+Shared setup, commenting, FTP and Changesets release dependencies are maintained
+in `Lufa-CICD`. Review catalogue releases alongside this repository's Changesets
+CLI version when upgrading the `changesets-release` action.
 
 **PR Limit**: Maximum 5 open PRs at a time to avoid overwhelming the review queue.
 
