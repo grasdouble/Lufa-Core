@@ -203,8 +203,8 @@ importers:
   packages/cdn/autobuild-server:
     dependencies:
       '@dotenvx/dotenvx':
-        specifier: ^2.28.2
-        version: 2.28.2
+        specifier: ^2.30.0
+        version: 2.30.0
       cors:
         specifier: ^2.8.6
         version: 2.8.6
@@ -218,8 +218,8 @@ importers:
         specifier: ^8.7.0
         version: 8.7.0(express@5.2.1(supports-color@5.5.0))(supports-color@5.5.0)
       fs-extra:
-        specifier: ^11.4.0
-        version: 11.4.0
+        specifier: ^11.4.1
+        version: 11.4.1
       pacote:
         specifier: ^21.5.1
         version: 21.5.1(supports-color@5.5.0)
@@ -509,12 +509,12 @@ packages:
     resolution: {integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==}
     engines: {node: '>= 20.12.0'}
 
-  '@dotenvx/dotenvx@2.28.2':
-    resolution: {integrity: sha512-8UZfVEj4rrYQcaq/3Ox7te1qC1znOUOavv6F0BQiGhLLjqaD4xDQ4j3ddla/afC5ukBrnWx3c4RPsh6i1SQUSw==}
+  '@dotenvx/dotenvx@2.30.0':
+    resolution: {integrity: sha512-+Rk8UhaD3WIREKJBPmH9HHUvKO+ggb4tJhzAoXiZNBjQv6nAiJmI953MQ6sC7msHjAvhRIFlyZT7Oe6bQPslAA==}
     hasBin: true
 
-  '@dotenvx/primitives@3.0.2':
-    resolution: {integrity: sha512-qhddO125donMnxDZRK7Wvw1Oyd5744wJD5j7a8U5254IKwpnAxcpFcjwiUHhmIfGYnAuGBoCRIK5Rlm3bd6y7Q==}
+  '@dotenvx/primitives@3.0.3':
+    resolution: {integrity: sha512-KodBtwW8IgXhDiic04+cMvMKGjGLLew3jJq2JUGmh7c0M7u+twSylCkygkixzDvIvXrugKcCUQLkvDhgK7RN2g==}
 
   '@dotenvx/tooling@1.0.3':
     resolution: {integrity: sha512-Gd6qQol/ICb4MPRWpiIH56y+pR9AVB7kPBkbhrLSGLtAiF4Qgy+k651/f2pze0Xbm3H5XewbPfIm4y9K+ic30Q==}
@@ -1627,8 +1627,8 @@ packages:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
 
-  fs-extra@11.4.0:
-    resolution: {integrity: sha512-EQsFzMUJkCKGr1ePqlYADkIUmHW1s3ZXr5Yqy6wbGrfUCphpl2maM/kyOIRA2HpP3AaFQTZXD4ldjek+nccddA==}
+  fs-extra@11.4.1:
+    resolution: {integrity: sha512-KYAb4c9BJQI6QqGKthV68OHe0badztdXJWKo0WtBA9IuCFPTKvE5ZdUBglP833aMjhaSPNO4A5j/EkzZtGlKjA==}
     engines: {node: '>=14.14'}
 
   fs-minipass@3.0.3:
@@ -3196,16 +3196,16 @@ snapshots:
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
 
-  '@dotenvx/dotenvx@2.28.2':
+  '@dotenvx/dotenvx@2.30.0':
     dependencies:
-      '@dotenvx/primitives': 3.0.2
+      '@dotenvx/primitives': 3.0.3
       '@dotenvx/tooling': 1.0.3
       global-agent: 3.0.0
       node-forge: 1.4.0
       undici: 6.28.1
       yocto-spinner: 1.2.2
 
-  '@dotenvx/primitives@3.0.2': {}
+  '@dotenvx/primitives@3.0.3': {}
 
   '@dotenvx/tooling@1.0.3': {}
 
@@ -4580,7 +4580,7 @@ snapshots:
 
   fresh@2.0.0: {}
 
-  fs-extra@11.4.0:
+  fs-extra@11.4.1:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.2.1

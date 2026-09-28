@@ -48,12 +48,12 @@
     ]
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^2.28.2",
+    "@dotenvx/dotenvx": "^2.30.0",
     "cors": "^2.8.6",
     "escape-html": "^1.0.3",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
-    "fs-extra": "^11.4.0",
+    "fs-extra": "^11.4.1",
     "pacote": "^21.5.1"
   },
   "devDependencies": {
