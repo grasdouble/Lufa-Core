@@ -10,7 +10,7 @@ permissions:
   checks: none
   deployments: none
   issues: none
-  packages: none
+  packages: read
   repository-projects: none
   security-events: none
   statuses: none
@@ -27,7 +27,7 @@ jobs:
         uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
         with:
           node-version-file: '.tool-versions'
-          github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
+          github-token: ${{ github.token }}
 
       - name: 📦 Install dependencies
         id: install-dependencies

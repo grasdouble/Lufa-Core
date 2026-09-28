@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
   pull-requests: write
   id-token: write
 
@@ -25,7 +26,7 @@ jobs:
         uses: grasdouble/Lufa-CICD/actions/setup-node-pnpm@setup-node-pnpm-v1
         with:
           node-version-file: '.tool-versions'
-          github-token: ${{ secrets.LUFA_CI_SECRET_READ }}
+          github-token: ${{ github.token }}
 
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
