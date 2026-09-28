@@ -1,5 +1,0 @@
----
-"@grasdouble/cdn_autobuild-server": patch
----
-
-Dependency updates
