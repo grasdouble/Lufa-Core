@@ -48,7 +48,7 @@
     ]
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^2.30.0",
+    "@dotenvx/dotenvx": "^2.32.4",
     "cors": "^2.8.6",
     "escape-html": "^1.0.3",
     "express": "^5.2.1",
@@ -74,7 +74,7 @@
     "sort-package-json": "^4.0.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "typescript-eslint": "^8.70.1"
+    "typescript-eslint": "^8.71.0"
   },
   "engines": {
     "node": ">=18"
