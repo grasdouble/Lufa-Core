@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.5
+
+### Patch Changes
+
+- d52e326: Dependency updates
+
 ## 1.1.4
 
 ### Patch Changes
