@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.13
+
+### Patch Changes
+
+- 31a7411: Dependency updates
+
 ## 0.1.12
 
 ### Patch Changes
