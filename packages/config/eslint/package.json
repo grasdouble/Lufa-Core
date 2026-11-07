@@ -37,7 +37,7 @@
     "typescript-eslint": "^8.71.0"
   },
   "devDependencies": {
-    "sort-package-json": "^4.0.0"
+    "sort-package-json": "^4.1.0"
   },
   "peerDependencies": {
     "eslint": "^10.0.0"
