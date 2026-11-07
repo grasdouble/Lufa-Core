@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_prettier
 
+## 0.1.7
+
+### Patch Changes
+
+- 6f5c36f: Dependency updates
+
 ## 0.1.6
 
 ### Patch Changes

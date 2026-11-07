@@ -1,5 +1,13 @@
 # @grasdouble/cdn_autobuild-server
 
+## 1.0.4
+
+### Patch Changes
+
+- f5b5842: Dependency updates
+- 6f5c36f: Dependency updates
+- f5b5842: fix: define `__filename` in the ESM bundle for bundled CommonJS dependencies
+
 ## 1.0.3
 
 ### Patch Changes
