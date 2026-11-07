@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.6
+
+### Patch Changes
+
+- 6f5c36f: Dependency updates
+
 ## 1.1.5
 
 ### Patch Changes
