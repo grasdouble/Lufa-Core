@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_vitest
 
+## 2.0.4
+
+### Patch Changes
+
+- a4ec714: chore: update shared configuration dependencies
+
 ## 2.0.3
 
 ### Patch Changes

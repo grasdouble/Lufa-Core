@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_eslint
 
+## 0.1.15
+
+### Patch Changes
+
+- a4ec714: chore: update shared configuration dependencies
+
 ## 0.1.14
 
 ### Patch Changes
