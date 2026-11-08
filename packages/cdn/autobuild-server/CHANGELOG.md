@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 2.0.0
+
+### Major Changes
+
+- a4ec714: chore: require Node.js 22.22.2+ and update pacote to 22.0.1
+
 ## 1.0.4
 
 ### Patch Changes

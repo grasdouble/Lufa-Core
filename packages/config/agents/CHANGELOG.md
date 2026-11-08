@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.7
+
+### Patch Changes
+
+- a4ec714: chore: update shared configuration dependencies
+
 ## 1.1.6
 
 ### Patch Changes
