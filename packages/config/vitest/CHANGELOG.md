@@ -1,5 +1,11 @@
 # @grasdouble/lufa_config_vitest
 
+## 2.0.5
+
+### Patch Changes
+
+- 1f94295: Dependency updates
+
 ## 2.0.4
 
 ### Patch Changes

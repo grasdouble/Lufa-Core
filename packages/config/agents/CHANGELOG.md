@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.8
+
+### Patch Changes
+
+- 1f94295: Dependency updates
+
 ## 1.1.7
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @grasdouble/cdn_autobuild-server
 
+## 2.0.1
+
+### Patch Changes
+
+- 1f94295: Dependency updates
+
 ## 2.0.0
 
 ### Major Changes
