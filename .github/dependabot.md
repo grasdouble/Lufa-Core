@@ -88,6 +88,38 @@ gh pr merge <pr-number> --squash --auto
 - Consider creating a separate branch for testing
 - Update code if breaking changes are present
 
+### Review-aware merge pilot
+
+The pilot is off until the repository Actions variable `DEPENDABOT_AUTOMATION`
+is set to one Dependabot PR number. Remove that variable to disable new attempts.
+The pilot does not submit approvals or change the [main ruleset](rulesets/main.yml).
+The YAML mirrors the existing GitHub ruleset; merging edits to the file does not
+apply them to GitHub.
+
+```mermaid
+flowchart TD
+    CI["A required CI workflow completes"] --> Gate["Default-branch merge workflow checks the selected PR"]
+    Review["A reviewer submits an approval"] --> Signal["Read-only workflow signals the approval"]
+    Signal --> Gate
+    Gate --> Ready{"GitHub accepts the review and both checks passed for this head?"}
+    Ready -->|Yes| Merge["Request a squash merge for the exact checked commit"]
+    Ready -->|No| Wait["Leave the PR open"]
+```
+
+Either event can be the last prerequisite; an approval does not rerun CI.
+
+Only direct npm updates from one stable version at or above `1.0.0` to a patch or
+minor qualify. Every changed direct version in the pnpm workspaces is checked
+against the lockfile. The only additional commit accepted is the generated
+`.changeset/dependabot-pr-<number>.md` commit from GitHub Actions. Major updates,
+`0.x`, GitHub Actions updates, and other changes still need a manual merge.
+
+For the pilot, choose an eligible PR before approving it. Test CI-first by
+waiting for `Check-lint` and `validate-changesets` before submitting the approval.
+To test review-first, choose another eligible PR with checks still running and
+confirm it stays open until they pass. GitHub remains the final authority on
+review validity, branch freshness, and merge eligibility.
+
 ### Disabling Specific Updates
 
 If you need to prevent Dependabot from updating a specific dependency, add an `ignore` configuration:

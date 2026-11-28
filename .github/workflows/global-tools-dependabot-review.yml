@@ -1,0 +1,20 @@
+name: Global:Tools:Dependabot:review
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions: {}
+
+jobs:
+  signal:
+    if: >-
+      vars.DEPENDABOT_AUTOMATION != '' &&
+      format('{0}', github.event.pull_request.number) == vars.DEPENDABOT_AUTOMATION &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Signal a submitted approval
+        run: echo 'Dependabot review submitted'

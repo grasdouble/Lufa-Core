@@ -1,0 +1,42 @@
+name: Global:Tools:Dependabot:merge
+
+on:
+  workflow_run:
+    workflows:
+      - Global:Tools:Lint
+      - Global:Tools:Missing-Changeset
+      - Global:Tools:Dependabot:review
+    types: [completed]
+
+permissions: {}
+
+jobs:
+  merge:
+    if: >-
+      vars.DEPENDABOT_AUTOMATION != '' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      ((github.event.workflow_run.event == 'pull_request' &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/npm_and_yarn/') &&
+      (github.event.workflow_run.path == '.github/workflows/global-tools-lint.yml' ||
+      github.event.workflow_run.path == '.github/workflows/global-tools-missing-changeset.yml')) ||
+      (github.event.workflow_run.event == 'pull_request_review' &&
+      github.event.workflow_run.path == '.github/workflows/global-tools-dependabot-review.yml'))
+    concurrency:
+      group: dependabot-merge-${{ vars.DEPENDABOT_AUTOMATION }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+      checks: read
+    steps:
+      - name: Check out trusted default-branch code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Reconcile approval and CI for the selected PR
+        run: ruby .github/scripts/dependabot_merge.rb
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPENDABOT_AUTOMATION: ${{ vars.DEPENDABOT_AUTOMATION }}

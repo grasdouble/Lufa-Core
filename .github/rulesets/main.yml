@@ -1,0 +1,40 @@
+# Snapshot of repository ruleset 4113210. GitHub does not apply it automatically.
+# Update the existing ruleset, not a new one, from a reviewed administrator checkout:
+# ruby -rjson -ryaml -e 'puts JSON.generate(YAML.safe_load(File.read(ARGV.fetch(0))))' .github/rulesets/main.yml \
+#   | gh api --method PUT repos/grasdouble/Lufa-Core/rulesets/4113210 --input -
+name: main
+target: branch
+enforcement: active
+bypass_actors:
+  - actor_id: null
+    actor_type: OrganizationAdmin
+    bypass_mode: always
+conditions:
+  ref_name:
+    exclude: []
+    include: ['~DEFAULT_BRANCH']
+rules:
+  - type: deletion
+  - type: non_fast_forward
+  - type: pull_request
+    parameters:
+      allowed_merge_methods: [squash]
+      dismiss_stale_reviews_on_push: false
+      dismissal_restriction:
+        allowed_actors: []
+        enabled: false
+      require_code_owner_review: false
+      require_extra_approval_for_unattributed_changes: true
+      require_last_push_approval: false
+      required_approving_review_count: 1
+      required_review_thread_resolution: false
+      required_reviewers: []
+  - type: required_status_checks
+    parameters:
+      do_not_enforce_on_create: false
+      required_status_checks:
+        - context: Check-lint
+          integration_id: 15368
+        - context: validate-changesets
+          integration_id: 15368
+      strict_required_status_checks_policy: true
