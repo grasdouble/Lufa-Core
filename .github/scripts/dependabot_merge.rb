@@ -75,10 +75,17 @@ module DependabotMerge
     end
   end
 
-  def self.protected?(rules)
+  def self.protected?(rules, app_review: false)
     approval = rules.any? do |rule|
       rule['type'] == 'pull_request' && rule.dig('parameters', 'required_approving_review_count').to_i.positive?
     end
+    if app_review
+      checks = rules.select { |rule| rule['type'] == 'required_status_checks' }
+                    .flat_map { |rule| rule.dig('parameters', 'required_status_checks') }
+      expected = REQUIRED_CHECKS.map { |name| [name, ACTIONS_APP_ID] }
+      return false unless (checks.map { |check| check.values_at('context', 'integration_id') } - expected).empty?
+    end
+
     strict_checks = rules.select do |rule|
       rule['type'] == 'required_status_checks' && rule.dig('parameters', 'strict_required_status_checks_policy') == true
     end.flat_map { |rule| rule.dig('parameters', 'required_status_checks') }
@@ -87,17 +94,27 @@ module DependabotMerge
     end
   end
 
-  def self.ready?(pr, latest_reviews, checks, sha)
-    return false unless pr.values_at('reviewDecision', 'mergeStateStatus') == %w[APPROVED CLEAN]
-    return false unless latest_reviews.any? do |review|
-      review['state'] == 'APPROVED' && review.dig('author', '__typename') == 'User' &&
-        review['authorCanPushToRepository'] == true
-    end
-
-    REQUIRED_CHECKS.all? do |name|
+  def self.decision(pr, latest_reviews, checks, sha, reviewer: nil)
+    return :wait unless REQUIRED_CHECKS.all? do |name|
       check = checks.find { |entry| entry['name'] == name && entry.dig('app', 'id') == ACTIONS_APP_ID }
       check && check.values_at('head_sha', 'status', 'conclusion') == [sha, 'completed', 'success']
     end
+
+    approvals = latest_reviews.select { |review| review['state'] == 'APPROVED' }
+    human_approval = approvals.any? do |review|
+      review.dig('author', '__typename') == 'User' && review['authorCanPushToRepository'] == true
+    end
+    app_approval = reviewer && approvals.any? do |review|
+      review.dig('author', '__typename') == 'Bot' && review.dig('author', 'login') == reviewer &&
+        review.dig('commit', 'oid') == sha
+    end
+
+    if pr.values_at('reviewDecision', 'mergeStateStatus') == %w[APPROVED CLEAN] && (human_approval || app_approval)
+      return :merge
+    end
+
+    review_pending = %w[REVIEW_REQUIRED APPROVED].include?(pr['reviewDecision'])
+    reviewer && review_pending && !app_approval ? :approve : :wait
   end
 
   def self.review_state(repository, number)
@@ -109,11 +126,12 @@ module DependabotMerge
             headRefOid
             reviewDecision
             mergeStateStatus
-            latestOpinionatedReviews(first: 100, writersOnly: true) {
+            latestOpinionatedReviews(first: 100) {
               nodes {
                 state
                 authorCanPushToRepository
-                author { __typename }
+                author { __typename login }
+                commit { oid }
               }
             }
           }
@@ -124,9 +142,10 @@ module DependabotMerge
     JSON.parse(response).fetch('data').fetch('repository').fetch('pullRequest')
   end
 
-  def self.run(repository, scope)
+  def self.run(repository, scope, reviewer_token: '', reviewer_slug: '')
     return unless /\A[1-9]\d*\z/.match?(scope)
 
+    reviewer = "#{reviewer_slug}[bot]" unless reviewer_token.empty? || reviewer_slug.empty?
     number = scope.to_i
     path = "pulls/#{number}"
     pr = api(repository, path)
@@ -138,13 +157,16 @@ module DependabotMerge
     return unless (1..2).cover?(pr['commits'])
 
     rules = api(repository, 'rules/branches/main?per_page=100')
-    abort 'Pilot blocked: main does not require reviews and the strict Lufa CI checks.' unless protected?(rules)
+    unless protected?(rules, app_review: !reviewer.nil?)
+      abort 'Pilot blocked: main does not require the expected review and strict Lufa CI checks.'
+    end
 
     merge_state = review_state(repository, number)
     return unless merge_state['headRefOid'] == sha
 
     checks = api(repository, "commits/#{sha}/check-runs?filter=latest&per_page=100").fetch('check_runs')
-    unless ready?(merge_state, merge_state.dig('latestOpinionatedReviews', 'nodes'), checks, sha)
+    action = decision(merge_state, merge_state.dig('latestOpinionatedReviews', 'nodes'), checks, sha, reviewer: reviewer)
+    if action == :wait
       puts "PR ##{number} is waiting for review, CI, or branch protection."
       return
     end
@@ -155,6 +177,24 @@ module DependabotMerge
     unless update && eligible_versions?(metadata(update), raw_lock(repository, base), raw_lock(repository, sha))
       puts "PR ##{number} is outside the dependency merge policy or is no longer up to date."
       return
+    end
+
+    if action == :approve
+      approved = JSON.parse(gh('api', "repos/#{repository}/#{path}/reviews", '-X', 'POST',
+                               '-f', 'event=APPROVE', '-f', "commit_id=#{sha}",
+                               '-f', 'body=Automated approval: required Lufa CI checks passed for this Dependabot revision.',
+                               token: reviewer_token))
+      unless approved.values_at('state', 'commit_id') == ['APPROVED', sha] && approved.dig('user', 'login') == reviewer
+        abort 'GitHub did not record the expected app approval.'
+      end
+      puts "#{reviewer} approved commit #{sha} for PR ##{number}."
+
+      merge_state = review_state(repository, number)
+      return unless merge_state['headRefOid'] == sha
+      unless decision(merge_state, merge_state.dig('latestOpinionatedReviews', 'nodes'), checks, sha, reviewer: reviewer) == :merge
+        puts 'GitHub has not reported the PR as approved and mergeable; leaving it open.'
+        return
+      end
     end
 
     result = api(repository, "#{path}/merge", '-X', 'PUT', '-f', "sha=#{sha}", '-f', 'merge_method=squash')
@@ -171,8 +211,9 @@ module DependabotMerge
     JSON.parse(gh('api', "repos/#{repository}/#{path}", *options))
   end
 
-  def self.gh(*args)
-    output, error, status = Open3.capture3('gh', *args)
+  def self.gh(*args, token: nil)
+    environment = token ? { 'GH_TOKEN' => token } : {}
+    output, error, status = Open3.capture3(environment, 'gh', *args)
     abort error unless status.success?
 
     output
@@ -180,5 +221,7 @@ module DependabotMerge
 end
 
 if $PROGRAM_NAME == __FILE__
-  DependabotMerge.run(ENV.fetch('GITHUB_REPOSITORY'), ENV.fetch('DEPENDABOT_AUTOMATION'))
+  DependabotMerge.run(ENV.fetch('GITHUB_REPOSITORY'), ENV.fetch('DEPENDABOT_AUTOMATION'),
+                      reviewer_token: ENV.fetch('DEPENDABOT_REVIEWER_TOKEN', ''),
+                      reviewer_slug: ENV.fetch('DEPENDABOT_REVIEWER_SLUG', ''))
 end

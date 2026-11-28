@@ -92,7 +92,7 @@ gh pr merge <pr-number> --squash --auto
 
 The pilot is off until the repository Actions variable `DEPENDABOT_AUTOMATION`
 is set to one Dependabot PR number. Remove that variable to disable new attempts.
-The pilot does not submit approvals or change the [main ruleset](rulesets/main.yml).
+The pilot does not change the [main ruleset](rulesets/main.yml).
 The YAML mirrors the existing GitHub ruleset; merging edits to the file does not
 apply them to GitHub.
 
@@ -119,6 +119,27 @@ waiting for `Check-lint` and `validate-changesets` before submitting the approva
 To test review-first, choose another eligible PR with checks still running and
 confirm it stays open until they pass. GitHub remains the final authority on
 review validity, branch freshness, and merge eligibility.
+
+### Optional GitHub App approval
+
+By default the pilot waits for a human. To test automated approval, register a
+private GitHub App named `Dependabot reviewer` under the organization. Disable
+webhooks and install it on **Lufa-Core only**, with **Pull requests: Read and
+write** and the default metadata access. Do not grant **Contents: Write** or
+add the app to any ruleset bypass list.
+
+Add its Client ID as the Actions variable `DEPENDABOT_REVIEWER_CLIENT_ID` and
+store its generated private key as the Actions secret
+`DEPENDABOT_REVIEWER_PRIVATE_KEY`. Keep `DEPENDABOT_AUTOMATION` scoped to a single
+eligible PR number. Removing the Client ID returns the pilot to human-only
+approval.
+
+The app only approves the exact commit that passed both required CI checks and
+the dependency policy. The merge workflow uses a separate token and requests a
+merge only if GitHub counts the approval and reports the PR as mergeable. The
+workflow does not reuse an app approval for an earlier commit or override a
+request for changes. If GitHub does not count the app approval, leave the PR
+open for a human review rather than changing the ruleset.
 
 ### Disabling Specific Updates
 

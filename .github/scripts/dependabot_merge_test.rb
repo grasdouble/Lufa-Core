@@ -34,18 +34,44 @@ class DependabotMergeTest < Minitest::Test
     refute DependabotMerge.dependency_commit([update, followup], 'main', 'head', 326)
   end
 
-  def test_approval_can_arrive_before_or_after_ci_but_a_stale_check_does_not_count
+  def test_human_approval_can_arrive_before_or_after_ci
     approved = { 'reviewDecision' => 'APPROVED', 'mergeStateStatus' => 'CLEAN' }
     waiting_review = approved.merge('reviewDecision' => 'REVIEW_REQUIRED', 'mergeStateStatus' => 'BLOCKED')
     review = { 'author' => { '__typename' => 'User' }, 'state' => 'APPROVED', 'authorCanPushToRepository' => true }
     lint = check('Check-lint', 'head')
     changesets = check('validate-changesets', 'head')
-    refute DependabotMerge.ready?(waiting_review, [], [lint, changesets], 'head')
-    refute DependabotMerge.ready?(approved, [review], [lint, check('validate-changesets', 'old')], 'head')
-    refute DependabotMerge.ready?(approved, [review], [lint, changesets.merge('conclusion' => 'skipped')], 'head')
-    refute DependabotMerge.ready?(approved, [review.merge('author' => { '__typename' => 'Bot' })], [lint, changesets], 'head')
-    refute DependabotMerge.ready?(approved, [review.merge('authorCanPushToRepository' => false)], [lint, changesets], 'head')
-    assert DependabotMerge.ready?(approved, [review], [lint, changesets], 'head')
+    assert_equal :wait, DependabotMerge.decision(waiting_review, [], [lint, changesets], 'head')
+    assert_equal :wait, DependabotMerge.decision(approved, [review], [lint, check('validate-changesets', 'old')], 'head')
+    assert_equal :wait, DependabotMerge.decision(approved, [review], [lint, changesets.merge('conclusion' => 'skipped')], 'head')
+    assert_equal :wait, DependabotMerge.decision(approved, [review.merge('author' => { '__typename' => 'Bot' })], [lint, changesets], 'head')
+    assert_equal :wait, DependabotMerge.decision(approved, [review.merge('authorCanPushToRepository' => false)], [lint, changesets], 'head')
+    assert_equal :merge, DependabotMerge.decision(approved, [review], [lint, changesets], 'head')
+  end
+
+  def test_app_approves_only_after_both_required_checks_pass_and_no_changes_are_requested
+    pr = { 'reviewDecision' => 'REVIEW_REQUIRED', 'mergeStateStatus' => 'BLOCKED' }
+    lint = check('Check-lint', 'head')
+    changesets = check('validate-changesets', 'head')
+    reviewer = 'dependabot-reviewer[bot]'
+
+    assert_equal :wait, DependabotMerge.decision(pr, [], [lint], 'head', reviewer: reviewer)
+    assert_equal :wait, DependabotMerge.decision(pr, [], [lint, changesets.merge('conclusion' => 'failure')], 'head', reviewer: reviewer)
+    assert_equal :wait, DependabotMerge.decision(pr.merge('reviewDecision' => 'CHANGES_REQUESTED'), [], [lint, changesets], 'head', reviewer: reviewer)
+    assert_equal :approve, DependabotMerge.decision(pr, [], [lint, changesets], 'head', reviewer: reviewer)
+  end
+
+  def test_app_review_must_match_the_commit_and_be_counted_by_github
+    reviewer = 'dependabot-reviewer[bot]'
+    approved = { 'reviewDecision' => 'APPROVED', 'mergeStateStatus' => 'CLEAN' }
+    waiting_review = approved.merge('reviewDecision' => 'REVIEW_REQUIRED', 'mergeStateStatus' => 'BLOCKED')
+    checks = [check('Check-lint', 'head'), check('validate-changesets', 'head')]
+    review = { 'state' => 'APPROVED', 'author' => { '__typename' => 'Bot', 'login' => reviewer }, 'commit' => { 'oid' => 'head' } }
+
+    assert_equal :wait, DependabotMerge.decision(waiting_review, [review], checks, 'head', reviewer: reviewer)
+    assert_equal :approve, DependabotMerge.decision(approved, [review.merge('commit' => { 'oid' => 'old' })], checks, 'head', reviewer: reviewer)
+    other_bot = review.merge('author' => { '__typename' => 'Bot', 'login' => 'unrelated[bot]' })
+    assert_equal :approve, DependabotMerge.decision(approved, [other_bot], checks, 'head', reviewer: reviewer)
+    assert_equal :merge, DependabotMerge.decision(approved, [review], checks, 'head', reviewer: reviewer)
   end
 
   private
